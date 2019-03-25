@@ -293,6 +293,154 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/03/25/工作记录零碎/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="泉先">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="不会化妆的写手<br>不是好程序员">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/03/25/工作记录零碎/" itemprop="url">工作记录零碎</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-03-25T20:48:34+08:00">
+                2019-03-25
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/前端基础/" itemprop="url" rel="index">
+                    <span itemprop="name">前端基础</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="Charles-mock-数据"><a href="#Charles-mock-数据" class="headerlink" title="Charles mock 数据"></a>Charles mock 数据</h2><p>Charles mock 数据，眼看着 Charles 抓到的包都是正常的，可是浏览器中间就是收不到响应。忽然回忆起，跨域实际上是浏览器本身做的一个限制，为用户的安全，及时收到数据也不返回。考虑到可能是跨域的问题，开了禁止跨域的浏览器，解决。</p>
+<h2 id="position-fixed-问题"><a href="#position-fixed-问题" class="headerlink" title="position: fixed 问题"></a>position: fixed 问题</h2><p><code>fixed</code> 的元素不一定相对视口定位。在祖先元素中出现某些特定属性时，会相对于该祖先元素定位。</p>
+<p>相关文章：<a href="https://github.com/chokcoco/iCSS/issues/24" target="_blank" rel="noopener">fixed 定位失效 | 不受控制的 position:fixed</a></p>
+<h2 id="写全局组件的方法"><a href="#写全局组件的方法" class="headerlink" title="写全局组件的方法"></a>写全局组件的方法</h2><p>如常见的 <code>Modal</code> 弹窗，之前一直都会在组件中设置一个 <code>modalShow</code> 的值，用来在组件内控制 <code>Modal</code> 组件的显示/隐藏。最近忽然意识到，其实可以更加方便。直接 <code>ReactDOM.render</code> <code>Modal</code> 组件，然后将其插入某节点即可。不需要依赖组件内部的某个值来显示隐藏。详见：<a href="">Modal 组件</a></p>
+<h2 id="Flex-做到子元素无条件等分空间"><a href="#Flex-做到子元素无条件等分空间" class="headerlink" title="Flex 做到子元素无条件等分空间"></a>Flex 做到子元素无条件等分空间</h2><p>不知道我的做法对不对劲……毕竟是自己想到的。众所周知，Flex 布局中，子元素会先占据自己应有的大小，然后再等分剩余空间。导致子元素如果自然状态时大小并不一样大，则无法真正做到等分父元素。因此，可以给所有子元素设置 <code>width: 100%</code>。这样，所有子元素都会同样大小自然等分父元素。</p>
+<h2 id="触底定位不准"><a href="#触底定位不准" class="headerlink" title="触底定位不准"></a>触底定位不准</h2><p>奇怪的一加手机：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">// 视窗到网页底端的距离，为 0 即为触底</span><br><span class="line">export const getBottom = () =&gt; &#123;</span><br><span class="line">  let el</span><br><span class="line">  if (document.documentElement.scrollTop) &#123;</span><br><span class="line">    el = document.documentElement</span><br><span class="line">  &#125; else &#123;</span><br><span class="line">    el = document.body</span><br><span class="line">  &#125;</span><br><span class="line">  // 在（至少是）Chrome 浏览器下，当 documentElement.scrollTop 为 0 时，clientHeight 不为视口高度，而是整个网页的高度，与 scrollHeight 相等</span><br><span class="line">  // 在安卓 webview 中，clientHeight 也是与 scrollHeight 相等的</span><br><span class="line">  // 因此，用 window.innerHeight 替换 clientHeight</span><br><span class="line">  // 在一加手机中，可能出现计算值为小于 0 或 大于 0 小于 1 的情况，因此将触底计算更改为 &lt; 1</span><br><span class="line">  return el.scrollHeight - el.scrollTop - window.innerHeight &lt;= 1</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/02/a-cartoon-intro-to-fiber/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1765,171 +1913,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/01/23/Underscore-js实现bind方法/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="泉先">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpeg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="不会化妆的写手<br>不是好程序员">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/01/23/Underscore-js实现bind方法/" itemprop="url">Underscore.js实现bind方法</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-01-23T21:02:28+08:00">
-                2018-01-23
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/框架-库-工具/" itemprop="url" rel="index">
-                    <span itemprop="name">框架/库/工具</span>
-                  </a>
-                </span>
-
-                
-                
-                  , 
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/框架-库-工具/Underscore-js/" itemprop="url" rel="index">
-                    <span itemprop="name">Underscore.js</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h2 id="ES5中的bind"><a href="#ES5中的bind" class="headerlink" title="ES5中的bind"></a>ES5中的bind</h2><h3 id="描述"><a href="#描述" class="headerlink" title="描述"></a>描述</h3><p>bind()函数会创建一个新函数（称为绑定函数），新函数与被调用函数（绑定函数的目标函数）具有相同的函数体（。当新函数被调用时，this值绑定到bind()的第一个参数，该参数不能被重写。绑定函数被调用时，bind()也接受预设的参数提供给原函数。<br>一个绑定函数也能够使用new操作符创建对象，这种行为就像是把原函数当做构造器。提供的this值被忽略，同时调用时的参数被提供给模拟函数。</p>
-<h3 id="语法"><a href="#语法" class="headerlink" title="语法"></a>语法</h3><blockquote>
-<p>fun.bind(thisArg[, arg1, [, arg2, [, …]]])</p>
-<ul>
-<li>thisArg：当调用绑定函数时，该参数会作为目标函数运行时的this指向。当使用new操作符调用绑定函数时，该参数无效。</li>
-<li>arg1, arg2, …：当调用目标函数时，前置于提供给绑定函数的参数的参数</li>
-<li>返回值：返回由指定的this值和初始化参数改造的原函数拷贝</li>
-</ul>
-</blockquote>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2018/01/23/Underscore-js实现bind方法/#more" rel="contents">
-              Read more &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -1980,7 +1963,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">37</span>
+                <span class="site-state-item-count">38</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>
@@ -2002,7 +1985,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">17</span>
+                <span class="site-state-item-count">18</span>
                 <span class="site-state-item-name">tags</span>
               </a>
             </div>
@@ -2044,7 +2027,7 @@
         <div class="copyright" >
   
   &copy;  2017 - 
-  <span itemprop="copyrightYear">2018</span>
+  <span itemprop="copyrightYear">2019</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>
