@@ -293,6 +293,182 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/03/29/浏览器渲染详细过程/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="泉先">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="不会化妆的写手<br>不是好程序员">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/03/29/浏览器渲染详细过程/" itemprop="url">浏览器渲染的详细过程</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-03-29T18:27:31+08:00">
+                2019-03-29
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/前端基础/" itemprop="url" rel="index">
+                    <span itemprop="name">前端基础</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p><strong>这是一篇转载文章。</strong></p>
+<p>原作者博客已失效，留了一篇在掘金。很担心掘金的也会消失掉，赶快敲一遍，侵删。</p>
+<p>主要还是我比较笨拙，看内容很好的文章还真是很喜欢一个字一个字敲一遍，基于理解稍微整理层级改变细节。感觉这个方式对我来说真的很利于领会和记忆，能够触及每一个细节。</p>
+<p>就是实在太费时间了……这篇文章长达千字，写了有八九个小时……</p>
+<p>另外，我真的非常喜欢这位作者。我和他很像，都是钻牛角尖的人，追求对细节的了解，认为流程中缺失了不确定的部分就不是真正理解。不同的是，这位是一名十分优秀的程序员，能够从规范级别的文档中找到自己需要的答案。而我往往周旋于良莠不齐的国内博客，看着大家东抄西抄的东西，不仅找不到答案，还频频被误导。</p>
+<p>所以说，第一个目标：学好英语。</p>
+<h2 id="页面渲染的时机"><a href="#页面渲染的时机" class="headerlink" title="页面渲染的时机"></a>页面渲染的时机</h2><h3 id="从-event-loop-开始"><a href="#从-event-loop-开始" class="headerlink" title="从 event loop 开始"></a>从 event loop 开始</h3><p>event loop 是整个渲染过程的关键，涉及浏览器进行渲染的时机。先看 <a href="https://html.spec.whatwg.org/multipage/webappapis.html#event-loop-processing-model" target="_blank" rel="noopener">HTML5 关于 event loop 的官方规范</a>：</p>
+<ul>
+<li>从第 1 到第 5 步，从多个 task 队列中选出一个 task 队列（浏览器为了区分不同 task 的优先级，所以时常有多个 task 队列），从这个 task 队列中取出最老的一个 task，执行它，然后将它从队列中移除；</li>
+<li>第 6 步，<a href="https://html.spec.whatwg.org/multipage/webappapis.html#perform-a-microtask-checkpoint" target="_blank" rel="noopener">执行一个 microtask 检查点（preform a microtask checkpoint）</a>。只要 microtask 队列不为空，这一步会一直从 microtask 队列中取出 microtask，然后执行。如果 microtask 执行过程中又增加了 microtask，仍然会执行新添加的 microtask。（链接第 7 步的“return to the microtask queue handling step”很关键。）</li>
+<li>第 7 步，更新渲染（update the rendering）<ul>
+<li>判断当前 document 是否需要渲染。因为只需要保持 60Hz 的刷新率即可，而每轮 event loop 都是非常快的，所以没必要每轮都进行渲染，而是差不多间隔 16ms 的时候渲染一次。同时，对于一些卡顿得已经不能保证 60Hz 的页面，若再在此时执行渲染会雪上加霜，所以浏览器可能会下调渲染频率为 30Hz。</li>
+<li><a href="https://drafts.csswg.org/cssom-view/#run-the-resize-steps" target="_blank" rel="noopener">run the resize steps</a><ul>
+<li>若浏览器 resize 过，那么这里会在 window 上触发“resize”事件</li>
+</ul>
+</li>
+<li><a href="https://drafts.csswg.org/cssom-view/#run-the-scroll-steps" target="_blank" rel="noopener">run the scroll steps</a><ul>
+<li>首先，每当我们在某个 target 上滚动时（target 可以是某个可滚动元素，也可以是 document），浏览器就会在 target 所属的 document 上的 <a href="https://drafts.csswg.org/cssom-view/#pending-scroll-event-targets" target="_blank" rel="noopener">pending scroll event targets</a> 列表里存放这个发生滚动的 target</li>
+<li>现在，run the scroll steps 这一步会从 pending scroll event targets 列表里取出 target，然后在 target 上触发事件</li>
+</ul>
+</li>
+<li>计算是否触发 media query</li>
+<li>执行 css animation，触发 animationstart 等 animation 相关事件</li>
+<li>run the fullscreen rendering steps：如果在之前的 task 或 microtask 中执行过 <code>requestFullscreen()</code> 等 full screen 相关 api，此时会执行全屏操作</li>
+<li>run the animation frame callbacks：执行 requestAnimationFrame 的回调</li>
+<li>执行 <a href="http://www.ruanyifeng.com/blog/2016/11/intersectionobserver_api.html?utm_source=tuicool&amp;utm_medium=referral" target="_blank" rel="noopener">IntersectionObserver</a> 的回调</li>
+<li>更新，渲染用户界面</li>
+</ul>
+</li>
+<li>继续返回第一步</li>
+</ul>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2019/03/29/浏览器渲染详细过程/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/03/25/工作记录零碎/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1760,160 +1936,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/02/05/关键渲染路径/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="泉先">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpeg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="不会化妆的写手<br>不是好程序员">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/02/05/关键渲染路径/" itemprop="url">关键渲染路径</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-02-05T14:40:48+08:00">
-                2018-02-05
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/前端基础/" itemprop="url" rel="index">
-                    <span itemprop="name">前端基础</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h2 id="关键渲染路径"><a href="#关键渲染路径" class="headerlink" title="关键渲染路径"></a>关键渲染路径</h2><p>从收到HTML、CSS和JavaScript字节到对其进行必需的处理，从而将它们转变成渲染的像素。这一过程中有一些中间步骤，即关键渲染路径。</p>
-<ol>
-<li>处理HTML标记并构建DOM树；</li>
-<li>处理CSS标记并构建CSSOM树；</li>
-<li>将DOM与CSSOM合并成一个渲染树；</li>
-<li>根据渲染树来布局，以计算每个节点的几何信息；</li>
-<li>将各个节点绘制到屏幕上。</li>
-</ol>
-<h3 id="阻塞渲染的CSS"><a href="#阻塞渲染的CSS" class="headerlink" title="阻塞渲染的CSS"></a>阻塞渲染的CSS</h3><p>关键渲染路径要求我们同时具有DOM和CSSOM才能构建渲染树，因此HTML和CSS都是阻塞渲染的资源。<br>我们可以通过媒体类型和媒体查询将一些CSS资源标记为不阻塞渲染。<br>浏览器会下载所有的CSS资源，无论是否阻塞渲染，只是不阻塞渲染的资源优先级比较低。<br>阻塞渲染指的是浏览器是否要暂停网页的首次渲染，直至该资源准备就绪。</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2018/02/05/关键渲染路径/#more" rel="contents">
-              Read more &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -1964,7 +1986,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">38</span>
+                <span class="site-state-item-count">39</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>
