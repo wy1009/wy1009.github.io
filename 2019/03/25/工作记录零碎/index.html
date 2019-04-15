@@ -102,7 +102,7 @@
 <meta property="og:site_name" content="不会化妆的写手&lt;br&gt;不是好程序员">
 <meta property="og:description" content="Charles mock 数据Charles mock 数据，眼看着 Charles 抓到的包都是正常的，可是浏览器中间就是收不到响应。忽然回忆起，跨域实际上是浏览器本身做的一个限制，为用户的安全，及时收到数据也不返回。考虑到可能是跨域的问题，开了禁止跨域的浏览器，解决。 position: fixed 问题fixed 的元素不一定相对视口定位。在祖先元素中出现某些特定属性时，会相对于该祖先元素定">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-03-26T12:40:15.815Z">
+<meta property="og:updated_time" content="2019-04-04T10:00:18.307Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="工作记录零碎">
 <meta name="twitter:description" content="Charles mock 数据Charles mock 数据，眼看着 Charles 抓到的包都是正常的，可是浏览器中间就是收不到响应。忽然回忆起，跨域实际上是浏览器本身做的一个限制，为用户的安全，及时收到数据也不返回。考虑到可能是跨域的问题，开了禁止跨域的浏览器，解决。 position: fixed 问题fixed 的元素不一定相对视口定位。在祖先元素中出现某些特定属性时，会相对于该祖先元素定">
@@ -392,6 +392,11 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">// 视窗到网页底端的距离，为 0 即为触底</span><br><span class="line">export const getBottom = () =&gt; &#123;</span><br><span class="line">  let el</span><br><span class="line">  if (document.documentElement.scrollTop) &#123;</span><br><span class="line">    el = document.documentElement</span><br><span class="line">  &#125; else &#123;</span><br><span class="line">    el = document.body</span><br><span class="line">  &#125;</span><br><span class="line">  // 在（至少是）Chrome 浏览器下，当 documentElement.scrollTop 为 0 时，clientHeight 不为视口高度，而是整个网页的高度，与 scrollHeight 相等</span><br><span class="line">  // 在安卓 webview 中，clientHeight 也是与 scrollHeight 相等的</span><br><span class="line">  // 因此，用 window.innerHeight 替换 clientHeight</span><br><span class="line">  // 在一加手机中，可能出现计算值为小于 0 或 大于 0 小于 1 的情况，因此将触底计算更改为 &lt; 1</span><br><span class="line">  return el.scrollHeight - el.scrollTop - window.innerHeight &lt;= 1</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h2 id="Number-parseInt"><a href="#Number-parseInt" class="headerlink" title="Number.parseInt"></a>Number.parseInt</h2><p>低版本浏览器不支持 <code>Number.parseInt</code>，但是支持 <code>window.parseInt</code>。</p>
 <h2 id="webview-中刷新页面"><a href="#webview-中刷新页面" class="headerlink" title="webview 中刷新页面"></a>webview 中刷新页面</h2><p>前端在 webview 中刷新页面的行为是不可靠的，部分机型前端没有刷新页面的权利，需要客户端来刷新。</p>
+<h2 id="create-react-app-升级后问题"><a href="#create-react-app-升级后问题" class="headerlink" title="create-react-app 升级后问题"></a>create-react-app 升级后问题</h2><p>create-react-app 最近应该是进行了升级，和我几个月前拉的代码完全不一样。有两个小坑：</p>
+<ol>
+<li>eject 项目后会报缺包错误，按照它的错误提示装三个包就可以了；</li>
+<li>css module 不再默认开启，看 webpack 配置代码会发现，文件名为 ‘xxx.module.css’ 的文件才会开启 css module，否则会报一个根本完全看不出来是因为没有开启 css module 的错误。真的完全看不出来，从字面意义上看，完全就是在告诉你另一回事……</li>
+</ol>
 
       
     </div>
@@ -568,7 +573,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Charles-mock-数据"><span class="nav-number">1.</span> <span class="nav-text">Charles mock 数据</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#position-fixed-问题"><span class="nav-number">2.</span> <span class="nav-text">position: fixed 问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#写全局组件的方法"><span class="nav-number">3.</span> <span class="nav-text">写全局组件的方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Flex-做到子元素无条件等分空间"><span class="nav-number">4.</span> <span class="nav-text">Flex 做到子元素无条件等分空间</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#触底定位不准"><span class="nav-number">5.</span> <span class="nav-text">触底定位不准</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Number-parseInt"><span class="nav-number">6.</span> <span class="nav-text">Number.parseInt</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#webview-中刷新页面"><span class="nav-number">7.</span> <span class="nav-text">webview 中刷新页面</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Charles-mock-数据"><span class="nav-number">1.</span> <span class="nav-text">Charles mock 数据</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#position-fixed-问题"><span class="nav-number">2.</span> <span class="nav-text">position: fixed 问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#写全局组件的方法"><span class="nav-number">3.</span> <span class="nav-text">写全局组件的方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Flex-做到子元素无条件等分空间"><span class="nav-number">4.</span> <span class="nav-text">Flex 做到子元素无条件等分空间</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#触底定位不准"><span class="nav-number">5.</span> <span class="nav-text">触底定位不准</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Number-parseInt"><span class="nav-number">6.</span> <span class="nav-text">Number.parseInt</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#webview-中刷新页面"><span class="nav-number">7.</span> <span class="nav-text">webview 中刷新页面</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#create-react-app-升级后问题"><span class="nav-number">8.</span> <span class="nav-text">create-react-app 升级后问题</span></a></li></ol></div>
             
 
           </div>
