@@ -105,7 +105,7 @@
 <meta property="og:image" content="http://yoursite.com/images/memory-box-1.png">
 <meta property="og:image" content="http://yoursite.com/images/memory-box-2.png">
 <meta property="og:image" content="http://yoursite.com/images/memory-box-3.png">
-<meta property="og:updated_time" content="2019-04-15T05:32:47.221Z">
+<meta property="og:updated_time" content="2019-05-07T08:44:25.973Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="React 和 Redux 中的不可变性：全面指引">
 <meta name="twitter:description" content="不可变性（immutability）可能是个令人困惑的话题，它总会在 React、Redux 和 JavaScript 中到处出现。 你可能碰到过已经更改了 props，但 React 组件不重新渲染的 bug。有人说：“你应该做不可改变状态（immutable state）的更新。”可能你或者你的同事经常写改变状态（mutate state）的 Redux reducers，且你不得不不断纠正这">
@@ -405,6 +405,7 @@
 <p>所以某个东西是不可变的，就是说，这个东西不能够被改变。</p>
 <p>极端的讲，这意味着比起传统地直接改变值，你应该始终创建新的值去取代旧的值。JavaScript 没有这么极端，但是一些语言完全不允许“可变”（Elixir、Erlang、ML 等等）。</p>
 <p>尽管 JavaScript 不是纯粹的函数式语言，但它有时候可以假装是。在 JS 中，某些数组操作是不可变的（就是返回一个新数值，而不是修改原本的）。字符串操作总是不可变的（变化会创建一个新字符串）。并且，你也可以自己写不可变的函数。你只需要意识到一些规则。</p>
+<a id="more"></a>
 <h2 id="改变（mutation）的代码示例"><a href="#改变（mutation）的代码示例" class="headerlink" title="改变（mutation）的代码示例"></a>改变（mutation）的代码示例</h2><p>我们可以通过一个例子来看可变性是怎样的。比如以下这个 <code>person</code> 对象：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">let person = &#123;</span><br><span class="line">  firstName: &apos;Bob&apos;,</span><br><span class="line">  lastName: &apos;Loblaw&apos;,</span><br><span class="line">  address: &#123;</span><br><span class="line">    street: &apos;123 fake St&apos;,</span><br><span class="line">    city: &apos;Emberton&apos;,</span><br><span class="line">    state: &apos;NJ&apos;,</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>接下来，我们写一个函数，给这个人赋予超能力：</p>
