@@ -293,6 +293,179 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/10/Vue-js双向数据绑定原理/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="泉先">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="不会化妆的写手<br>不是好程序员">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/10/10/Vue-js双向数据绑定原理/" itemprop="url">Vue.js双向数据绑定原理</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-10-10T15:15:25+08:00">
+                2017-10-10
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/框架-库-工具/" itemprop="url" rel="index">
+                    <span itemprop="name">框架/库/工具</span>
+                  </a>
+                </span>
+
+                
+                
+                  , 
+                
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/框架-库-工具/Vue-js/" itemprop="url" rel="index">
+                    <span itemprop="name">Vue.js</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>写个（只有）自己能看懂的流程。</p>
+<h2 id="mvvm-js"><a href="#mvvm-js" class="headerlink" title="mvvm.js"></a>mvvm.js</h2><ol>
+<li>数据代理；</li>
+<li>initComputed；</li>
+<li>observe(this.data)。</li>
+</ol>
+<h2 id="observer-js"><a href="#observer-js" class="headerlink" title="observer.js"></a>observer.js</h2><ol>
+<li>监听每一个值的get/set，每一个值跟随一个dep。如果被取值，将Dep全局保存的watcher推入dep中的watcher列表。</li>
+</ol>
+<h2 id="mvvm-js-1"><a href="#mvvm-js-1" class="headerlink" title="mvvm.js"></a>mvvm.js</h2><ol>
+<li>compile(options.el)。</li>
+</ol>
+<h2 id="compile-js"><a href="#compile-js" class="headerlink" title="compile.js"></a>compile.js</h2><ol>
+<li>遍历el中的所有节点，分别处理每个节点。</li>
+<li>以text节点为例，分析出是否和data的属性关联，如果关联，新建一个watcher，watcher中包含了此节点、关联的data属性名以及updateFn（一个用于更新节点的函数，比如文本节点，就是node.textContent = val）。</li>
+</ol>
+<h2 id="watcher-js"><a href="#watcher-js" class="headerlink" title="watcher.js"></a>watcher.js</h2><ol>
+<li>将与节点相关联的属性名分解开来（a.b.c），挨个取值；</li>
+<li>因取值而触发observer.js中的get方法，将该watcher推入该属性的dep中；</li>
+<li>watcher中记录下该watcher推入过哪个dep（dep标id），避免重复推入（update时也需要get值，此时不需要重复推入）。</li>
+</ol>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/07/27/代码执行过程中，执行上下文和执行上下文栈的变化过程/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -1730,160 +1903,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/03/30/position、float和display同时作用于一个元素的处理方法/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="泉先">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpeg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="不会化妆的写手<br>不是好程序员">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/03/30/position、float和display同时作用于一个元素的处理方法/" itemprop="url">position、float和display同时作用于一个元素的处理方法</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-03-30T20:52:05+08:00">
-                2017-03-30
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/categories/CSS/" itemprop="url" rel="index">
-                    <span itemprop="name">CSS</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h2 id="相关特性"><a href="#相关特性" class="headerlink" title="相关特性"></a>相关特性</h2><h3 id="浮动"><a href="#浮动" class="headerlink" title="浮动"></a>浮动</h3><ul>
-<li>在浮动模型中，一个框（box）首先根据常规流布局，再将它从流中取出并尽可能地向左或向右偏移。因为它首先要根据常规布局后才偏移，所以效率较常规流较低。</li>
-<li>浮动元素不发生外边距折叠。</li>
-<li>浮动框的顶边不可以高于源文档中先前元素产生的块框或浮动框的顶。详细如下图，源文件中元素的顺序为O、A、B，O与A左浮动，B右浮动。B右浮动没有在上一行，而是在下一行的原因是，其不可以高于源文件中先前元素产生的块框或浮动框的顶，即不能高过B元素的顶。<br><img src="http://wx2.sinaimg.cn/large/7b1152ffly1fehr66za2wj205606x3y9.jpg" alt="块框或浮动框"></li>
-<li>浮动框的顶边不可以高过源文档中先前元素产生的任何包含一个框的行框的顶。<br><img src="http://wx3.sinaimg.cn/large/7b1152ffly1fehrd9t3mlj20bb01k0pq.jpg" alt="行框"></li>
-<li>在满足以上两条顶边规则的限制下，浮动框要放置得尽可能得高。</li>
-<li>左浮动框必须尽量向左放置，右浮动框必须尽量向右放置。在更高的位置和更靠左/靠右的位置间，选择前者。</li>
-<li>附加规则：对于clear特性不是none的浮动框，其上外边界（top margin edge）必须低于前面所有的左浮动框（clear: left）或右浮动框（clear: right）或左右浮动框（clear: both）的下外边界。</li>
-</ul>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2017/03/30/position、float和display同时作用于一个元素的处理方法/#more" rel="contents">
-              Read more &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -1932,7 +1951,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">41</span>
+                <span class="site-state-item-count">42</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>

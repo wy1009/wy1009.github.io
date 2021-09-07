@@ -293,6 +293,168 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/03/08/Vue-js-keep-alive踩坑/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="泉先">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="不会化妆的写手<br>不是好程序员">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/03/08/Vue-js-keep-alive踩坑/" itemprop="url">Vue.js keep-alive踩坑</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-03-08T15:39:56+08:00">
+                2018-03-08
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/框架-库-工具/" itemprop="url" rel="index">
+                    <span itemprop="name">框架/库/工具</span>
+                  </a>
+                </span>
+
+                
+                
+                  , 
+                
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/框架-库-工具/Vue-js/" itemprop="url" rel="index">
+                    <span itemprop="name">Vue.js</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>发现面试好像会喜欢问“项目中遇到的难点”这样的问题。但说实话，难点这种东西，难了不会，会了不难，一旦解决了就觉得也还好，过段时间也就忘了，再过段时间，哪怕能想起来，也一定觉得不是什么值得说出来的问题。<br>总之，确实怎么回想也想不出什么难点，就只好从现在开始记录了。<br>就从keep-alive踩坑开始吧。<br>本文主要为了给个人记录一个过程，因此按照踩坑顺序记录，而不是一个知识体系。<br>btw过程中发现了好多博客的错误……</p>
+<p>首先，移动端，一个列表页，一个详情页。从列表页点入详情页，再从详情页回退到列表页，实际上列表页是完全不需要刷新的。在此需求上，能做到类似App那样“前进刷新，后退不刷新”的效果，当然是极好的。</p>
+<h2 id="判断前进还是后退"><a href="#判断前进还是后退" class="headerlink" title="判断前进还是后退"></a>判断前进还是后退</h2><p>单纯监听前进还是后退，很容易想到监听<code>popstate</code>事件。但是这个事件不管前进还是后退都能触发，且不能和Vue的生命周期结合起来，所以Pass。</p>
+<p>其他人的实现提供了两种方法，一种是<a href="https://segmentfault.com/a/1190000012083511" target="_blank" rel="noopener">另辟蹊径：vue单页面，多路由，前进刷新，后退不刷新</a>，严格监听是从哪一个路由跳到哪一个路由，从而监听是前进还是后退。这显然是很死板的，当然，如果需求简单，仅仅需要顾及几个页面，那反而很安全。另一种是<a href="https://juejin.im/post/5a69894a518825733b0f12f2" target="_blank" rel="noopener">vue实现前进刷新，后退不刷新</a>，使用路由的路径层级去判断是前进还是后退，也就是说，前进后退和路由层级严格挂钩，路由和前进后退的方向都变得不自由了。</p>
+<p>我开始想的是第三种方法，在路由信息对象上记录数字，用这个数字标识层级。但是很快意识到，这种方法也不直观，最直观的方法莫过于直接压一个栈。当要去的路由等于栈顶的路由的时候，就相当于是后退了。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> routerStack = []</span><br><span class="line">router.beforeEach(<span class="function">(<span class="params">to, <span class="keyword">from</span>, next</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">if</span> (to.name === routerStack[routerStack.length - <span class="number">1</span>]) &#123;</span><br><span class="line">    <span class="comment">// 后退</span></span><br><span class="line">    routerStack.pop()</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="comment">// 前进</span></span><br><span class="line">    routerStack.push(to.name)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2018/03/08/Vue-js-keep-alive踩坑/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/03/02/JS获取各种常见位置距离/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -1745,179 +1907,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/10/Vue-js双向数据绑定原理/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="泉先">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpeg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="不会化妆的写手<br>不是好程序员">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/10/10/Vue-js双向数据绑定原理/" itemprop="url">Vue.js双向数据绑定原理</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-10-10T15:15:25+08:00">
-                2017-10-10
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/categories/框架-库-工具/" itemprop="url" rel="index">
-                    <span itemprop="name">框架/库/工具</span>
-                  </a>
-                </span>
-
-                
-                
-                  , 
-                
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/categories/框架-库-工具/Vue-js/" itemprop="url" rel="index">
-                    <span itemprop="name">Vue.js</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>写个（只有）自己能看懂的流程。</p>
-<h2 id="mvvm-js"><a href="#mvvm-js" class="headerlink" title="mvvm.js"></a>mvvm.js</h2><ol>
-<li>数据代理；</li>
-<li>initComputed；</li>
-<li>observe(this.data)。</li>
-</ol>
-<h2 id="observer-js"><a href="#observer-js" class="headerlink" title="observer.js"></a>observer.js</h2><ol>
-<li>监听每一个值的get/set，每一个值跟随一个dep。如果被取值，将Dep全局保存的watcher推入dep中的watcher列表。</li>
-</ol>
-<h2 id="mvvm-js-1"><a href="#mvvm-js-1" class="headerlink" title="mvvm.js"></a>mvvm.js</h2><ol>
-<li>compile(options.el)。</li>
-</ol>
-<h2 id="compile-js"><a href="#compile-js" class="headerlink" title="compile.js"></a>compile.js</h2><ol>
-<li>遍历el中的所有节点，分别处理每个节点。</li>
-<li>以text节点为例，分析出是否和data的属性关联，如果关联，新建一个watcher，watcher中包含了此节点、关联的data属性名以及updateFn（一个用于更新节点的函数，比如文本节点，就是node.textContent = val）。</li>
-</ol>
-<h2 id="watcher-js"><a href="#watcher-js" class="headerlink" title="watcher.js"></a>watcher.js</h2><ol>
-<li>将与节点相关联的属性名分解开来（a.b.c），挨个取值；</li>
-<li>因取值而触发observer.js中的get方法，将该watcher推入该属性的dep中；</li>
-<li>watcher中记录下该watcher推入过哪个dep（dep标id），避免重复推入（update时也需要get值，此时不需要重复推入）。</li>
-</ol>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -1966,7 +1955,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">41</span>
+                <span class="site-state-item-count">42</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>
