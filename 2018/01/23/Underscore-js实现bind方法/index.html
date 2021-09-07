@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="JavaScript,Underscore.js,源码,">
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.2">
+
+
+
+
+
+
+<meta name="description" content="ES5中的bind描述bind()函数会创建一个新函数（称为绑定函数），新函数与被调用函数（绑定函数的目标函数）具有相同的函数体（。当新函数被调用时，this值绑定到bind()的第一个参数，该参数不能被重写。绑定函数被调用时，bind()也接受预设的参数提供给原函数。一个绑定函数也能够使用new操作符创建对象，这种行为就像是把原函数当做构造器。提供的this值被忽略，同时调用时的参数被提供给模拟">
+<meta name="keywords" content="JavaScript,Underscore.js,源码">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Underscore.js实现bind方法">
+<meta property="og:url" content="http://yoursite.com/2018/01/23/Underscore-js实现bind方法/index.html">
+<meta property="og:site_name" content="不会化妆的写手&lt;br&gt;不是好程序员">
+<meta property="og:description" content="ES5中的bind描述bind()函数会创建一个新函数（称为绑定函数），新函数与被调用函数（绑定函数的目标函数）具有相同的函数体（。当新函数被调用时，this值绑定到bind()的第一个参数，该参数不能被重写。绑定函数被调用时，bind()也接受预设的参数提供给原函数。一个绑定函数也能够使用new操作符创建对象，这种行为就像是把原函数当做构造器。提供的this值被忽略，同时调用时的参数被提供给模拟">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2020-06-30T14:04:59.931Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Underscore.js实现bind方法">
+<meta name="twitter:description" content="ES5中的bind描述bind()函数会创建一个新函数（称为绑定函数），新函数与被调用函数（绑定函数的目标函数）具有相同的函数体（。当新函数被调用时，this值绑定到bind()的第一个参数，该参数不能被重写。绑定函数被调用时，bind()也接受预设的参数提供给原函数。一个绑定函数也能够使用new操作符创建对象，这种行为就像是把原函数当做构造器。提供的this值被忽略，同时调用时的参数被提供给模拟">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/01/23/Underscore-js实现bind方法/">
+
+
+
+
+
+  <title>Underscore.js实现bind方法 | 不会化妆的写手<br>不是好程序员</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?a17a483691d457feb9d048db3e29684c";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="default">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">不会化妆的写手<br>不是好程序员</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            About
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/01/23/Underscore-js实现bind方法/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="泉先">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="不会化妆的写手<br>不是好程序员">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Underscore.js实现bind方法</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-01-23T21:02:28+08:00">
+                2018-01-23
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/框架-库-工具/" itemprop="url" rel="index">
+                    <span itemprop="name">框架/库/工具</span>
+                  </a>
+                </span>
+
+                
+                
+                  , 
+                
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/框架-库-工具/Underscore-js/" itemprop="url" rel="index">
+                    <span itemprop="name">Underscore.js</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="ES5中的bind"><a href="#ES5中的bind" class="headerlink" title="ES5中的bind"></a>ES5中的bind</h2><h3 id="描述"><a href="#描述" class="headerlink" title="描述"></a>描述</h3><p>bind()函数会创建一个新函数（称为绑定函数），新函数与被调用函数（绑定函数的目标函数）具有相同的函数体（。当新函数被调用时，this值绑定到bind()的第一个参数，该参数不能被重写。绑定函数被调用时，bind()也接受预设的参数提供给原函数。<br>一个绑定函数也能够使用new操作符创建对象，这种行为就像是把原函数当做构造器。提供的this值被忽略，同时调用时的参数被提供给模拟函数。</p>
+<h3 id="语法"><a href="#语法" class="headerlink" title="语法"></a>语法</h3><blockquote>
+<p>fun.bind(thisArg[, arg1, [, arg2, [, …]]])</p>
+<ul>
+<li>thisArg：当调用绑定函数时，该参数会作为目标函数运行时的this指向。当使用new操作符调用绑定函数时，该参数无效。</li>
+<li>arg1, arg2, …：当调用目标函数时，前置于提供给绑定函数的参数的参数</li>
+<li>返回值：返回由指定的this值和初始化参数改造的原函数拷贝</li>
+</ul>
+</blockquote>
+<a id="more"></a>
+<h3 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h3><h4 id="创建绑定函数"><a href="#创建绑定函数" class="headerlink" title="创建绑定函数"></a>创建绑定函数</h4><p>bind()最简单的用法是创建一个函数，使这个函数无论怎么调用都有同样的this值。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">this</span>.x = <span class="number">9</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> <span class="built_in">module</span> = &#123;</span><br><span class="line">  x: <span class="number">81</span>,</span><br><span class="line">  getX: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">this</span>.x</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="built_in">module</span>.getX() <span class="comment">// 81</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> retrieveX = <span class="built_in">module</span>.getX()</span><br><span class="line">retrieveX() <span class="comment">// 9</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> boundGetX = retrieveX.bind(<span class="built_in">module</span>)</span><br><span class="line">boundGetX() <span class="comment">// 81</span></span><br></pre></td></tr></table></figure>
+<h4 id="偏函数（partial-functions）"><a href="#偏函数（partial-functions）" class="headerlink" title="偏函数（partial functions）"></a>偏函数（partial functions）</h4><p>bind()的另一个简单用法是使一个函数具有预设的初始参数。这些参数会被插入到目标函数的参数列表的开始位置，传递给绑定函数的参数会跟在它们的后面。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">list</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="built_in">Array</span>.prototype.slice.call(<span class="built_in">arguments</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> list1 = list(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>) <span class="comment">// [1, 2, 3]</span></span><br><span class="line"><span class="keyword">var</span> leadingThirtysevenList = list.bind(<span class="literal">null</span>, <span class="number">37</span>)</span><br><span class="line"><span class="keyword">var</span> list2 = leadingThirtysevenList() <span class="comment">// [37]</span></span><br><span class="line"><span class="keyword">var</span> list3 = leadingThirtysevenList(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>) <span class="comment">// [37, 1, 2, 3]</span></span><br></pre></td></tr></table></figure>
+<h4 id="绑定函数作为构造函数使用"><a href="#绑定函数作为构造函数使用" class="headerlink" title="绑定函数作为构造函数使用"></a>绑定函数作为构造函数使用</h4><p>绑定函数当然也可以使用new操作符去构造目标函数创建的新实例。当绑定函数被用于构造一个值时，提供的this值被忽略。然而，提供的参数预先提供给构造器。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Point</span> (<span class="params">x, y</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">this</span>.x = x</span><br><span class="line">  <span class="keyword">this</span>.y = y</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">Point.prototype.toString = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">this</span>.x + <span class="string">', '</span> + <span class="keyword">this</span>.y</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> p = <span class="keyword">new</span> Point(<span class="number">1</span>, <span class="number">2</span>)</span><br><span class="line">p.toString() <span class="comment">// 1, 2</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> emptyObj = &#123;&#125;</span><br><span class="line"><span class="keyword">var</span> YAxisPoint = Point.bind(emptyObj, <span class="number">0</span>)</span><br><span class="line"><span class="keyword">var</span> axisPoint = <span class="keyword">new</span> YAxisPoint(<span class="number">5</span>)</span><br><span class="line"></span><br><span class="line">axisPoint.toString() <span class="comment">// 0, 5</span></span><br><span class="line">axisPoint <span class="keyword">instanceof</span> Point <span class="comment">// true</span></span><br><span class="line">axisPoint <span class="keyword">instanceof</span> YAxisPoint <span class="comment">// true</span></span><br><span class="line"><span class="keyword">new</span> Point(<span class="number">17</span>, <span class="number">42</span>) <span class="keyword">instanceof</span> YAxisPoint; <span class="comment">// true</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 仍可以作为普通函数被调用</span></span><br><span class="line">YAxisPoint(<span class="number">13</span>)</span><br><span class="line">empty.x + <span class="string">', '</span> + empty.y <span class="comment">// 0, 13</span></span><br></pre></td></tr></table></figure>
+<h2 id="underscore实现bind"><a href="#underscore实现bind" class="headerlink" title="underscore实现bind"></a>underscore实现bind</h2><h3 id="最简单的方法"><a href="#最简单的方法" class="headerlink" title="最简单的方法"></a>最简单的方法</h3><p>也是一开始我自己写出的方法：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">_.bind = restArgs(<span class="function"><span class="keyword">function</span> (<span class="params">func, context, args</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> restArgs(<span class="function"><span class="keyword">function</span> (<span class="params">callArgs</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> func.apply(context, args.concat(callArgs))</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<p>本质上，实际上返回一个将目标函数包裹起来的绑定函数，利用闭包储存了context，在执行绑定函数时，就执行目标函数，同时将利用apply将this置为context。<br>但这个方法不能够处理用new调用的情况。根据ES5标准，使用new调用bind函数，创建的应该是目标函数的实例。但是此时，使用new创建的显然是绑定函数的实例。</p>
+<h3 id="解决使用new创建实例的问题"><a href="#解决使用new创建实例的问题" class="headerlink" title="解决使用new创建实例的问题"></a>解决使用new创建实例的问题</h3><p>underscore是这样解决这个问题的：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> baseCreate = <span class="function"><span class="keyword">function</span> (<span class="params">obj</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">var</span> Ctor = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;&#125;</span><br><span class="line">  Ctor.prototype = obj</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">new</span> Ctor()</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> executeBound = <span class="function"><span class="keyword">function</span> (<span class="params">sourceFn, boundFn, context, callingContext, args</span>) </span>&#123;</span><br><span class="line">  <span class="comment">// 如果不是使用new调用函数，则按照原操作处理</span></span><br><span class="line">  <span class="keyword">if</span> (!(<span class="keyword">this</span> <span class="keyword">instanceof</span> callingContext)) &#123;</span><br><span class="line">    <span class="keyword">return</span> func.apply(context, args)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">var</span> self = baseCreate(sourceFn.prototype)</span><br><span class="line">  <span class="keyword">var</span> result = sourceFn.apply(self, args)</span><br><span class="line">  <span class="keyword">if</span> (_.isObject(result)) <span class="keyword">return</span> result</span><br><span class="line">  <span class="keyword">return</span> self</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">_.bind = restArgs(<span class="function"><span class="keyword">function</span> (<span class="params">func, context, args</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">var</span> bound = restArgs(<span class="function"><span class="keyword">function</span> (<span class="params">callArgs</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> executeBound(func, bound, context, <span class="keyword">this</span>, args.concat(callArgs))</span><br><span class="line">  &#125;)</span><br><span class="line">  <span class="keyword">return</span> bound</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<p>同样，是执行绑定函数，返回目标函数的执行结果。不同的是，要先判断是否是new调用。<br>如果不是new调用，则正常返回目标函数的执行结果。<br>如果是new调用，则创建一个[[prototype]]指向目标函数原型对象的实例，相当于模拟new执行函数的第一步，然后将这个实例放入目标函数中执行，this指向该实例，模拟第第二步，最后返回该实例，模拟第三步。<br>不同的是，underscore做的另一个处理是，如果目标函数本来就返回一个对象，那么执行结果就不返回该实例，而是返回目标函数本身返回的对象。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/JavaScript/" rel="tag"># JavaScript</a>
+          
+            <a href="/tags/Underscore-js/" rel="tag"># Underscore.js</a>
+          
+            <a href="/tags/源码/" rel="tag"># 源码</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/01/18/替换元素和非替换元素/" rel="next" title="替换元素和非替换元素">
+                <i class="fa fa-chevron-left"></i> 替换元素和非替换元素
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/02/05/关键渲染路径/" rel="prev" title="关键渲染路径">
+                关键渲染路径 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/images/avatar.jpeg" alt="泉先">
+          <p class="site-author-name" itemprop="name">泉先</p>
+           
+              <p class="site-description motion-element" itemprop="description">今天我有变得更厉害一点吗！>v<</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">41</span>
+                <span class="site-state-item-name">posts</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">12</span>
+                <span class="site-state-item-name">categories</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">18</span>
+                <span class="site-state-item-name">tags</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#ES5中的bind"><span class="nav-number">1.</span> <span class="nav-text">ES5中的bind</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#描述"><span class="nav-number">1.1.</span> <span class="nav-text">描述</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#语法"><span class="nav-number">1.2.</span> <span class="nav-text">语法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#示例"><span class="nav-number">1.3.</span> <span class="nav-text">示例</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#创建绑定函数"><span class="nav-number">1.3.1.</span> <span class="nav-text">创建绑定函数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#偏函数（partial-functions）"><span class="nav-number">1.3.2.</span> <span class="nav-text">偏函数（partial functions）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#绑定函数作为构造函数使用"><span class="nav-number">1.3.3.</span> <span class="nav-text">绑定函数作为构造函数使用</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#underscore实现bind"><span class="nav-number">2.</span> <span class="nav-text">underscore实现bind</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#最简单的方法"><span class="nav-number">2.1.</span> <span class="nav-text">最简单的方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#解决使用new创建实例的问题"><span class="nav-number">2.2.</span> <span class="nav-text">解决使用new创建实例的问题</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy;  2017 - 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">泉先</span>
+</div>
+
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="https://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Gemini
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.2"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

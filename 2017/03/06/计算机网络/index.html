@@ -1,0 +1,825 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="计算机网络,">
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.2">
+
+
+
+
+
+
+<meta name="description" content="TCPTCP三次握手客户端端首先发送一个带SYN标志的数据包给对方。服务器端收到后，回传一个带有SYN/ACK标志的数据包以示传达确认信息。最后，客户端再回传一个带有ACK标志的数据包，代表握手结束。 若在握手过程中某个阶段莫名中断，TCP协议会再次以相同的顺序发送相同的数据包。 为什么不“两次握手” 发送端发出的第一个连接请求报文段并没有丢失，而是在某个网络节点长时间地滞留了，以至于延误到连接释">
+<meta name="keywords" content="计算机网络">
+<meta property="og:type" content="article">
+<meta property="og:title" content="计算机网络">
+<meta property="og:url" content="http://yoursite.com/2017/03/06/计算机网络/index.html">
+<meta property="og:site_name" content="不会化妆的写手&lt;br&gt;不是好程序员">
+<meta property="og:description" content="TCPTCP三次握手客户端端首先发送一个带SYN标志的数据包给对方。服务器端收到后，回传一个带有SYN/ACK标志的数据包以示传达确认信息。最后，客户端再回传一个带有ACK标志的数据包，代表握手结束。 若在握手过程中某个阶段莫名中断，TCP协议会再次以相同的顺序发送相同的数据包。 为什么不“两次握手” 发送端发出的第一个连接请求报文段并没有丢失，而是在某个网络节点长时间地滞留了，以至于延误到连接释">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2020-06-30T14:04:59.938Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="计算机网络">
+<meta name="twitter:description" content="TCPTCP三次握手客户端端首先发送一个带SYN标志的数据包给对方。服务器端收到后，回传一个带有SYN/ACK标志的数据包以示传达确认信息。最后，客户端再回传一个带有ACK标志的数据包，代表握手结束。 若在握手过程中某个阶段莫名中断，TCP协议会再次以相同的顺序发送相同的数据包。 为什么不“两次握手” 发送端发出的第一个连接请求报文段并没有丢失，而是在某个网络节点长时间地滞留了，以至于延误到连接释">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/03/06/计算机网络/">
+
+
+
+
+
+  <title>计算机网络 | 不会化妆的写手<br>不是好程序员</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?a17a483691d457feb9d048db3e29684c";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="default">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">不会化妆的写手<br>不是好程序员</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            About
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/03/06/计算机网络/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="泉先">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="不会化妆的写手<br>不是好程序员">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">计算机网络</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-03-06T15:44:34+08:00">
+                2017-03-06
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/计算机网络/" itemprop="url" rel="index">
+                    <span itemprop="name">计算机网络</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="TCP"><a href="#TCP" class="headerlink" title="TCP"></a>TCP</h2><h3 id="TCP三次握手"><a href="#TCP三次握手" class="headerlink" title="TCP三次握手"></a>TCP三次握手</h3><p>客户端端首先发送一个带SYN标志的数据包给对方。服务器端收到后，回传一个带有SYN/ACK标志的数据包以示传达确认信息。最后，客户端再回传一个带有ACK标志的数据包，代表握手结束。</p>
+<p>若在握手过程中某个阶段莫名中断，TCP协议会再次以相同的顺序发送相同的数据包。</p>
+<p><strong>为什么不“两次握手”</strong></p>
+<p>发送端发出的第一个连接请求报文段并没有丢失，而是在某个网络节点长时间地滞留了，以至于延误到连接释放后的某个时间点才到达接收端。但接收端收到此失效的连接请求报文段后，会误认为是发送端再次发送的一个新的连接请求，就向发送端发出确认报文段，同意连接。假设不采用“三次握手”，新的连接就建立了。由于采用了“三次握手”，发送端不会理睬接收端的确认，不会发送ACK包，避免了失误。</p>
+<p><strong>与HTTP请求/响应关系</strong></p>
+<p>先进行TCP三次握手，建立TCP连接，然后发送HTTP请求，HTTP响应，完成后断开TCP连接。</p>
+<h2 id="DNS服务"><a href="#DNS服务" class="headerlink" title="DNS服务"></a>DNS服务</h2><p>DNS服务是和HTTP协议一样位于应用层的协议。它提供域名到IP地址之间的解析服务，通过域名查找IP地址，或通过IP地址反查域名。</p>
+<a id="more"></a>
+<h2 id="各种协议与HTTP协议的关系"><a href="#各种协议与HTTP协议的关系" class="headerlink" title="各种协议与HTTP协议的关系"></a>各种协议与HTTP协议的关系</h2><p>即客户端与服务器通讯的整个过程。因为处于书籍开头，不太详细，暂时不记录。</p>
+<h2 id="URI和URL"><a href="#URI和URL" class="headerlink" title="URI和URL"></a>URI和URL</h2><blockquote>
+<p>URI用字符串标识某一互联网资源，而URL表示资源的地点（互联网上所处的位置）。可见URL是URI的子集。——《图解HTTP》</p>
+<p>URI 可以进一步分为定位器、名称，或者二者兼具。术语“Uniform Resource Locator” (URL) 涉及的是 URI 的子集，除识别资源外，它还通过描述其最初访问机制（比如它的网络“位置”）来提供定位资源的方法。 术语“Uniform Resource Name” (URN) 在历史上曾用于引用“urn”方案 [RFC2141] 下的 URI，这个 URI 需要是全球惟一的，并且在资源不存在或不再可用时依然保持不变，对于其他任何拥有名称的一些属性的 URI，都需要使用这样的 URI。</p>
+<p>对于单独的方案，没有必要将其分为仅仅是一个 “名称”或者是一个“定位器”。 来自任意特定方案的 URI 实例可能有名称或定位器的特征，或两者兼而有之， 这通常取决于标识符分配中的持久性和命名机构对其关注程度， 而不取决于其他方案的质量。未来的规范和相关的文档应当使用通用术语“URI”，而不是使用有更多限制的条目“URL”和“URN” [RFC3305]。——IBM《分清URI、URL和URN》</p>
+</blockquote>
+<p>至此，我的理解是，URI标识的是一个资源，包括资源的名称、位置（但是外表看起来与一个单纯的位置标识是一样的，因此很多时候URL等于URI），而URL意义上仅代表资源的位置，URN意义上仅代表资源的名称，因此说URL、URN是URI的子集。</p>
+<h2 id="HTTP"><a href="#HTTP" class="headerlink" title="HTTP"></a>HTTP</h2><p>在两台计算机之间使用HTTP协议通信时，在一条通信线路上必然有一端是客户端，一端是服务器端。</p>
+<p>客户端发送给服务器的请求报文是由请求方法（如GET）、请求URI（如/index.html）、协议版本（如HTTP/1.1）、可选的请求首部字段（如host、connection、content-type、content-length等）和内容实体（如name=ueno&amp;age=37）构成的。</p>
+<p>服务器发送给客户端的响应报文基本上由协议版本、状态码、用以解释状态码的原因短语、可选的响应首部字段和内容实体构成。</p>
+<p>报文=报文首部+报文主体</p>
+<p>报文实体=实体首部（报文首部的一部分）+实体主体（未进行编码操作时等于报文主体）</p>
+<p>通常，报文主体等于实体主体。只有当传输中进行编码操作时，实体主体的内容发生变化，才导致它和报文主体产生差异。</p>
+<p><strong>压缩传输的内容编码</strong></p>
+<p>内容编码指明应用在实体内容上的编码格式，并保持实体信息原样压缩。内容编码后的实体由客户端接收并负责解码。常用的内容编码：gzip(GUN zip)、compress、deflate、identity。</p>
+<p><strong>分割发送的分块传输编码</strong></p>
+<p>在传输大容量数据时，通过把数据分割成多块，能够让浏览器逐步显示页面。把实体主体分块的功能称为分块传输编码。</p>
+<h3 id="状态码"><a href="#状态码" class="headerlink" title="状态码"></a>状态码</h3><h4 id="3XX重定向"><a href="#3XX重定向" class="headerlink" title="3XX重定向"></a>3XX重定向</h4><p>301：重定向到新的URI；</p>
+<p>302：临时性重定向。尽管RFC标准不允许在重定向时改变请求方法，但现存浏览器基本会将POST请求更改为GET；</p>
+<p>303：临时性重定向，重定向时应使用GET获取（如为POST请求，重定向会变成GET）；</p>
+<p>307：临时性重定向，重定向时不会从POST变成GET。因为302的“不守规则”而诞生；</p>
+<p>304：客户端发送附带条件的请求，比如文件在某某时间点后更新过（If-Modified-Since），服务器端允许请求访问资源，但没有满足条件。304状态码返回时，不包括任何响应主体部分。</p>
+<h4 id="4XX客户端错误"><a href="#4XX客户端错误" class="headerlink" title="4XX客户端错误"></a>4XX客户端错误</h4><p>400 Bad Request：请求报文中存在语法错误；</p>
+<p>401 Unauthorized：表示发送的请求需要有通过HTTP认证的认证信息。当浏览器初次接收到401响应，会弹出认证用的对话框。第二次接到表示认证失败；</p>
+<p>403 Forbidden：请求的资源被服务器拒绝；</p>
+<p>404 Not Found：服务器无法找到请求的资源。</p>
+<h4 id="5XX服务器错误"><a href="#5XX服务器错误" class="headerlink" title="5XX服务器错误"></a>5XX服务器错误</h4><p>500 Internal Server Error：服务器端在执行请求时发生了错误。可能是Web应用存在的bug或是某些临时的故障；</p>
+<p>503 Server Unavailable：服务器暂时处于超负载或正在进行停机维护；</p>
+<h2 id="与HTTP协作的Web服务器"><a href="#与HTTP协作的Web服务器" class="headerlink" title="与HTTP协作的Web服务器"></a>与HTTP协作的Web服务器</h2><h3 id="用单台虚拟主机实现多个域名"><a href="#用单台虚拟主机实现多个域名" class="headerlink" title="用单台虚拟主机实现多个域名"></a>用单台虚拟主机实现多个域名</h3><p>物理层面的一台服务器，使用虚拟主机功能，可以假想具有多个服务器。在互联网上，域名通过DNS服务映射到IP地址（域名解析）之后访问目标网站。可见，当请求发送到服务器时，已经是以IP地址形式访问了。所以，如果一台服务器同时托管了两个域名，就要搞清楚究竟要访问哪个域名。</p>
+<p>在相同IP地址下， 由于虚拟主机可以寄存多个不同主机名和域名的Web网站，因此在发送HTTP请求时，必须在首部的Host内完整指定主机名或域名的URI。</p>
+<h3 id="通信数据转发程序：代理、网关、隧道"><a href="#通信数据转发程序：代理、网关、隧道" class="headerlink" title="通信数据转发程序：代理、网关、隧道"></a>通信数据转发程序：代理、网关、隧道</h3><h4 id="代理"><a href="#代理" class="headerlink" title="代理"></a>代理</h4><p>使用代理服务器的理由有：利用缓存技术减少网络带宽的流量，组织内部针对特定网站进行访问控制，以获取访问日志为主要目的等。</p>
+<h5 id="缓存代理"><a href="#缓存代理" class="headerlink" title="缓存代理"></a>缓存代理</h5><p>代理转发响应时，代理服务器会预先将资源的副本缓存在代理服务器上。当代理再次接到对相同资源的请求时，可以不从源服务器那里获取资源，而是将之前缓存的资源作为响应返回。</p>
+<h5 id="透明代理"><a href="#透明代理" class="headerlink" title="透明代理"></a>透明代理</h5><p>转发请求或响应时，不对报文做任何加工的代理类型叫做透明代理，对报文内容进行加工的代理叫做非透明代理。</p>
+<h4 id="网关"><a href="#网关" class="headerlink" title="网关"></a>网关</h4><p>网关的工作机制和代理十分相似。网关能使通信线路上的服务器提供非HTTP协议服务。即利用网关可以将HTTP请求转化为其他协议通信。</p>
+<p>利用网关能提高通信的安全性，因为可以在客户端和网关之间的通信线路进行加密以确保连接的安全。</p>
+<h4 id="隧道"><a href="#隧道" class="headerlink" title="隧道"></a>隧道</h4><p>隧道可按要求建立起一条和其他服务器的通信线路，届时使用SSL等加密手段进行通信。隧道的目的是确保客户端能和服务器进行安全的通信。</p>
+<p>隧道本身不会解析HTTP请求，请求按照原样中转给之后的服务器。</p>
+<h3 id="保存资源的缓存"><a href="#保存资源的缓存" class="headerlink" title="保存资源的缓存"></a>保存资源的缓存</h3><p>缓存是指代理服务器或客户端本地磁盘内保存的资源副本。利用缓存可减少对源服务器的访问，也节省了通信流量和通信时间。</p>
+<p>缓存服务器是代理服务器的一种。当代理转发从服务器返回的响应时，代理服务器会保存一份资源的副本。缓存服务器的优势在于利用缓存可以避免多次从源服务器转发资源。因此客户端可就近从缓存服务器上获取资源，而源服务器也不必多次处理相同的请求。</p>
+<h4 id="缓存的有效期限"><a href="#缓存的有效期限" class="headerlink" title="缓存的有效期限"></a>缓存的有效期限</h4><p>缓存服务器会因为客户端的要求、缓存的有效期等因素，向源服务器确认资源的有效性。若判断缓存失效，缓存服务器会再次从源服务器上获取新的资源。</p>
+<h4 id="客户端的缓存"><a href="#客户端的缓存" class="headerlink" title="客户端的缓存"></a>客户端的缓存</h4><p>缓存还可存在于浏览器客户端中。如果浏览器中的缓存有效，则不必向服务器请求相同的资源，可以从本地磁盘直接读取。当判定缓存过期后，会向源服务器确认资源的有效性。若判断浏览器缓存失效，浏览器会再次请求新资源。</p>
+<h2 id="HTTP首部"><a href="#HTTP首部" class="headerlink" title="HTTP首部"></a>HTTP首部</h2><h3 id="HTTP报文首部"><a href="#HTTP报文首部" class="headerlink" title="HTTP报文首部"></a>HTTP报文首部</h3><p>响应首部字段Cache-Control: no-cache，到底是缓存服务器可以对响应进行缓存，但每次都要向源服务器确认有效性，还是根本不能够进行缓存。</p>
+<p>由服务器返回的响应中，若报文首部字段Cache-Control对no-cache字段名具体指定参数值（no-cache=Location），那么客户端在接收到这个被指定参数值的首部字段对应的响应报文后，就不能使用缓存。换言之，无参数的首部字段可以使用缓存。</p>
+<h3 id="Cookie"><a href="#Cookie" class="headerlink" title="Cookie"></a>Cookie</h3><p>Cookie的Expires属性指定浏览器可发送Cookie的有效期。当省略Expires属性时，其有效期仅限于维持浏览器会话时间段内，通常限于浏览器应用程序被关闭之前。</p>
+<h2 id="HTTP-1"><a href="#HTTP-1" class="headerlink" title="HTTP"></a>HTTP</h2><h4 id="通信使用明文可能会被窃听"><a href="#通信使用明文可能会被窃听" class="headerlink" title="通信使用明文可能会被窃听"></a>通信使用明文可能会被窃听</h4><p>通信的加密：HTTP协议中没有加密机制，但可以通过和SSL或TLS的组合使用，加密HTTP的通信内容。用SSL建立安全通信线路之后，就可以在这条线路上进行HTTP通信了。与SSL组合使用的HTTP被称为HTTPS。</p>
+<p>内容的加密</p>
+<h4 id="不验证通信方的身份可能遭遇伪装"><a href="#不验证通信方的身份可能遭遇伪装" class="headerlink" title="不验证通信方的身份可能遭遇伪装"></a>不验证通信方的身份可能遭遇伪装</h4><p>在HTTP协议通信中，由于不存在确认通信方的处理步骤，任何人都可以发起请求。另外，服务器只要接收到请求，不管对方是谁都会返回一个响应。虽然使用HTTP无法确定通信方，但使用SSL则可以。SSL不仅提供加密处理，而且还使用了一种被称为证书的手段，可用于确定方。</p>
+<h4 id="无法证明报文的完整性，可能已遭篡改"><a href="#无法证明报文的完整性，可能已遭篡改" class="headerlink" title="无法证明报文的完整性，可能已遭篡改"></a>无法证明报文的完整性，可能已遭篡改</h4><h3 id="HTTP-加密-认证-完整性保护-HTTPS"><a href="#HTTP-加密-认证-完整性保护-HTTPS" class="headerlink" title="HTTP+加密+认证+完整性保护=HTTPS"></a>HTTP+加密+认证+完整性保护=HTTPS</h3><p>HTTPS并非应用层的一种新协议，只是HTTP通信接口部分用SSL和TLS协议代替而已。通常，HTTP直接和TCP通信。当使用SSL时，则演变为先和SSL通信，再由SSL和TCP通信了。简而言之，HTTPS就是身披SSL协议这层外壳保护的HTTP。</p>
+<h3 id="HTTPS握手过程"><a href="#HTTPS握手过程" class="headerlink" title="HTTPS握手过程"></a>HTTPS握手过程</h3><ol>
+<li>(Client)Client Hello：客户端向服务端发送Client Hello消息，消息中包含一个客户端生成的随机数Random1、客户端支持的加密套件和SSL Version等信息；</li>
+<li>(Server)Server Hello：服务器向客户端发送Server Hello消息，从Client Hello传过来的加密套件中确定一份，再生成一个随机数Random2；</li>
+<li>(Server)Certificate：服务器端将自己的证书下发给客户端。</li>
+<li>(Server)Server Hello Done：通知客户端Server Hello过程结束；</li>
+<li>(Client)Certificate Verify：接到证书的客户端可使用数字证书认证机构的公开密钥对证书上的数字签名进行认证，验证后取出证书中的服务器公钥，再生成一个随机数Random3，利用公钥对Random3加密，生成PerMaster Key；</li>
+<li>(Client)Client Key Exchange：将PerMaster Key传给服务器，服务器再利用私钥解出PerMaster Key得到Random3。客户端和服务器都根据同样的算法，使用Random1+Random2+Random3生成一份秘钥，握手结束后的应用层数据都根据这个秘钥进行对称加密。</li>
+<li>(Client)Change Cipher Spec：客户端通知服务器，之后再发出的消息都会用之前协商出的秘钥进行加密；</li>
+<li>(Client)HandShake: Finished：客户端将前面的握手消息生成摘要再用协商好的秘钥进行加密，服务端接收后会用秘钥进行解密，若能解出来，说明前面协商出来的秘钥是一致的；</li>
+<li>(Server)Change Cipher Spec：服务端通知客户端之后再发出的消息都会用之前协商出的秘钥进行加密；</li>
+<li>(Server)HandShake: Finished：服务器端也将握手消息生成摘要再用密钥加密。客户端接收后利用秘钥解密，能解出来说明协商出的秘钥是一样的；</li>
+<li>Application Data：双方已经安全地协商出了一份秘钥，所有应用层数据都会用秘钥加密后再通过TCP进行可靠传输；</li>
+<li>Alert: warning, close notify：由客户端断开连接。断开连接时，发送close_notify报文。</li>
+</ol>
+<h2 id="用户使用浏览器访问一个网站的过程"><a href="#用户使用浏览器访问一个网站的过程" class="headerlink" title="用户使用浏览器访问一个网站的过程"></a>用户使用浏览器访问一个网站的过程</h2><ol>
+<li>浏览器先尝试从host文件中获取域名对应的ip地址，如果没有，则利用DNS协议来获取IP；</li>
+<li>获取IP地址后，利用TCP协议建立TCP连接；</li>
+<li>PC和服务器之间会有很多路由器一类的东西，IP协议指定了出发地（你的PC）和目的地（服务器）。数据会经过一个又一个路由器，OSPF协议会使用路由算法决定会经过哪些路由器，ARP协议负责求下一节点的地址。IP协议使用的是IP地址，整个发送过程只涉及出发地和目的地两个IP地址，而ARP协议使用的是MAC地址，整个发送过程涉及每一个节点的MAP地址；</li>
+<li>使用HTTP协议请求网页内容；</li>
+<li>服务器接收到HTTP请求，Web Server进行相应的初步处理，解析请求，拿到请求的地址、参数等，服务器脚本根据请求调用本地的数据，生成页面；</li>
+<li>Web Server将生成的页面作为HTTP响应的body，根据不同的处理结果生成响应header，发回给客户端；</li>
+<li>客户端接收到HTTP响应，通常第一个得到的响应body内是HTML代码，开始对HTML代码进行解析；</li>
+<li>解析过程中遇到引用服务器的资源（CSS、JS、图片、音频视频、附件等），再向Web Server发送请求，Web Server找到相应的文件发送回来；</li>
+<li>浏览器用CSS对HTML进行渲染，执行JS代码。</li>
+</ol>
+<h2 id="websocket"><a href="#websocket" class="headerlink" title="websocket"></a>websocket</h2><p>基于HTTP协议，请求头添加Upgrade: websocket; Connection: Upgrade，切换为websocket协议。<br>服务器可以主动给客户端发送消息。轮询或long loop浪费服务器资源。<br><a href="https://www.zhihu.com/question/20215561" target="_blank" rel="noopener">https://www.zhihu.com/question/20215561</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/计算机网络/" rel="tag"># 计算机网络</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/02/22/HTML5新标签/" rel="next" title="HTML5新标签">
+                <i class="fa fa-chevron-left"></i> HTML5新标签
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/03/08/JS零碎/" rel="prev" title="JS零碎">
+                JS零碎 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/images/avatar.jpeg" alt="泉先">
+          <p class="site-author-name" itemprop="name">泉先</p>
+           
+              <p class="site-description motion-element" itemprop="description">今天我有变得更厉害一点吗！>v<</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">41</span>
+                <span class="site-state-item-name">posts</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">12</span>
+                <span class="site-state-item-name">categories</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">18</span>
+                <span class="site-state-item-name">tags</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#TCP"><span class="nav-number">1.</span> <span class="nav-text">TCP</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#TCP三次握手"><span class="nav-number">1.1.</span> <span class="nav-text">TCP三次握手</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#DNS服务"><span class="nav-number">2.</span> <span class="nav-text">DNS服务</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#各种协议与HTTP协议的关系"><span class="nav-number">3.</span> <span class="nav-text">各种协议与HTTP协议的关系</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#URI和URL"><span class="nav-number">4.</span> <span class="nav-text">URI和URL</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HTTP"><span class="nav-number">5.</span> <span class="nav-text">HTTP</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#状态码"><span class="nav-number">5.1.</span> <span class="nav-text">状态码</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#3XX重定向"><span class="nav-number">5.1.1.</span> <span class="nav-text">3XX重定向</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4XX客户端错误"><span class="nav-number">5.1.2.</span> <span class="nav-text">4XX客户端错误</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5XX服务器错误"><span class="nav-number">5.1.3.</span> <span class="nav-text">5XX服务器错误</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#与HTTP协作的Web服务器"><span class="nav-number">6.</span> <span class="nav-text">与HTTP协作的Web服务器</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#用单台虚拟主机实现多个域名"><span class="nav-number">6.1.</span> <span class="nav-text">用单台虚拟主机实现多个域名</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#通信数据转发程序：代理、网关、隧道"><span class="nav-number">6.2.</span> <span class="nav-text">通信数据转发程序：代理、网关、隧道</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#代理"><span class="nav-number">6.2.1.</span> <span class="nav-text">代理</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#缓存代理"><span class="nav-number">6.2.1.1.</span> <span class="nav-text">缓存代理</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#透明代理"><span class="nav-number">6.2.1.2.</span> <span class="nav-text">透明代理</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#网关"><span class="nav-number">6.2.2.</span> <span class="nav-text">网关</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#隧道"><span class="nav-number">6.2.3.</span> <span class="nav-text">隧道</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#保存资源的缓存"><span class="nav-number">6.3.</span> <span class="nav-text">保存资源的缓存</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#缓存的有效期限"><span class="nav-number">6.3.1.</span> <span class="nav-text">缓存的有效期限</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#客户端的缓存"><span class="nav-number">6.3.2.</span> <span class="nav-text">客户端的缓存</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HTTP首部"><span class="nav-number">7.</span> <span class="nav-text">HTTP首部</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#HTTP报文首部"><span class="nav-number">7.1.</span> <span class="nav-text">HTTP报文首部</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Cookie"><span class="nav-number">7.2.</span> <span class="nav-text">Cookie</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HTTP-1"><span class="nav-number">8.</span> <span class="nav-text">HTTP</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#通信使用明文可能会被窃听"><span class="nav-number">8.0.1.</span> <span class="nav-text">通信使用明文可能会被窃听</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#不验证通信方的身份可能遭遇伪装"><span class="nav-number">8.0.2.</span> <span class="nav-text">不验证通信方的身份可能遭遇伪装</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#无法证明报文的完整性，可能已遭篡改"><span class="nav-number">8.0.3.</span> <span class="nav-text">无法证明报文的完整性，可能已遭篡改</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#HTTP-加密-认证-完整性保护-HTTPS"><span class="nav-number">8.1.</span> <span class="nav-text">HTTP+加密+认证+完整性保护=HTTPS</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#HTTPS握手过程"><span class="nav-number">8.2.</span> <span class="nav-text">HTTPS握手过程</span></a></li></ol><li class="nav-item nav-level-2"><a class="nav-link" href="#用户使用浏览器访问一个网站的过程"><span class="nav-number">9.</span> <span class="nav-text">用户使用浏览器访问一个网站的过程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#websocket"><span class="nav-number">10.</span> <span class="nav-text">websocket</span></a></li></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy;  2017 - 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">泉先</span>
+</div>
+
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="https://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Gemini
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.2"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
