@@ -396,17 +396,180 @@
 
       
         
-          
-            <h2 id="起因"><a href="#起因" class="headerlink" title="起因"></a>起因</h2><p>需求是实现一个伪对话框，也就是实现一个“两人互发消息”的效果。<br>第一反应，当然是把需要展示出来的消息存入数组，作为 React 组件的 state。这样，在需要发出消息的时候，就把消息推入这个数组，造成重新渲染即可。<br>所以，我写出了这样的代码：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Home</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span> </span>&#123;</span><br><span class="line">  <span class="keyword">constructor</span>() &#123;</span><br><span class="line">    <span class="keyword">super</span>()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">this</span>.state = &#123;</span><br><span class="line">      tag: <span class="string">''</span>, <span class="comment">// 中文学段。因为初版本实验性质，暂时使用中文作为选项索引。</span></span><br><span class="line">      msgList: [],</span><br><span class="line">      selected: &#123;</span><br><span class="line">        gradeSelected: <span class="string">''</span>,</span><br><span class="line">      &#125;,</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  componentDidMount() &#123;</span><br><span class="line">    <span class="comment">// “很高兴见到你”</span></span><br><span class="line">    <span class="keyword">this</span>.addMsgItem(<span class="number">0</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment">// “你最想提升哪门学科的成绩呢？”</span></span><br><span class="line">    setTimeout(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">      <span class="keyword">this</span>.addMsgItem(<span class="number">1</span>)</span><br><span class="line">    &#125;, <span class="number">2000</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment">// “初一 | 想提升的学科是：”</span></span><br><span class="line">    getUserInfo(&#123;</span><br><span class="line">      imei: getQuery(<span class="string">'imei'</span>),</span><br><span class="line">    &#125;).then(<span class="function"><span class="params">res</span> =&gt;</span> &#123;</span><br><span class="line">      setTimeout(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">        <span class="keyword">this</span>.setState(</span><br><span class="line">          &#123;</span><br><span class="line">            tag: res.slTag.tagName,</span><br><span class="line">          &#125;,</span><br><span class="line">          () =&gt; &#123;</span><br><span class="line">            <span class="keyword">this</span>.addMsgItem(<span class="string">'gradeSelect'</span>)</span><br><span class="line">          &#125;</span><br><span class="line">        )</span><br><span class="line">      &#125;, <span class="number">3000</span>)</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 给聊天框增加信息</span></span><br><span class="line">  addMsgItem = <span class="function"><span class="params">key</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">let</span> &#123; msgList &#125; = <span class="keyword">this</span>.state</span><br><span class="line">    <span class="keyword">const</span> &#123; tag, selected &#125; = <span class="keyword">this</span>.state</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 静态文本消息</span></span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">typeof</span> key === <span class="string">'number'</span>) &#123;</span><br><span class="line">      msgList = [...msgList, staticMsgItems[key]]</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">switch</span> (key) &#123;</span><br><span class="line">      <span class="comment">// 选择成绩</span></span><br><span class="line">      <span class="keyword">case</span> <span class="string">'gradeSelect'</span>:</span><br><span class="line">        msgList = [</span><br><span class="line">          ...msgList,</span><br><span class="line">          &#123;</span><br><span class="line">            children: (</span><br><span class="line">              &lt;div className=&#123;s.selectSubjectContainer&#125;&gt;</span><br><span class="line">                &lt;header className=&#123;s.subHeader&#125;&gt;&#123;tag&#125; | 想提升的学科是：&lt;<span class="regexp">/header&gt;</span></span><br><span class="line"><span class="regexp"></span></span><br><span class="line"><span class="regexp">                &lt;ul className=&#123;s.subjectList&#125;&gt;</span></span><br><span class="line"><span class="regexp">                  &#123;subjectList.map(item =&gt; (</span></span><br><span class="line"><span class="regexp">                    &lt;li className=&#123;s.subjectItem&#125; key=&#123;item&#125;&gt;</span></span><br><span class="line"><span class="regexp">                      &lt;button</span></span><br><span class="line"><span class="regexp">                        type="button"</span></span><br><span class="line"><span class="regexp">                        className=&#123;cx(&#123;</span></span><br><span class="line"><span class="regexp">                          [s.subjectItemBtn]: true,</span></span><br><span class="line"><span class="regexp">                          [s.active]: item === selected.gradeSelected,</span></span><br><span class="line"><span class="regexp">                        &#125;)&#125;</span></span><br><span class="line"><span class="regexp">                        onClick=&#123;() =&gt; &#123;</span></span><br><span class="line"><span class="regexp">                          this.setState(&#123;</span></span><br><span class="line"><span class="regexp">                            selected: &#123;</span></span><br><span class="line"><span class="regexp">                              ...selected,</span></span><br><span class="line"><span class="regexp">                              gradeSelected: item,</span></span><br><span class="line"><span class="regexp">                            &#125;,</span></span><br><span class="line"><span class="regexp">                          &#125;)</span></span><br><span class="line"><span class="regexp">                        &#125;&#125;</span></span><br><span class="line"><span class="regexp">                      &gt;</span></span><br><span class="line"><span class="regexp">                        &#123;item&#125;</span></span><br><span class="line"><span class="regexp">                      &lt;/</span>button&gt;</span><br><span class="line">                    &lt;<span class="regexp">/li&gt;</span></span><br><span class="line"><span class="regexp">                  ))&#125;</span></span><br><span class="line"><span class="regexp">                &lt;/u</span>l&gt;</span><br><span class="line">              &lt;<span class="regexp">/div&gt;</span></span><br><span class="line"><span class="regexp">            ),</span></span><br><span class="line"><span class="regexp">          &#125;,</span></span><br><span class="line"><span class="regexp">        ]</span></span><br><span class="line"><span class="regexp">        break</span></span><br><span class="line"><span class="regexp"></span></span><br><span class="line"><span class="regexp">      default:</span></span><br><span class="line"><span class="regexp">        break</span></span><br><span class="line"><span class="regexp">    &#125;</span></span><br><span class="line"><span class="regexp"></span></span><br><span class="line"><span class="regexp">    this.setState(&#123;</span></span><br><span class="line"><span class="regexp">      msgList,</span></span><br><span class="line"><span class="regexp">    &#125;)</span></span><br><span class="line"><span class="regexp">  &#125;</span></span><br><span class="line"><span class="regexp"></span></span><br><span class="line"><span class="regexp">  render() &#123;</span></span><br><span class="line"><span class="regexp">    const &#123; msgList &#125; = this.state</span></span><br><span class="line"><span class="regexp"></span></span><br><span class="line"><span class="regexp">    return (</span></span><br><span class="line"><span class="regexp">      &lt;ul className=&#123;s.container&#125;&gt;</span></span><br><span class="line"><span class="regexp">        &#123;msgList.map(item =&gt; (</span></span><br><span class="line"><span class="regexp">          &lt;MessageItem className=&#123;s.msgItem&#125;&gt;&#123;item.children&#125;&lt;/</span>MessageItem&gt;</span><br><span class="line">        ))&#125;</span><br><span class="line">      &lt;<span class="regexp">/ul&gt;</span></span><br><span class="line"><span class="regexp">    )</span></span><br><span class="line"><span class="regexp">  &#125;</span></span><br><span class="line"><span class="regexp">&#125;</span></span><br><span class="line"><span class="regexp"></span></span><br><span class="line"><span class="regexp">export default Home</span></span><br></pre></td></tr></table></figure>
-<p><code>addMsgItem</code> 即为向数组中插入消息的方法。</p>
-<p>可以看到，插入的第三条消息为一个可交互的组件，有着自己的样式和交互逻辑。我就毫不犹豫地将第三条消息的 jsx 直接插入了数组，渲染了出来。</p>
-<p>到这一步都没有发现问题。直到后面，在对这个组件进行交互的时候，我发现这个这个组件上的按钮“点不了”。</p>
-<h2 id="调查"><a href="#调查" class="headerlink" title="调查"></a>调查</h2><p>按理说，点击按钮应该使按钮变为“选择状态”，也就是变红。但现在无论怎样点击都不能够变红。<br>调查了下按钮的回调，发现 <code>onClick</code> 回调是好好触发了，记录“哪个按钮被选择”的 state 也已经正常更改了。<br>怀疑是 state 变动没有触发渲染。但是在 render 打 log，发现 render 函数也是执行了的。<br>很迷茫，不知道为什么，“哪个按钮被点击”的 state 已经改变了，<code>item</code> 等于 <code>selected.gradeSelected</code>，但是对应的按钮就是不变红。</p>
-<h2 id="bug-原因"><a href="#bug-原因" class="headerlink" title="bug 原因"></a>bug 原因</h2><p>当时脑子也有些乱。后来把整个渲染过程想了一遍，才发现问题所在。<br>这个问题的原因在于，我直接把 jsx 存入了数组。<br>如果 jsx 是纯展示性质的，在存入数组之后不会有任何变化，那这个操作没有什么问题。但是，这个 jsx 实际上是需要依赖当前的 state 做出变化的。<br>这样，一旦我把它存入数组，它在数组之中就不会再次被改变了。组件 state 的变化与它毫无关系（“哪个按钮被选中”的 state 和数组 state 完全独立，互不影响）。<br>React 组件重渲染的本质是执行 render 方法。在当次渲染执行 render 的时候，render 方法计算 jsx 并返回。在计算过程中，如果 jsx 需要 state，则会取得当前的 state，也就是最新的 state。<br>而如果 jsx 不是由 render 方法在当次渲染实时计算出来的，而是一早就存入 state 的，当然不会受到每次渲染变更的 state 的影响，一直维持着最初 push 进数组的那个状态。</p>
-<h2 id="解决方式"><a href="#解决方式" class="headerlink" title="解决方式"></a>解决方式</h2><p>也就是在这个时候，我才意识到了 antd 设计的睿智。<br>antd 其实也存在着同样的场景，即渲染表格的时候，需要设置 <code>columns</code>，用于配置每个单元格渲染的内容。<br>在渲染内容为 jsx 的时候，<code>columns</code> 要求配置一个 <code>render</code> 方法，而不直接是需要渲染的那段 jsx。这显然就是为了让这段 jsx 能够在渲染过程中重新生成，而不是静态存在于 state 中。<br>回到我的例子。在配置消息列表时，我也可以在列表项中提供一个 <code>render</code> 方法，而不是一段静态的 jsx。在需要渲染 jsx 时，调用当前列表项的 <code>render</code> 方法即可。</p>
+          <h2 id="起因"><a href="#起因" class="headerlink" title="起因"></a>起因</h2><p>需求是实现一个伪对话框，也就是实现一个“两人互发消息”的效果。<br>第一反应，当然是把需要展示出来的消息存入数组，作为 React 组件的 state。这样，在需要发出消息的时候，就把消息推入这个数组，造成重新渲染即可。<br>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2021/09/07/react-jsx-position/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </p></div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/10/18/complex-sentence/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="泉先">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="不会化妆的写手<br>不是好程序员">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/10/18/complex-sentence/" itemprop="url">一个比较有趣的需求</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-10-18T18:09:58+08:00">
+                2019-10-18
+              </time>
+            
+
+            
+
+            
+          </span>
 
           
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/框架-库-工具/" itemprop="url" rel="index">
+                    <span itemprop="name">框架/库/工具</span>
+                  </a>
+                </span>
+
+                
+                
+                  , 
+                
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/框架-库-工具/React-js/" itemprop="url" rel="index">
+                    <span itemprop="name">React.js</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>因为比较少见，是难得比较有趣的需求，记录一下。</p>
+<p>首先介绍一下需求。</p>
+<p><img src="/images/complex-01.jpeg" style="width: 300px;"><br><img src="/images/complex-03.png" style="width: 300px;"></p>
+<p>大概就是要实现如图效果，需求点拆分大概如下：</p>
+<ol>
+<li>给出一个句子，使用户可以在句子上划动，选中句子中的一部分。可以取消选中。</li>
+<li>将选中部分的位置（下称 index）提交给后端。不能单单提交选中的内容，因为同一句中可能会出现重复的单词。</li>
+<li>给出 index，可以将对应 index 转化为横线，划在句子上。句子中的下划线还可以再次叠加下划线，叠加的线条数目也是无上限的。</li>
+</ol>
+<p>第2、3条合并起来，其实就是 UI 视图到 index，与 index 到视图的相互转化。</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2019/10/18/complex-sentence/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -1689,188 +1852,6 @@
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/2018/07/20/rem布局在webview中页面错乱/#more" rel="contents">
-              Read more &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/03/28/babel-polyfill-babel-runtime/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="泉先">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpeg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="不会化妆的写手<br>不是好程序员">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/03/28/babel-polyfill-babel-runtime/" itemprop="url">babel-polyfill & babel-runtime</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-03-28T15:52:57+08:00">
-                2018-03-28
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/categories/框架-库-工具/" itemprop="url" rel="index">
-                    <span itemprop="name">框架/库/工具</span>
-                  </a>
-                </span>
-
-                
-                
-                  , 
-                
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/categories/框架-库-工具/webpack/" itemprop="url" rel="index">
-                    <span itemprop="name">webpack</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>之前明明知道，不知道为什么又变得不确定……“好记性不如烂笔头”系列。<br>为了验证一下，又找不到火狐旧版本入口，还专门去了类似“太平洋下载站”的地方下了个旧版的火狐哈哈哈哈哈哈哈有十年多没进过这类网站了吧。</p>
-<h2 id="babelrc"><a href="#babelrc" class="headerlink" title=".babelrc"></a>.babelrc</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="string">"present"</span>: [</span><br><span class="line">    <span class="string">"es2015"</span>,</span><br><span class="line">    <span class="string">"react"</span>,</span><br><span class="line">    <span class="string">"stage-2"</span></span><br><span class="line">  ],</span><br><span class="line">  <span class="string">"plugins"</span>: []</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>Present是按照ECMAScript草案来组织的，通常可以分为以下三大类：</p>
-<ol>
-<li>已经被写入ECMAScript标准中的特性，由于之前每年都有新特性被加入到标准中，又可以细分为：<ul>
-<li>es2015包含在2015里加入的新特性；</li>
-<li>es2016包含在2016里加入的新特性；</li>
-<li>es2017包含在2017里加入的新特性；</li>
-<li>env包含当前所有ECMAScript标准里的最新特性。</li>
-</ul>
-</li>
-</ol>
-<p>env包含了es2015、es2016和es2017。</p>
-<ol start="2">
-<li>被社区提出，但还没有写入ECMAScript标准里的特性，这其中又分为以下四种：<ul>
-<li>stage0 只是一个美好激进的想法，有 Babel 插件实现了对这些特性的支持，但是不确定是否会被定为标准；</li>
-<li>stage1 值得被纳入标准的特性；</li>
-<li>stage2 该特性规范已经被起草，将会被纳入标准里；</li>
-<li>stage3 该特性规范已经定稿，各大浏览器厂商和 Node.js 社区开始着手实现。</li>
-</ul>
-</li>
-</ol>
-<p>stage0包含stage1，stage1包含stage2，stage2包含stage3。</p>
-<ol start="3">
-<li>为了支持一些特定应用场景下的语法，和ECMAScript标准没有关系。例如<code>babel-preset-react</code>是为了支持React开发中的JSX语法。</li>
-</ol>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2018/03/28/babel-polyfill-babel-runtime/#more" rel="contents">
               Read more &raquo;
             </a>
           </div>
