@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="JavaScript,前端基础,位置,">
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.2">
+
+
+
+
+
+
+<meta name="description" content="client/offset/scroll系width/heightelement.clientWidth/Height按照以下判定规则：  如果没有CSS布局盒子或者CSS布局盒子为inline，返回0； 如果是根元素（html元素）或body元素，clientWidth/Height指的是视口的宽高（不含滚动条） 否则，如上，是不包含border不包含滚动条的元素宽高。  显然，其实就是致力于表">
+<meta name="keywords" content="JavaScript,前端基础,位置">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JS获取各种常见位置距离">
+<meta property="og:url" content="http://yoursite.com/2018/03/02/JS获取各种常见位置距离/index.html">
+<meta property="og:site_name" content="不会化妆的写手&lt;br&gt;不是好程序员">
+<meta property="og:description" content="client/offset/scroll系width/heightelement.clientWidth/Height按照以下判定规则：  如果没有CSS布局盒子或者CSS布局盒子为inline，返回0； 如果是根元素（html元素）或body元素，clientWidth/Height指的是视口的宽高（不含滚动条） 否则，如上，是不包含border不包含滚动条的元素宽高。  显然，其实就是致力于表">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="http://wx3.sinaimg.cn/large/7b1152ffly1foyj84wh62j20bf06vaa2.jpg">
+<meta property="og:image" content="http://wx3.sinaimg.cn/mw690/7b1152ffly1foyj8a47qnj20bf06vdfu.jpg">
+<meta property="og:image" content="http://wx4.sinaimg.cn/mw690/7b1152ffly1foyl5m0opwj20dw0dwt94.jpg">
+<meta property="og:updated_time" content="2020-06-30T14:04:59.930Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="JS获取各种常见位置距离">
+<meta name="twitter:description" content="client/offset/scroll系width/heightelement.clientWidth/Height按照以下判定规则：  如果没有CSS布局盒子或者CSS布局盒子为inline，返回0； 如果是根元素（html元素）或body元素，clientWidth/Height指的是视口的宽高（不含滚动条） 否则，如上，是不包含border不包含滚动条的元素宽高。  显然，其实就是致力于表">
+<meta name="twitter:image" content="http://wx3.sinaimg.cn/large/7b1152ffly1foyj84wh62j20bf06vaa2.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/03/02/JS获取各种常见位置距离/">
+
+
+
+
+
+  <title>JS获取各种常见位置距离 | 不会化妆的写手<br>不是好程序员</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?a17a483691d457feb9d048db3e29684c";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="default">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">不会化妆的写手<br>不是好程序员</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            About
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/03/02/JS获取各种常见位置距离/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="泉先">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="不会化妆的写手<br>不是好程序员">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">JS获取各种常见位置距离</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-03-02T15:03:48+08:00">
+                2018-03-02
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/JavaScript/" itemprop="url" rel="index">
+                    <span itemprop="name">JavaScript</span>
+                  </a>
+                </span>
+
+                
+                
+                  , 
+                
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/JavaScript/基础/" itemprop="url" rel="index">
+                    <span itemprop="name">基础</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="client-offset-scroll系"><a href="#client-offset-scroll系" class="headerlink" title="client/offset/scroll系"></a>client/offset/scroll系</h2><h3 id="width-height"><a href="#width-height" class="headerlink" title="width/height"></a>width/height</h3><h4 id="element-clientWidth-Height"><a href="#element-clientWidth-Height" class="headerlink" title="element.clientWidth/Height"></a>element.clientWidth/Height</h4><p>按照以下判定规则：</p>
+<ol>
+<li>如果没有CSS布局盒子或者CSS布局盒子为inline，返回0；</li>
+<li>如果是根元素（html元素）或body元素，clientWidth/Height指的是视口的宽高（不含滚动条）</li>
+<li>否则，如上，是不包含border不包含滚动条的元素宽高。</li>
+</ol>
+<p>显然，其实就是致力于表示元素能够用于显示内容的那部分区域的宽高，所以才叫做clientWidth/Height吧。</p>
+<p><strong>用盒子模型表达，就是content-box去除滚动条占位。</strong></p>
+<p><img src="http://wx3.sinaimg.cn/large/7b1152ffly1foyj84wh62j20bf06vaa2.jpg" alt="clientWidth/Height"></p>
+<h4 id="element-offsetWidth-Height"><a href="#element-offsetWidth-Height" class="headerlink" title="element.offsetWidth/Height"></a>element.offsetWidth/Height</h4><p>与clientWidth/Height致力于表示元素能显示内容的区域的宽高不同，offsetWidth/Height致力于表示元素本身的宽高。</p>
+<p><strong>用盒子模型表达，即border-box的宽高。</strong></p>
+<p><img src="http://wx3.sinaimg.cn/mw690/7b1152ffly1foyj8a47qnj20bf06vdfu.jpg" alt="offsetWidth/Height"></p>
+<h4 id="element-scrollWidth-Height"><a href="#element-scrollWidth-Height" class="headerlink" title="element.scrollWidth/Height"></a>element.scrollWidth/Height</h4><p>表示元素内容的宽高，即包括了被卷去部分的宽高。</p>
+<p><strong>用盒子模型表达，就是……没有专门的框，就是显示在content-box中的内容的宽高（内容仅包含常规流中的元素），包括因设置overflow: auto/hidden藏起的部分</strong></p>
+<a id="more"></a>
+<h3 id="left-top"><a href="#left-top" class="headerlink" title="left/top"></a>left/top</h3><h4 id="element-clientLeft-Top"><a href="#element-clientLeft-Top" class="headerlink" title="element.clientLeft/Top"></a>element.clientLeft/Top</h4><p>用来表示元素左/上边框的宽度。没想到仅仅是用来表达这个意思的，看MDN还以为自己没领会意思，试了下还真是这样……</p>
+<p>不过仔细想想也能领会其思想，client指的是能够显示内容区域的部分，clientLeft本身想要指代的是这个区域距离元素本身边界（即border-box）的距离。考虑到值只有clientLeft/Top，而滚动条都在右边或下方，所以滚动条的宽度不被考虑在内（否则一定会算上滚动条的宽度），这个距离中只可能出现border。因此，这个距离就成为了border的宽度。</p>
+<p><strong>用盒子模型表达，就是left/top border width。</strong></p>
+<h4 id="element-offsetLeft-Top"><a href="#element-offsetLeft-Top" class="headerlink" title="element.offsetLeft/Top"></a>element.offsetLeft/Top</h4><h5 id="offsetParent"><a href="#offsetParent" class="headerlink" title="offsetParent"></a>offsetParent</h5><ol>
+<li>如果元素为fixed定位，offsetParent为null；</li>
+<li>如果元素有最近的有定位的祖先元素，即position不为static的元素，则offsetParent为该元素；</li>
+<li>否则，offsetParent为body；</li>
+<li>body的offsetParent为null。</li>
+</ol>
+<h5 id="offsetLeft-Top"><a href="#offsetLeft-Top" class="headerlink" title="offsetLeft/Top"></a>offsetLeft/Top</h5><p>元素左/上外边框距离offsetParent左/上内边框的距离。</p>
+<p>fixed定位元素的offsetLeft/Top为与body内边框的距离。<br>body的offsetLeft/Top为0。</p>
+<h4 id="element-scrollLeft-Top"><a href="#element-scrollLeft-Top" class="headerlink" title="element.scrollLeft/Top"></a>element.scrollLeft/Top</h4><p>网页向左/上卷去部分的长度。</p>
+<p>除了该属性，以上全部属性均为只读。</p>
+<h2 id="element-getBoundingClientRect"><a href="#element-getBoundingClientRect" class="headerlink" title="element.getBoundingClientRect()"></a>element.getBoundingClientRect()</h2><h3 id="left-top-right-bottom"><a href="#left-top-right-bottom" class="headerlink" title="left/top/right/bottom"></a>left/top/right/bottom</h3><p>元素外边框距离视口左上角(0, 0)点的距离。</p>
+<p><img src="http://wx4.sinaimg.cn/mw690/7b1152ffly1foyl5m0opwj20dw0dwt94.jpg" alt="element.getBoundingClientRect().left/right/top/bottom"></p>
+<h3 id="width-height-1"><a href="#width-height-1" class="headerlink" title="width/height"></a>width/height</h3><p>width：元素右外边框距离(0, 0)点的距离减去元素左外边框距离(0, 0)点的距离；<br>height：元素下外边框距离(0, 0)点的距离减去元素上外边框距离(0, 0)点的距离。</p>
+<h2 id="window系"><a href="#window系" class="headerlink" title="window系"></a>window系</h2><h3 id="width-heigth"><a href="#width-heigth" class="headerlink" title="width/heigth"></a>width/heigth</h3><h4 id="window-innerWidth-Height"><a href="#window-innerWidth-Height" class="headerlink" title="window.innerWidth/Height"></a>window.innerWidth/Height</h4><p>浏览器视口的宽高，包括滚动条。</p>
+<p>与document.documentElement.clientWidth/Height与document.body.clientWidth/Height的区别是，clientWidth/Height不包含滚动条，而innerWidth/Height包含滚动条。</p>
+<h4 id="window-outerWidth-Height"><a href="#window-outerWidth-Height" class="headerlink" title="window.outerWidth/Height"></a>window.outerWidth/Height</h4><p>浏览器窗口的宽高，包括菜单栏和边框。</p>
+<h4 id="window-screen-width-height"><a href="#window-screen-width-height" class="headerlink" title="window.screen.width/height"></a>window.screen.width/height</h4><p>返回屏幕的分辨率。</p>
+<h4 id="window-screen-availWidth-Height"><a href="#window-screen-availWidth-Height" class="headerlink" title="window.screen.availWidth/Height"></a>window.screen.availWidth/Height</h4><p>返回屏幕的可用分辨率，去除操作系统某些功能占据的空间，如系统任务栏。</p>
+<h3 id="距离"><a href="#距离" class="headerlink" title="距离"></a>距离</h3><h4 id="window-screenX-Y"><a href="#window-screenX-Y" class="headerlink" title="window.screenX/Y"></a>window.screenX/Y</h4><p>视口左上角相对于屏幕左上角的距离。</p>
+<h4 id="window-pageXOffset-pageYOffset"><a href="#window-pageXOffset-pageYOffset" class="headerlink" title="window.pageXOffset/pageYOffset"></a>window.pageXOffset/pageYOffset</h4><p>页面向左/上卷去的长度。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 取网页卷去距离</span></span><br><span class="line"><span class="keyword">const</span> scrollTop = <span class="built_in">document</span>.documentElement.scrollTop || <span class="built_in">window</span>.pageYOffset || <span class="built_in">document</span>.body.scrollTop</span><br><span class="line"><span class="keyword">const</span> scrollLeft = <span class="built_in">document</span>.documentElement.scrollLeft || <span class="built_in">window</span>.pageXOffset || <span class="built_in">document</span>.body.scrollLeft</span><br></pre></td></tr></table></figure>
+<h3 id="操作操作"><a href="#操作操作" class="headerlink" title="#操作操作"></a><a href="#操作">#操作</a>操作</h3><h4 id="window-scrollTo-x-ywindow-scrollTo-x-y"><a href="#window-scrollTo-x-ywindow-scrollTo-x-y" class="headerlink" title="#window-scrollTo-x-ywindow.scrollTo(x, y)"></a><a href="#window-scrollTo-x-y">#window-scrollTo-x-y</a>window.scrollTo(x, y)</h4><p>将网页滚动到指定位置。</p>
+<h4 id="window-scrollBy-x-ywindow-scrollBy-x-y"><a href="#window-scrollBy-x-ywindow-scrollBy-x-y" class="headerlink" title="#window-scrollBy-x-ywindow.scrollBy(x, y)"></a><a href="#window-scrollBy-x-y">#window-scrollBy-x-y</a>window.scrollBy(x, y)</h4><p>将网页滚动指定距离，即相对位移。如window.scrollBy(0, window.innerHeight)，将网页向下滚动一屏。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/JavaScript/" rel="tag"># JavaScript</a>
+          
+            <a href="/tags/前端基础/" rel="tag"># 前端基础</a>
+          
+            <a href="/tags/位置/" rel="tag"># 位置</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/02/05/关键渲染路径/" rel="next" title="关键渲染路径">
+                <i class="fa fa-chevron-left"></i> 关键渲染路径
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/03/08/Vue-js-keep-alive踩坑/" rel="prev" title="Vue.js keep-alive踩坑">
+                Vue.js keep-alive踩坑 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/images/avatar.jpeg" alt="泉先">
+          <p class="site-author-name" itemprop="name">泉先</p>
+           
+              <p class="site-description motion-element" itemprop="description">今天我有变得更厉害一点吗！>v<</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">51</span>
+                <span class="site-state-item-name">posts</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">14</span>
+                <span class="site-state-item-name">categories</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">23</span>
+                <span class="site-state-item-name">tags</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#client-offset-scroll系"><span class="nav-number">1.</span> <span class="nav-text">client/offset/scroll系</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#width-height"><span class="nav-number">1.1.</span> <span class="nav-text">width/height</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#element-clientWidth-Height"><span class="nav-number">1.1.1.</span> <span class="nav-text">element.clientWidth/Height</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#element-offsetWidth-Height"><span class="nav-number">1.1.2.</span> <span class="nav-text">element.offsetWidth/Height</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#element-scrollWidth-Height"><span class="nav-number">1.1.3.</span> <span class="nav-text">element.scrollWidth/Height</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#left-top"><span class="nav-number">1.2.</span> <span class="nav-text">left/top</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#element-clientLeft-Top"><span class="nav-number">1.2.1.</span> <span class="nav-text">element.clientLeft/Top</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#element-offsetLeft-Top"><span class="nav-number">1.2.2.</span> <span class="nav-text">element.offsetLeft/Top</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#offsetParent"><span class="nav-number">1.2.2.1.</span> <span class="nav-text">offsetParent</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#offsetLeft-Top"><span class="nav-number">1.2.2.2.</span> <span class="nav-text">offsetLeft/Top</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#element-scrollLeft-Top"><span class="nav-number">1.2.3.</span> <span class="nav-text">element.scrollLeft/Top</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#element-getBoundingClientRect"><span class="nav-number">2.</span> <span class="nav-text">element.getBoundingClientRect()</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#left-top-right-bottom"><span class="nav-number">2.1.</span> <span class="nav-text">left/top/right/bottom</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#width-height-1"><span class="nav-number">2.2.</span> <span class="nav-text">width/height</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#window系"><span class="nav-number">3.</span> <span class="nav-text">window系</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#width-heigth"><span class="nav-number">3.1.</span> <span class="nav-text">width/heigth</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#window-innerWidth-Height"><span class="nav-number">3.1.1.</span> <span class="nav-text">window.innerWidth/Height</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#window-outerWidth-Height"><span class="nav-number">3.1.2.</span> <span class="nav-text">window.outerWidth/Height</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#window-screen-width-height"><span class="nav-number">3.1.3.</span> <span class="nav-text">window.screen.width/height</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#window-screen-availWidth-Height"><span class="nav-number">3.1.4.</span> <span class="nav-text">window.screen.availWidth/Height</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#距离"><span class="nav-number">3.2.</span> <span class="nav-text">距离</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#window-screenX-Y"><span class="nav-number">3.2.1.</span> <span class="nav-text">window.screenX/Y</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#window-pageXOffset-pageYOffset"><span class="nav-number">3.2.2.</span> <span class="nav-text">window.pageXOffset/pageYOffset</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#操作操作"><span class="nav-number">3.3.</span> <span class="nav-text">#操作操作</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#window-scrollTo-x-ywindow-scrollTo-x-y"><span class="nav-number">3.3.1.</span> <span class="nav-text">#window-scrollTo-x-ywindow.scrollTo(x, y)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#window-scrollBy-x-ywindow-scrollBy-x-y"><span class="nav-number">3.3.2.</span> <span class="nav-text">#window-scrollBy-x-ywindow.scrollBy(x, y)</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy;  2017 - 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">泉先</span>
+</div>
+
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="https://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Gemini
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.2"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="React.js,JavaScript,">
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.2">
+
+
+
+
+
+
+<meta name="description" content="起因需求是实现一个伪对话框，也就是实现一个“两人互发消息”的效果。第一反应，当然是把需要展示出来的消息存入数组，作为 React 组件的 state。这样，在需要发出消息的时候，就把消息推入这个数组，造成重新渲染即可。">
+<meta name="keywords" content="React.js,JavaScript">
+<meta property="og:type" content="article">
+<meta property="og:title" content="关于我写了这么多年 React，居然还能忽然懵掉这件事">
+<meta property="og:url" content="http://yoursite.com/2021/09/07/react-jsx-position/index.html">
+<meta property="og:site_name" content="不会化妆的写手&lt;br&gt;不是好程序员">
+<meta property="og:description" content="起因需求是实现一个伪对话框，也就是实现一个“两人互发消息”的效果。第一反应，当然是把需要展示出来的消息存入数组，作为 React 组件的 state。这样，在需要发出消息的时候，就把消息推入这个数组，造成重新渲染即可。">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2021-09-07T09:44:37.649Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="关于我写了这么多年 React，居然还能忽然懵掉这件事">
+<meta name="twitter:description" content="起因需求是实现一个伪对话框，也就是实现一个“两人互发消息”的效果。第一反应，当然是把需要展示出来的消息存入数组，作为 React 组件的 state。这样，在需要发出消息的时候，就把消息推入这个数组，造成重新渲染即可。">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2021/09/07/react-jsx-position/">
+
+
+
+
+
+  <title>关于我写了这么多年 React，居然还能忽然懵掉这件事 | 不会化妆的写手<br>不是好程序员</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?a17a483691d457feb9d048db3e29684c";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="default">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">不会化妆的写手<br>不是好程序员</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            About
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2021/09/07/react-jsx-position/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="泉先">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="不会化妆的写手<br>不是好程序员">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">关于我写了这么多年 React，居然还能忽然懵掉这件事</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-09-07T16:42:42+08:00">
+                2021-09-07
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/框架-库-工具/" itemprop="url" rel="index">
+                    <span itemprop="name">框架/库/工具</span>
+                  </a>
+                </span>
+
+                
+                
+                  , 
+                
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/框架-库-工具/React-js/" itemprop="url" rel="index">
+                    <span itemprop="name">React.js</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="起因"><a href="#起因" class="headerlink" title="起因"></a>起因</h2><p>需求是实现一个伪对话框，也就是实现一个“两人互发消息”的效果。<br>第一反应，当然是把需要展示出来的消息存入数组，作为 React 组件的 state。这样，在需要发出消息的时候，就把消息推入这个数组，造成重新渲染即可。<br><a id="more"></a><br>所以，我写出了这样的代码：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Home</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span> </span>&#123;</span><br><span class="line">  <span class="keyword">constructor</span>() &#123;</span><br><span class="line">    <span class="keyword">super</span>()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">this</span>.state = &#123;</span><br><span class="line">      tag: <span class="string">''</span>, <span class="comment">// 中文学段。因为初版本实验性质，暂时使用中文作为选项索引。</span></span><br><span class="line">      msgList: [],</span><br><span class="line">      selected: &#123;</span><br><span class="line">        gradeSelected: <span class="string">''</span>,</span><br><span class="line">      &#125;,</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  componentDidMount() &#123;</span><br><span class="line">    <span class="comment">// “很高兴见到你”</span></span><br><span class="line">    <span class="keyword">this</span>.addMsgItem(<span class="number">0</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment">// “你最想提升哪门学科的成绩呢？”</span></span><br><span class="line">    setTimeout(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">      <span class="keyword">this</span>.addMsgItem(<span class="number">1</span>)</span><br><span class="line">    &#125;, <span class="number">2000</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment">// “初一 | 想提升的学科是：”</span></span><br><span class="line">    getUserInfo(&#123;</span><br><span class="line">      imei: getQuery(<span class="string">'imei'</span>),</span><br><span class="line">    &#125;).then(<span class="function"><span class="params">res</span> =&gt;</span> &#123;</span><br><span class="line">      setTimeout(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">        <span class="keyword">this</span>.setState(</span><br><span class="line">          &#123;</span><br><span class="line">            tag: res.slTag.tagName,</span><br><span class="line">          &#125;,</span><br><span class="line">          () =&gt; &#123;</span><br><span class="line">            <span class="keyword">this</span>.addMsgItem(<span class="string">'gradeSelect'</span>)</span><br><span class="line">          &#125;</span><br><span class="line">        )</span><br><span class="line">      &#125;, <span class="number">3000</span>)</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 给聊天框增加信息</span></span><br><span class="line">  addMsgItem = <span class="function"><span class="params">key</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">let</span> &#123; msgList &#125; = <span class="keyword">this</span>.state</span><br><span class="line">    <span class="keyword">const</span> &#123; tag, selected &#125; = <span class="keyword">this</span>.state</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 静态文本消息</span></span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">typeof</span> key === <span class="string">'number'</span>) &#123;</span><br><span class="line">      msgList = [...msgList, staticMsgItems[key]]</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">switch</span> (key) &#123;</span><br><span class="line">      <span class="comment">// 选择成绩</span></span><br><span class="line">      <span class="keyword">case</span> <span class="string">'gradeSelect'</span>:</span><br><span class="line">        msgList = [</span><br><span class="line">          ...msgList,</span><br><span class="line">          &#123;</span><br><span class="line">            children: (</span><br><span class="line">              &lt;div className=&#123;s.selectSubjectContainer&#125;&gt;</span><br><span class="line">                &lt;header className=&#123;s.subHeader&#125;&gt;&#123;tag&#125; | 想提升的学科是：&lt;<span class="regexp">/header&gt;</span></span><br><span class="line"><span class="regexp"></span></span><br><span class="line"><span class="regexp">                &lt;ul className=&#123;s.subjectList&#125;&gt;</span></span><br><span class="line"><span class="regexp">                  &#123;subjectList.map(item =&gt; (</span></span><br><span class="line"><span class="regexp">                    &lt;li className=&#123;s.subjectItem&#125; key=&#123;item&#125;&gt;</span></span><br><span class="line"><span class="regexp">                      &lt;button</span></span><br><span class="line"><span class="regexp">                        type="button"</span></span><br><span class="line"><span class="regexp">                        className=&#123;cx(&#123;</span></span><br><span class="line"><span class="regexp">                          [s.subjectItemBtn]: true,</span></span><br><span class="line"><span class="regexp">                          [s.active]: item === selected.gradeSelected,</span></span><br><span class="line"><span class="regexp">                        &#125;)&#125;</span></span><br><span class="line"><span class="regexp">                        onClick=&#123;() =&gt; &#123;</span></span><br><span class="line"><span class="regexp">                          this.setState(&#123;</span></span><br><span class="line"><span class="regexp">                            selected: &#123;</span></span><br><span class="line"><span class="regexp">                              ...selected,</span></span><br><span class="line"><span class="regexp">                              gradeSelected: item,</span></span><br><span class="line"><span class="regexp">                            &#125;,</span></span><br><span class="line"><span class="regexp">                          &#125;)</span></span><br><span class="line"><span class="regexp">                        &#125;&#125;</span></span><br><span class="line"><span class="regexp">                      &gt;</span></span><br><span class="line"><span class="regexp">                        &#123;item&#125;</span></span><br><span class="line"><span class="regexp">                      &lt;/</span>button&gt;</span><br><span class="line">                    &lt;<span class="regexp">/li&gt;</span></span><br><span class="line"><span class="regexp">                  ))&#125;</span></span><br><span class="line"><span class="regexp">                &lt;/u</span>l&gt;</span><br><span class="line">              &lt;<span class="regexp">/div&gt;</span></span><br><span class="line"><span class="regexp">            ),</span></span><br><span class="line"><span class="regexp">          &#125;,</span></span><br><span class="line"><span class="regexp">        ]</span></span><br><span class="line"><span class="regexp">        break</span></span><br><span class="line"><span class="regexp"></span></span><br><span class="line"><span class="regexp">      default:</span></span><br><span class="line"><span class="regexp">        break</span></span><br><span class="line"><span class="regexp">    &#125;</span></span><br><span class="line"><span class="regexp"></span></span><br><span class="line"><span class="regexp">    this.setState(&#123;</span></span><br><span class="line"><span class="regexp">      msgList,</span></span><br><span class="line"><span class="regexp">    &#125;)</span></span><br><span class="line"><span class="regexp">  &#125;</span></span><br><span class="line"><span class="regexp"></span></span><br><span class="line"><span class="regexp">  render() &#123;</span></span><br><span class="line"><span class="regexp">    const &#123; msgList &#125; = this.state</span></span><br><span class="line"><span class="regexp"></span></span><br><span class="line"><span class="regexp">    return (</span></span><br><span class="line"><span class="regexp">      &lt;ul className=&#123;s.container&#125;&gt;</span></span><br><span class="line"><span class="regexp">        &#123;msgList.map(item =&gt; (</span></span><br><span class="line"><span class="regexp">          &lt;MessageItem className=&#123;s.msgItem&#125;&gt;&#123;item.children&#125;&lt;/</span>MessageItem&gt;</span><br><span class="line">        ))&#125;</span><br><span class="line">      &lt;<span class="regexp">/ul&gt;</span></span><br><span class="line"><span class="regexp">    )</span></span><br><span class="line"><span class="regexp">  &#125;</span></span><br><span class="line"><span class="regexp">&#125;</span></span><br><span class="line"><span class="regexp"></span></span><br><span class="line"><span class="regexp">export default Home</span></span><br></pre></td></tr></table></figure>
+<p><code>addMsgItem</code> 即为向数组中插入消息的方法。</p>
+<p>可以看到，插入的第三条消息为一个可交互的组件，有着自己的样式和交互逻辑。我就毫不犹豫地将第三条消息的 jsx 直接插入了数组，渲染了出来。</p>
+<p>到这一步都没有发现问题。直到后面，在对这个组件进行交互的时候，我发现这个这个组件上的按钮“点不了”。</p>
+<h2 id="调查"><a href="#调查" class="headerlink" title="调查"></a>调查</h2><p>按理说，点击按钮应该使按钮变为“选择状态”，也就是变红。但现在无论怎样点击都不能够变红。<br>调查了下按钮的回调，发现 <code>onClick</code> 回调是好好触发了，记录“哪个按钮被选择”的 state 也已经正常更改了。<br>怀疑是 state 变动没有触发渲染。但是在 render 打 log，发现 render 函数也是执行了的。<br>很迷茫，不知道为什么，“哪个按钮被点击”的 state 已经改变了，<code>item</code> 等于 <code>selected.gradeSelected</code>，但是对应的按钮就是不变红。</p>
+<h2 id="bug-原因"><a href="#bug-原因" class="headerlink" title="bug 原因"></a>bug 原因</h2><p>当时脑子也有些乱。后来把整个渲染过程想了一遍，才发现问题所在。<br>这个问题的原因在于，我直接把 jsx 存入了数组。<br>如果 jsx 是纯展示性质的，在存入数组之后不会有任何变化，那这个操作没有什么问题。但是，这个 jsx 实际上是需要依赖当前的 state 做出变化的。<br>这样，一旦我把它存入数组，它在数组之中就不会再次被改变了。组件 state 的变化与它毫无关系（“哪个按钮被选中”的 state 和数组 state 完全独立，互不影响）。<br>React 组件重渲染的本质是执行 render 方法。在当次渲染执行 render 的时候，render 方法计算 jsx 并返回。在计算过程中，如果 jsx 需要 state，则会取得当前的 state，也就是最新的 state。<br>而如果 jsx 不是由 render 方法在当次渲染实时计算出来的，而是一早就存入 state 的，当然不会受到每次渲染变更的 state 的影响，一直维持着最初 push 进数组的那个状态。</p>
+<h2 id="解决方式"><a href="#解决方式" class="headerlink" title="解决方式"></a>解决方式</h2><p>也就是在这个时候，我才意识到了 antd 设计的睿智。<br>antd 其实也存在着同样的场景，即渲染表格的时候，需要设置 <code>columns</code>，用于配置每个单元格渲染的内容。<br>在渲染内容为 jsx 的时候，<code>columns</code> 要求配置一个 <code>render</code> 方法，而不直接是需要渲染的那段 jsx。这显然就是为了让这段 jsx 能够在渲染过程中重新生成，而不是静态存在于 state 中。<br>回到我的例子。在配置消息列表时，我也可以在列表项中提供一个 <code>render</code> 方法，而不是一段静态的 jsx。在需要渲染 jsx 时，调用当前列表项的 <code>render</code> 方法即可。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/React-js/" rel="tag"># React.js</a>
+          
+            <a href="/tags/JavaScript/" rel="tag"># JavaScript</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/10/18/complex-sentence/" rel="next" title="一个比较有趣的需求">
+                <i class="fa fa-chevron-left"></i> 一个比较有趣的需求
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2021/09/09/some-notes/" rel="prev" title="零碎笔记">
+                零碎笔记 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/images/avatar.jpeg" alt="泉先">
+          <p class="site-author-name" itemprop="name">泉先</p>
+           
+              <p class="site-description motion-element" itemprop="description">今天我有变得更厉害一点吗！>v<</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">51</span>
+                <span class="site-state-item-name">posts</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">14</span>
+                <span class="site-state-item-name">categories</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">23</span>
+                <span class="site-state-item-name">tags</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#起因"><span class="nav-number">1.</span> <span class="nav-text">起因</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#调查"><span class="nav-number">2.</span> <span class="nav-text">调查</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#bug-原因"><span class="nav-number">3.</span> <span class="nav-text">bug 原因</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#解决方式"><span class="nav-number">4.</span> <span class="nav-text">解决方式</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy;  2017 - 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">泉先</span>
+</div>
+
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="https://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Gemini
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.2"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

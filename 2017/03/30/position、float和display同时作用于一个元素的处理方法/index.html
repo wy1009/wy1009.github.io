@@ -1,0 +1,805 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="CSS,">
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.2">
+
+
+
+
+
+
+<meta name="description" content="相关特性浮动 在浮动模型中，一个框（box）首先根据常规流布局，再将它从流中取出并尽可能地向左或向右偏移。因为它首先要根据常规布局后才偏移，所以效率较常规流较低。 浮动元素不发生外边距折叠。 浮动框的顶边不可以高于源文档中先前元素产生的块框或浮动框的顶。详细如下图，源文件中元素的顺序为O、A、B，O与A左浮动，B右浮动。B右浮动没有在上一行，而是在下一行的原因是，其不可以高于源文件中先前元素产生的">
+<meta name="keywords" content="CSS">
+<meta property="og:type" content="article">
+<meta property="og:title" content="position、float和display同时作用于一个元素的处理方法">
+<meta property="og:url" content="http://yoursite.com/2017/03/30/position、float和display同时作用于一个元素的处理方法/index.html">
+<meta property="og:site_name" content="不会化妆的写手&lt;br&gt;不是好程序员">
+<meta property="og:description" content="相关特性浮动 在浮动模型中，一个框（box）首先根据常规流布局，再将它从流中取出并尽可能地向左或向右偏移。因为它首先要根据常规布局后才偏移，所以效率较常规流较低。 浮动元素不发生外边距折叠。 浮动框的顶边不可以高于源文档中先前元素产生的块框或浮动框的顶。详细如下图，源文件中元素的顺序为O、A、B，O与A左浮动，B右浮动。B右浮动没有在上一行，而是在下一行的原因是，其不可以高于源文件中先前元素产生的">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="http://wx2.sinaimg.cn/large/7b1152ffly1fehr66za2wj205606x3y9.jpg">
+<meta property="og:image" content="http://wx3.sinaimg.cn/large/7b1152ffly1fehrd9t3mlj20bb01k0pq.jpg">
+<meta property="og:image" content="http://wx4.sinaimg.cn/large/7b1152ffly1feisqutl2lj20i10dcwf9.jpg">
+<meta property="og:image" content="http://wx2.sinaimg.cn/large/7b1152ffly1feisqz4qbyj20dk0crjsz.jpg">
+<meta property="og:image" content="http://wx2.sinaimg.cn/large/7b1152ffly1fe4wzbxzc4j20k00f0t9l.jpg">
+<meta property="og:updated_time" content="2020-06-30T14:04:59.933Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="position、float和display同时作用于一个元素的处理方法">
+<meta name="twitter:description" content="相关特性浮动 在浮动模型中，一个框（box）首先根据常规流布局，再将它从流中取出并尽可能地向左或向右偏移。因为它首先要根据常规布局后才偏移，所以效率较常规流较低。 浮动元素不发生外边距折叠。 浮动框的顶边不可以高于源文档中先前元素产生的块框或浮动框的顶。详细如下图，源文件中元素的顺序为O、A、B，O与A左浮动，B右浮动。B右浮动没有在上一行，而是在下一行的原因是，其不可以高于源文件中先前元素产生的">
+<meta name="twitter:image" content="http://wx2.sinaimg.cn/large/7b1152ffly1fehr66za2wj205606x3y9.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/03/30/position、float和display同时作用于一个元素的处理方法/">
+
+
+
+
+
+  <title>position、float和display同时作用于一个元素的处理方法 | 不会化妆的写手<br>不是好程序员</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?a17a483691d457feb9d048db3e29684c";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="default">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">不会化妆的写手<br>不是好程序员</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            About
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/03/30/position、float和display同时作用于一个元素的处理方法/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="泉先">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="不会化妆的写手<br>不是好程序员">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">position、float和display同时作用于一个元素的处理方法</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-03-30T20:52:05+08:00">
+                2017-03-30
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/CSS/" itemprop="url" rel="index">
+                    <span itemprop="name">CSS</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="相关特性"><a href="#相关特性" class="headerlink" title="相关特性"></a>相关特性</h2><h3 id="浮动"><a href="#浮动" class="headerlink" title="浮动"></a>浮动</h3><ul>
+<li>在浮动模型中，一个框（box）首先根据常规流布局，再将它从流中取出并尽可能地向左或向右偏移。因为它首先要根据常规布局后才偏移，所以效率较常规流较低。</li>
+<li>浮动元素不发生外边距折叠。</li>
+<li>浮动框的顶边不可以高于源文档中先前元素产生的块框或浮动框的顶。详细如下图，源文件中元素的顺序为O、A、B，O与A左浮动，B右浮动。B右浮动没有在上一行，而是在下一行的原因是，其不可以高于源文件中先前元素产生的块框或浮动框的顶，即不能高过B元素的顶。<br><img src="http://wx2.sinaimg.cn/large/7b1152ffly1fehr66za2wj205606x3y9.jpg" alt="块框或浮动框"></li>
+<li>浮动框的顶边不可以高过源文档中先前元素产生的任何包含一个框的行框的顶。<br><img src="http://wx3.sinaimg.cn/large/7b1152ffly1fehrd9t3mlj20bb01k0pq.jpg" alt="行框"></li>
+<li>在满足以上两条顶边规则的限制下，浮动框要放置得尽可能得高。</li>
+<li>左浮动框必须尽量向左放置，右浮动框必须尽量向右放置。在更高的位置和更靠左/靠右的位置间，选择前者。</li>
+<li>附加规则：对于clear特性不是none的浮动框，其上外边界（top margin edge）必须低于前面所有的左浮动框（clear: left）或右浮动框（clear: right）或左右浮动框（clear: both）的下外边界。</li>
+</ul>
+<a id="more"></a>
+<h4 id="clear特性"><a href="#clear特性" class="headerlink" title="clear特性"></a>clear特性</h4><p>该特性表明一个元素框的哪一边不可以与先前的浮动框相邻。clear特性不考虑它自身包含的浮动子元素和不处于同一格式化上下文中的浮动元素。</p>
+<ul>
+<li>left|right|both：生成框的间隙，是指设置足够的空白区，以使元素的顶边框边界（top border edge）放置到由源文档中较早元素生成的任何左浮动框（left）或右浮动框（right）或左右浮动框（both）的底外边界（bottom outer edge）之下。</li>
+<li>none：对考虑到浮动后的框的位置没有约束。</li>
+</ul>
+<p>可以简单地认为设置了clear特性值的元素，其top border edge要放在相关浮动元素的bottom margin edge之下。注意这两种元素接触边界的区别，一个是border，一个是margin。</p>
+<p>前面也提到，如果clear特性作用的是一个浮动元素，则规则变成其top margin edge要放在相关浮动元素的bottom margin edge之下。</p>
+<h3 id="绝对定位"><a href="#绝对定位" class="headerlink" title="绝对定位"></a>绝对定位</h3><h4 id="position-relative"><a href="#position-relative" class="headerlink" title="position: relative"></a>position: relative</h4><ol>
+<li>table-row-group、table-header-group、table-footer-group、table-column-group、table-row、table-column、table-cell、table-caption元素的position: relative效果没有被定义。</li>
+<li>相对定位元素处于常规流中，没有脱离常规流。position: static——常规流！position: relative——常规流！</li>
+<li>top、left、right、bottom设置百分比时，top和bottom是依据包含块的高度，left和right是依据包含块的宽度。这点和absolute是一样的。</li>
+</ol>
+<h4 id="position-absolute"><a href="#position-absolute" class="headerlink" title="position: absolute"></a>position: absolute</h4><ol>
+<li>绝对定位元素定位的参照物是其包含块，top、left、right、bottom指定的是元素相对于其包含块的偏移量，因此当包含块为行内元素时，表现会有点颠覆三观。</li>
+<li>绝对定位（absolute、fixed）的元素在3D可视化模型中，处于浮动元素的上方，比浮动元素更靠前。</li>
+</ol>
+<h4 id="分层显示（Layered-presentation）"><a href="#分层显示（Layered-presentation）" class="headerlink" title="分层显示（Layered presentation）"></a>分层显示（Layered presentation）</h4><h5 id="z-index"><a href="#z-index" class="headerlink" title="z-index"></a>z-index</h5><p>z-index特性指定层叠级别，只在定位元素（position不为static）上奏效。</p>
+<ul>
+<li>该整数为生成框在当前层叠上下文中的层叠级别。同时，该框也会生成一个局部层叠上下文，其中它的层叠级别为0。</li>
+<li>auto 生成框在当前层叠上下文中的层叠级别与它的父框相同。<strong>该框不生成新的局部层叠上下文</strong></li>
+</ul>
+<p><strong>也就是说，如果一个元素z-index为1，与它同一层叠上下文的元素z-index为0，那么为1的元素在为0的元素上方。此时，哪怕为1的元素的子元素z-index为负，那么这个为负的子元素仍在为0的元素上方。因为为1的元素已经生成了一个局部层叠上下文，它是独立的，其中的框不可能出现在其他层叠上下文中。</strong></p>
+<h5 id="层叠上下文的构成"><a href="#层叠上下文的构成" class="headerlink" title="层叠上下文的构成"></a>层叠上下文的构成</h5><ol>
+<li>形成层叠上下文的元素的背景和边框</li>
+<li>层叠级别为负值的后代层叠上下文</li>
+<li>常规流内非行内非定位的子元素形成的层</li>
+<li>非定位的浮动子元素和它们的内容组成的层</li>
+<li>常规流内行内非定位子元素组成的层</li>
+<li>任何z-index为auto的定位子元素，以及z-index是0的层叠上下文组成的层</li>
+<li>层叠级别为正值的后代层叠上下文</li>
+</ol>
+<p>简单说，就是形成层叠上下文的元素的背景和边框 &lt; z-index为负 &lt; 常规流（非行内） &lt; 浮动 &lt; 常规流行内 &lt; z-index为0/auto &lt; z-index为正。除了行内元素，实际上都很符合常识，只要记得常规流内行内元素高于浮动元素即可。</p>
+<p><img src="http://wx4.sinaimg.cn/large/7b1152ffly1feisqutl2lj20i10dcwf9.jpg" alt="层叠上下文的构成"></p>
+<p>既然已经提到了分层，就再复习一下元素盒子模型的切面图吧。</p>
+<p><img src="http://wx2.sinaimg.cn/large/7b1152ffly1feisqz4qbyj20dk0crjsz.jpg" alt="元素盒子模型切面图"></p>
+<h2 id="display、position、float的相互关系"><a href="#display、position、float的相互关系" class="headerlink" title="display、position、float的相互关系"></a>display、position、float的相互关系</h2><p>简单说，判断的先后顺序（优先级）就是display:none&gt;position: absolute/fixed&gt;float: left/right&gt;元素是否为根元素（是的话display强行block或table）&gt;display不为none的值。<br><img src="http://wx2.sinaimg.cn/large/7b1152ffly1fe4wzbxzc4j20k00f0t9l.jpg" alt=""></p>
+<p>设定值对应计算值：</p>
+<ul>
+<li>设定值inline-table，计算值table；</li>
+<li>设定值table-header-group、table-footer-group、table-column-group、table-row-group、table-row、table-column、table-cell、table-caption、inline-block、inline、run-in；</li>
+<li>设定值为其他，则计算值同设定值。</li>
+</ul>
+<p>侧面说明，浮动或绝对定位的元素只能是表格或者块级元素，如果不是表格或块级元素，就强行设定为表格或块级元素。</p>
+<h2 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h2><ul>
+<li>W3help, 武利剑, <a href="http://www.w3help.org/zh-cn/kb/009/" target="_blank" rel="noopener">CSS 定位体系概述</a></li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/CSS/" rel="tag"># CSS</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/03/30/可视化格式模型和各种框/" rel="next" title="可视化格式模型和各种框">
+                <i class="fa fa-chevron-left"></i> 可视化格式模型和各种框
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/04/11/浏览器缓存机制/" rel="prev" title="浏览器缓存机制">
+                浏览器缓存机制 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/images/avatar.jpeg" alt="泉先">
+          <p class="site-author-name" itemprop="name">泉先</p>
+           
+              <p class="site-description motion-element" itemprop="description">今天我有变得更厉害一点吗！>v<</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">51</span>
+                <span class="site-state-item-name">posts</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">14</span>
+                <span class="site-state-item-name">categories</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">23</span>
+                <span class="site-state-item-name">tags</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#相关特性"><span class="nav-number">1.</span> <span class="nav-text">相关特性</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#浮动"><span class="nav-number">1.1.</span> <span class="nav-text">浮动</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#clear特性"><span class="nav-number">1.1.1.</span> <span class="nav-text">clear特性</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#绝对定位"><span class="nav-number">1.2.</span> <span class="nav-text">绝对定位</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#position-relative"><span class="nav-number">1.2.1.</span> <span class="nav-text">position: relative</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#position-absolute"><span class="nav-number">1.2.2.</span> <span class="nav-text">position: absolute</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#分层显示（Layered-presentation）"><span class="nav-number">1.2.3.</span> <span class="nav-text">分层显示（Layered presentation）</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#z-index"><span class="nav-number">1.2.3.1.</span> <span class="nav-text">z-index</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#层叠上下文的构成"><span class="nav-number">1.2.3.2.</span> <span class="nav-text">层叠上下文的构成</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#display、position、float的相互关系"><span class="nav-number">2.</span> <span class="nav-text">display、position、float的相互关系</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考文献"><span class="nav-number">3.</span> <span class="nav-text">参考文献</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy;  2017 - 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">泉先</span>
+</div>
+
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="https://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Gemini
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.2"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="JavaScript,Underscore.js,源码,">
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.2">
+
+
+
+
+
+
+<meta name="description" content="underscore基本结构在全局变量上挂载一个对象“_”，将方法全部添加在这个对象上。 1234567var root = typeof self == &apos;object&apos; &amp;amp;&amp;amp; self.self === self &amp;amp;&amp;amp; self ||  typeof global == &apos;object&apos; &amp;amp;&amp;amp; global.global === global &amp;">
+<meta name="keywords" content="JavaScript,Underscore.js,源码">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Underscore.js实现链式调用">
+<meta property="og:url" content="http://yoursite.com/2017/12/14/Underscore-js实现链式调用/index.html">
+<meta property="og:site_name" content="不会化妆的写手&lt;br&gt;不是好程序员">
+<meta property="og:description" content="underscore基本结构在全局变量上挂载一个对象“_”，将方法全部添加在这个对象上。 1234567var root = typeof self == &apos;object&apos; &amp;amp;&amp;amp; self.self === self &amp;amp;&amp;amp; self ||  typeof global == &apos;object&apos; &amp;amp;&amp;amp; global.global === global &amp;">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2020-06-30T14:04:59.931Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Underscore.js实现链式调用">
+<meta name="twitter:description" content="underscore基本结构在全局变量上挂载一个对象“_”，将方法全部添加在这个对象上。 1234567var root = typeof self == &apos;object&apos; &amp;amp;&amp;amp; self.self === self &amp;amp;&amp;amp; self ||  typeof global == &apos;object&apos; &amp;amp;&amp;amp; global.global === global &amp;">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/12/14/Underscore-js实现链式调用/">
+
+
+
+
+
+  <title>Underscore.js实现链式调用 | 不会化妆的写手<br>不是好程序员</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?a17a483691d457feb9d048db3e29684c";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="default">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">不会化妆的写手<br>不是好程序员</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            About
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/12/14/Underscore-js实现链式调用/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="泉先">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="不会化妆的写手<br>不是好程序员">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Underscore.js实现链式调用</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-12-14T20:11:13+08:00">
+                2017-12-14
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/框架-库-工具/" itemprop="url" rel="index">
+                    <span itemprop="name">框架/库/工具</span>
+                  </a>
+                </span>
+
+                
+                
+                  , 
+                
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/框架-库-工具/Underscore-js/" itemprop="url" rel="index">
+                    <span itemprop="name">Underscore.js</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="underscore基本结构"><a href="#underscore基本结构" class="headerlink" title="underscore基本结构"></a>underscore基本结构</h2><p>在全局变量上挂载一个对象“_”，将方法全部添加在这个对象上。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> root = <span class="keyword">typeof</span> self == <span class="string">'object'</span> &amp;&amp; self.self === self &amp;&amp; self ||</span><br><span class="line">  <span class="keyword">typeof</span> global == <span class="string">'object'</span> &amp;&amp; global.global === global &amp;&amp; global ||</span><br><span class="line">  <span class="keyword">this</span> ||</span><br><span class="line">  &#123;&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> _ = &#123;&#125;</span><br><span class="line">root._ = _</span><br></pre></td></tr></table></figure>
+<h2 id="面向对象风格"><a href="#面向对象风格" class="headerlink" title="面向对象风格"></a>面向对象风格</h2><p>调用underscore方法的两种方式：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">_.each(obj, <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;&#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 面向对象风格</span></span><br><span class="line">_(obj).each(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;&#125;)</span><br></pre></td></tr></table></figure>
+<p>为实现面向对象风格，将<code>_</code>写为构造函数。</p>
+<a id="more"></a>
+<h3 id="对-构造函数的处理"><a href="#对-构造函数的处理" class="headerlink" title="对_构造函数的处理"></a>对<code>_</code>构造函数的处理</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> _ = <span class="function"><span class="keyword">function</span> (<span class="params">obj</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (!(<span class="keyword">this</span> <span class="keyword">instanceof</span> _)) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> _(obj)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">this</span>._wrapped = obj</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>意思很简单，在没有特殊设置的情况下，只有在使用<code>new</code>操作符调用函数时，函数内的<code>this</code>才会指向函数实例。因此根据<code>this</code>是否是<code>_</code>的实例可以确定是否是通过new调用<code>_</code>函数的。如果不是通过<code>new</code>调用，则通过<code>new</code>调用。<br>通过<code>new</code>调用，创建<code>_</code>的实例，其中实例的_wrapped属性为obj，即本应传入函数的值。</p>
+<h3 id="调用函数方法时的处理"><a href="#调用函数方法时的处理" class="headerlink" title="调用函数方法时的处理"></a>调用函数方法时的处理</h3><p>在<code>_</code>构造函数中，生成了一个包含了<em>wrapped属性的实例。显然还并不能够实现直接通过该实例调用方法，因此，需要将方法加入到`</em>`所指向的原型对象中。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">_.mixin = <span class="function"><span class="keyword">function</span> (<span class="params">obj</span>) </span>&#123;</span><br><span class="line">  <span class="comment">// _.functions为一个取出obj中所有方法名的函数</span></span><br><span class="line">  _.each(_.functions(obj), <span class="function"><span class="keyword">function</span> (<span class="params">name</span>) </span>&#123;</span><br><span class="line">    <span class="comment">// 将obj的方法加入到`_`的属性中</span></span><br><span class="line">    <span class="keyword">var</span> func = _[name] = obj[name]</span><br><span class="line">    _.prototype[name] = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">      <span class="comment">// `_`的实例会调用的`_`的原型对象上的方法，而不是`_`的属性上的方法，因此可以直接通过this取到该实例</span></span><br><span class="line">      <span class="keyword">var</span> args = <span class="keyword">this</span>._wrapped</span><br><span class="line">      <span class="comment">// apply可以将传入的array-like展开为一个个参数传入，使用apply调用push相当于将arguments一个个push入args中</span></span><br><span class="line">      <span class="built_in">Array</span>.prototype.push.apply(args, <span class="built_in">arguments</span>)</span><br><span class="line">      <span class="comment">// 将func中的this置为`_`，使其表现与直接通过`_`调用的函数相同</span></span><br><span class="line">      <span class="keyword">return</span> func.apply(_, args)</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">_.mixin(_)</span><br></pre></td></tr></table></figure>
+<h2 id="链式调用"><a href="#链式调用" class="headerlink" title="链式调用"></a>链式调用</h2><h3 id="表现"><a href="#表现" class="headerlink" title="表现"></a>表现</h3><p>underscore的链式调用需要借助<code>_.chain</code>方法。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> lyrics = [</span><br><span class="line">  <span class="string">'I\'m a lumberjack and I\'m okay'</span>,</span><br><span class="line">  <span class="string">'I sleep all night and I work all day'</span>,</span><br><span class="line">  <span class="string">'He\'s a lumberjack and he\'s okay'</span>,</span><br><span class="line">  <span class="string">'He sleeps all night and he works all day'</span>,</span><br><span class="line">]</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> counts = _(lyrics).chain()</span><br><span class="line">  .map(<span class="function"><span class="keyword">function</span> (<span class="params">line</span>) </span>&#123; <span class="keyword">return</span> line.split(<span class="string">''</span>) &#125;)</span><br><span class="line">  .flatten()</span><br><span class="line">  .reduce(<span class="function"><span class="keyword">function</span> (<span class="params">hash, l</span>) </span>&#123;</span><br><span class="line">    hash[l] = hash[l] || <span class="number">0</span></span><br><span class="line">    hash[l]++</span><br><span class="line">    <span class="keyword">return</span> hash</span><br><span class="line">  &#125;, &#123;&#125;)</span><br><span class="line">  .value()</span><br><span class="line"></span><br><span class="line"><span class="comment">// 也有这种写法</span></span><br><span class="line"><span class="keyword">var</span> counts = _.chain(lyrics).map()...</span><br></pre></td></tr></table></figure>
+<p>前一个方法的返回值是后一个方法的第一个参数。</p>
+<h3 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h3><p>在underscore中，如果你选择了链式调用，那么你调用的所有方法都是<code>_</code>原型对象上的方法。这也方便了对返回结果的统一处理。<br>首先，将初始对象（即后续链式调用链上的方法的返回结果）通过<code>_.chain()</code>方法封装为一个带有_wrapped属性的实例，即前面所说的面向对象风格。同时通过<code>_chain</code>属性标记当前为链式调用模式。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">_.chain = <span class="function"><span class="keyword">function</span> (<span class="params">obj</span>) </span>&#123;</span><br><span class="line">  obj = _(obj)</span><br><span class="line">  obj._chain = <span class="literal">true</span></span><br><span class="line">  <span class="keyword">return</span> obj</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>然后通过该实例调用underscore的方法，这样，所有的方法都会经由<code>_</code>原型对象上的方法的“外包装”的统一处理，即以下部分：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">_.prototype[name] = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="comment">// `_`的实例会调用的`_`的原型对象上的方法，而不是`_`的属性上的方法，因此可以直接通过this取到该实例</span></span><br><span class="line">  <span class="keyword">var</span> args = <span class="keyword">this</span>._wrapped</span><br><span class="line">  <span class="comment">// apply可以将传入的array-like展开为一个个参数传入，使用apply调用push相当于将arguments一个个push入args中</span></span><br><span class="line">  <span class="built_in">Array</span>.prototype.push.apply(args, <span class="built_in">arguments</span>)</span><br><span class="line">  <span class="comment">// 将func中的this置为`_`，使其表现与直接通过`_`调用的函数相同</span></span><br><span class="line">  <span class="keyword">return</span> func.apply(_, args)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>再在这部分动些手脚：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">_.prototype[name] = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="comment">// `_`的实例会调用的`_`的原型对象上的方法，而不是`_`的属性上的方法，因此可以直接通过this取到该实例</span></span><br><span class="line">  <span class="keyword">var</span> args = <span class="keyword">this</span>._wrapped</span><br><span class="line">  <span class="comment">// apply可以将传入的array-like展开为一个个参数传入，使用apply调用push相当于将arguments一个个push入args中</span></span><br><span class="line">  <span class="built_in">Array</span>.prototype.push.apply(args, <span class="built_in">arguments</span>)</span><br><span class="line">  <span class="comment">// 将func中的this置为`_`，使其表现与直接通过`_`调用的函数相同</span></span><br><span class="line">  <span class="keyword">var</span> obj = func.apply(_, args)</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">this</span>._chain ? : _.chain(obj) : obj</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这样，只要是通过<code>_</code>的实例所调用的方法，即<code>_</code>原型对象上的方法，其返回值都会被“外包装”处理。此时可以通过实例上的<code>_chain</code>标记，判断此时是否为链式调用。如果是链式调用，则再次调用<code>_.chain</code>方法，将返回值封装为实例的<code>_wrapped</code>属性，标记<code>_chain</code>属性，重复以上步骤。以此来将普通的返回值封入实例，进行下一步调用。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">_.prototype.value = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">this</span>._wrapper</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>最后，调用一个value()方法，结束链式调用。因为<strong>链式调用实际上是把返回值封入实例，然后再通过实例调用方法</strong>，因此，从实例中取出值，就是最终的返回值。</p>
+<h3 id="两种写法"><a href="#两种写法" class="headerlink" title="两种写法"></a>两种写法</h3><p>第一种写法，<code>_(obj).chain()</code>，先创建实例，将<code>obj</code>存入<code>_wrapped</code>中。在调用<code>_.chain()</code>时，会先被“外包装”处理，将<code>_wrapped</code>中的<code>obj</code>取出，作为参数传入给<code>_.chain()</code>方法，相当于直接调用<code>_.chain(obj)</code>，然后由<code>_.chain(obj)</code>创建实例；<br>第二种写法，直接调用<code>_.chain(obj)</code>，只是跳过了之前的步骤。</p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>underscore链式调用使用的是其面向对象风格。根本思想是将<code>obj</code>封入实例，在借由实例调用方法前，先将<code>obj</code>从实例中“剥出来”，调用方法完成后，再将返回值“封回去”，再借由实例进行下一步调用。<br>可以分为两个部分，一是面向对象风格。首先将初始参数的obj进行面向对象处理，生成实例<code>{ _wrapped: obj }</code>，再借由实例调用方法。同时，实例调用的方法，也就是<code>_</code>原型对象上的方法，是经过了特殊处理的。为实现面向对象，将调用方法的实例中包裹的真正参数<code>_wrapped</code>整合其他传入方法的参数，传入方法。<br>二是链式调用。链式调用是在面向对象风格的基础上实现的。进行链式调用时，先调用<code>_.chain</code>，在实例上添加链式调用标记<code>_chain</code>。接下来，为实现链式调用，如果实例上有<code>_chain</code>，则将返回值也进行面向对象处理，同时标记<code>_chain</code>，使其能够继续以面向对象的风格调用，返回值也同样能调用方法，即实现了链式调用。一直到调用_.prototype.value，这个方法没有经过特殊处理，不会根据链式调用标记将返回值也进行面向对象处理，而是直接返回实例中的<code>_wrapped</code>，即最终返回值。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/JavaScript/" rel="tag"># JavaScript</a>
+          
+            <a href="/tags/Underscore-js/" rel="tag"># Underscore.js</a>
+          
+            <a href="/tags/源码/" rel="tag"># 源码</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/11/23/对象类型判断/" rel="next" title="对象类型判断">
+                <i class="fa fa-chevron-left"></i> 对象类型判断
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/01/09/Nuxt-js使用笔记/" rel="prev" title="Nuxt.js使用笔记">
+                Nuxt.js使用笔记 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/images/avatar.jpeg" alt="泉先">
+          <p class="site-author-name" itemprop="name">泉先</p>
+           
+              <p class="site-description motion-element" itemprop="description">今天我有变得更厉害一点吗！>v<</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">51</span>
+                <span class="site-state-item-name">posts</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">14</span>
+                <span class="site-state-item-name">categories</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">23</span>
+                <span class="site-state-item-name">tags</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#underscore基本结构"><span class="nav-number">1.</span> <span class="nav-text">underscore基本结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#面向对象风格"><span class="nav-number">2.</span> <span class="nav-text">面向对象风格</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#对-构造函数的处理"><span class="nav-number">2.1.</span> <span class="nav-text">对_构造函数的处理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#调用函数方法时的处理"><span class="nav-number">2.2.</span> <span class="nav-text">调用函数方法时的处理</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#链式调用"><span class="nav-number">3.</span> <span class="nav-text">链式调用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#表现"><span class="nav-number">3.1.</span> <span class="nav-text">表现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#实现"><span class="nav-number">3.2.</span> <span class="nav-text">实现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#两种写法"><span class="nav-number">3.3.</span> <span class="nav-text">两种写法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#总结"><span class="nav-number">3.4.</span> <span class="nav-text">总结</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy;  2017 - 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">泉先</span>
+</div>
+
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="https://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Gemini
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.2"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

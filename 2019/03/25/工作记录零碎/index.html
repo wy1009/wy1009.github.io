@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="记录,">
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.2">
+
+
+
+
+
+
+<meta name="description" content="Charles mock 数据Charles mock 数据，眼看着 Charles 抓到的包都是正常的，可是浏览器中间就是收不到响应。忽然回忆起，跨域实际上是浏览器本身做的一个限制，为用户的安全，及时收到数据也不返回。考虑到可能是跨域的问题，开了禁止跨域的浏览器，解决。 position: fixed 问题fixed 的元素不一定相对视口定位。在祖先元素中出现某些特定属性时，会相对于该祖先元素定">
+<meta name="keywords" content="记录">
+<meta property="og:type" content="article">
+<meta property="og:title" content="工作记录零碎">
+<meta property="og:url" content="http://yoursite.com/2019/03/25/工作记录零碎/index.html">
+<meta property="og:site_name" content="不会化妆的写手&lt;br&gt;不是好程序员">
+<meta property="og:description" content="Charles mock 数据Charles mock 数据，眼看着 Charles 抓到的包都是正常的，可是浏览器中间就是收不到响应。忽然回忆起，跨域实际上是浏览器本身做的一个限制，为用户的安全，及时收到数据也不返回。考虑到可能是跨域的问题，开了禁止跨域的浏览器，解决。 position: fixed 问题fixed 的元素不一定相对视口定位。在祖先元素中出现某些特定属性时，会相对于该祖先元素定">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2022-04-25T04:17:16.116Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="工作记录零碎">
+<meta name="twitter:description" content="Charles mock 数据Charles mock 数据，眼看着 Charles 抓到的包都是正常的，可是浏览器中间就是收不到响应。忽然回忆起，跨域实际上是浏览器本身做的一个限制，为用户的安全，及时收到数据也不返回。考虑到可能是跨域的问题，开了禁止跨域的浏览器，解决。 position: fixed 问题fixed 的元素不一定相对视口定位。在祖先元素中出现某些特定属性时，会相对于该祖先元素定">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/03/25/工作记录零碎/">
+
+
+
+
+
+  <title>工作记录零碎 | 不会化妆的写手<br>不是好程序员</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?a17a483691d457feb9d048db3e29684c";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="default">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">不会化妆的写手<br>不是好程序员</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            About
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/03/25/工作记录零碎/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="泉先">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="不会化妆的写手<br>不是好程序员">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">工作记录零碎</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-03-25T20:48:34+08:00">
+                2019-03-25
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/前端基础/" itemprop="url" rel="index">
+                    <span itemprop="name">前端基础</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="Charles-mock-数据"><a href="#Charles-mock-数据" class="headerlink" title="Charles mock 数据"></a>Charles mock 数据</h2><p>Charles mock 数据，眼看着 Charles 抓到的包都是正常的，可是浏览器中间就是收不到响应。忽然回忆起，跨域实际上是浏览器本身做的一个限制，为用户的安全，及时收到数据也不返回。考虑到可能是跨域的问题，开了禁止跨域的浏览器，解决。</p>
+<h2 id="position-fixed-问题"><a href="#position-fixed-问题" class="headerlink" title="position: fixed 问题"></a>position: fixed 问题</h2><p><code>fixed</code> 的元素不一定相对视口定位。在祖先元素中出现某些特定属性时，会相对于该祖先元素定位。</p>
+<p>相关文章：<a href="https://github.com/chokcoco/iCSS/issues/24" target="_blank" rel="noopener">fixed 定位失效 | 不受控制的 position:fixed</a></p>
+<h2 id="写全局组件的方法"><a href="#写全局组件的方法" class="headerlink" title="写全局组件的方法"></a>写全局组件的方法</h2><p>如常见的 <code>Modal</code> 弹窗，之前一直都会在组件中设置一个 <code>modalShow</code> 的值，用来在组件内控制 <code>Modal</code> 组件的显示/隐藏。最近忽然意识到，其实可以更加方便。直接 <code>ReactDOM.render</code> <code>Modal</code> 组件，然后将其插入某节点即可。不需要依赖组件内部的某个值来显示隐藏。详见：<a href="https://github.com/wy1009/components/tree/master/ConfirmModal" target="_blank" rel="noopener">Modal 组件</a></p>
+<a id="more"></a>
+<h2 id="Flex-做到子元素无条件等分空间"><a href="#Flex-做到子元素无条件等分空间" class="headerlink" title="Flex 做到子元素无条件等分空间"></a>Flex 做到子元素无条件等分空间</h2><p>不知道我的做法对不对劲……毕竟是自己想到的。众所周知，Flex 布局中，子元素会先占据自己应有的大小，然后再等分剩余空间。导致子元素如果自然状态时大小并不一样大，则无法真正做到等分父元素。因此，可以给所有子元素设置 <code>width: 100%</code>。这样，所有子元素都会同样大小自然等分父元素。</p>
+<h2 id="触底定位不准"><a href="#触底定位不准" class="headerlink" title="触底定位不准"></a>触底定位不准</h2><p>奇怪的一加手机：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 视窗到网页底端的距离，为 0 即为触底</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> getBottom = <span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">let</span> el</span><br><span class="line">  <span class="keyword">if</span> (<span class="built_in">document</span>.documentElement.scrollTop) &#123;</span><br><span class="line">    el = <span class="built_in">document</span>.documentElement</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    el = <span class="built_in">document</span>.body</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">// 在（至少是）Chrome 浏览器下，当 documentElement.scrollTop 为 0 时，clientHeight 不为视口高度，而是整个网页的高度，与 scrollHeight 相等</span></span><br><span class="line">  <span class="comment">// 在安卓 webview 中，clientHeight 也是与 scrollHeight 相等的</span></span><br><span class="line">  <span class="comment">// 因此，用 window.innerHeight 替换 clientHeight</span></span><br><span class="line">  <span class="comment">// 在一加手机中，可能出现计算值为小于 0 或 大于 0 小于 1 的情况，因此将触底计算更改为 &lt; 1</span></span><br><span class="line">  <span class="keyword">return</span> el.scrollHeight - el.scrollTop - <span class="built_in">window</span>.innerHeight &lt;= <span class="number">1</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="Number-parseInt"><a href="#Number-parseInt" class="headerlink" title="Number.parseInt"></a>Number.parseInt</h2><p>低版本浏览器不支持 <code>Number.parseInt</code>，但是支持 <code>window.parseInt</code>。</p>
+<h2 id="webview-中刷新页面"><a href="#webview-中刷新页面" class="headerlink" title="webview 中刷新页面"></a>webview 中刷新页面</h2><p>前端在 webview 中刷新页面的行为是不可靠的，部分机型前端没有刷新页面的权利，需要客户端来刷新。</p>
+<h2 id="create-react-app-升级后问题"><a href="#create-react-app-升级后问题" class="headerlink" title="create-react-app 升级后问题"></a>create-react-app 升级后问题</h2><p>create-react-app 最近应该是进行了升级，和我几个月前拉的代码完全不一样。有两个小坑：</p>
+<ol>
+<li>eject 项目后会报缺包错误，按照它的错误提示装三个包就可以了；</li>
+<li>css module 不再默认开启，看 webpack 配置代码会发现，文件名为 ‘xxx.module.css’ 的文件才会开启 css module，否则会报一个根本完全看不出来是因为没有开启 css module 的错误。真的完全看不出来，从字面意义上看，完全就是在告诉你另一回事……</li>
+</ol>
+<h2 id="fastclick-造成的坑"><a href="#fastclick-造成的坑" class="headerlink" title="fastclick 造成的坑"></a>fastclick 造成的坑</h2><ul>
+<li>ios 引入 fastclick 会导致 contenteditable 的元素无法正常聚焦。表现为非常不灵敏，需要长按才能聚焦。</li>
+</ul>
+<h2 id="React-Hooks-闭包问题"><a href="#React-Hooks-闭包问题" class="headerlink" title="React Hooks 闭包问题"></a>React Hooks 闭包问题</h2><p>setTimeout 之类的闭包问题可能就必须用 ref 一类的方式解决。但是事件监听方法不必要啊！<br>你下意识地将元素的 dom 实例取出，用原生事件绑定。这样回调方法永远是绑定时候创建的那一个，就触发了闭包问题。<br>实际上，应该直接在元素上面绑定事件监听方法。这样每次渲染，都创建了一个新的回调方法，这个方法所获取的值就一直都是最新的。<br>就不存在闭包问题了。</p>
+<h2 id="mobile-safari-点击事件失效"><a href="#mobile-safari-点击事件失效" class="headerlink" title="mobile safari 点击事件失效"></a>mobile safari 点击事件失效</h2><p>部分不可点击的元素，需要明确指定 cursor: pointer 才可以。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/记录/" rel="tag"># 记录</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/12/02/a-cartoon-intro-to-fiber/" rel="next" title="对 Fiber 的介绍">
+                <i class="fa fa-chevron-left"></i> 对 Fiber 的介绍
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/03/29/浏览器渲染详细过程/" rel="prev" title="浏览器渲染的详细过程">
+                浏览器渲染的详细过程 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/images/avatar.jpeg" alt="泉先">
+          <p class="site-author-name" itemprop="name">泉先</p>
+           
+              <p class="site-description motion-element" itemprop="description">今天我有变得更厉害一点吗！>v<</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">51</span>
+                <span class="site-state-item-name">posts</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">14</span>
+                <span class="site-state-item-name">categories</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">23</span>
+                <span class="site-state-item-name">tags</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Charles-mock-数据"><span class="nav-number">1.</span> <span class="nav-text">Charles mock 数据</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#position-fixed-问题"><span class="nav-number">2.</span> <span class="nav-text">position: fixed 问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#写全局组件的方法"><span class="nav-number">3.</span> <span class="nav-text">写全局组件的方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Flex-做到子元素无条件等分空间"><span class="nav-number">4.</span> <span class="nav-text">Flex 做到子元素无条件等分空间</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#触底定位不准"><span class="nav-number">5.</span> <span class="nav-text">触底定位不准</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Number-parseInt"><span class="nav-number">6.</span> <span class="nav-text">Number.parseInt</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#webview-中刷新页面"><span class="nav-number">7.</span> <span class="nav-text">webview 中刷新页面</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#create-react-app-升级后问题"><span class="nav-number">8.</span> <span class="nav-text">create-react-app 升级后问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#fastclick-造成的坑"><span class="nav-number">9.</span> <span class="nav-text">fastclick 造成的坑</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#React-Hooks-闭包问题"><span class="nav-number">10.</span> <span class="nav-text">React Hooks 闭包问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#mobile-safari-点击事件失效"><span class="nav-number">11.</span> <span class="nav-text">mobile safari 点击事件失效</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy;  2017 - 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">泉先</span>
+</div>
+
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="https://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Gemini
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.2"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

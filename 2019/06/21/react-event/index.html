@@ -1,0 +1,878 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="React.js,JavaScript,源码,">
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.2">
+
+
+
+
+
+
+<meta name="description" content="起因其实是我用了 React Swiper 库。该库虽然挂着 React 的名头，但其实完全是由 Swiper.js 包装而成的，因而内里的事件机制仍旧是基于原生的。这导致我发现，我无法正常地将事件从 React 组件中阻止冒泡到 Swiper 的部分。 为了解决这个问题，很快，我从文档中查阅到，React 中的事件是由自己合成的“合成事件”，事件上的 e.nativeEvent 才是真正的原生事">
+<meta name="keywords" content="React.js,JavaScript,源码">
+<meta property="og:type" content="article">
+<meta property="og:title" content="全是代码——React 事件机制">
+<meta property="og:url" content="http://yoursite.com/2019/06/21/react-event/index.html">
+<meta property="og:site_name" content="不会化妆的写手&lt;br&gt;不是好程序员">
+<meta property="og:description" content="起因其实是我用了 React Swiper 库。该库虽然挂着 React 的名头，但其实完全是由 Swiper.js 包装而成的，因而内里的事件机制仍旧是基于原生的。这导致我发现，我无法正常地将事件从 React 组件中阻止冒泡到 Swiper 的部分。 为了解决这个问题，很快，我从文档中查阅到，React 中的事件是由自己合成的“合成事件”，事件上的 e.nativeEvent 才是真正的原生事">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="http://yoursite.com/images/react-event-registrationNameModules.png">
+<meta property="og:image" content="http://yoursite.com/images/react-event-01.png">
+<meta property="og:updated_time" content="2020-06-30T14:04:59.933Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="全是代码——React 事件机制">
+<meta name="twitter:description" content="起因其实是我用了 React Swiper 库。该库虽然挂着 React 的名头，但其实完全是由 Swiper.js 包装而成的，因而内里的事件机制仍旧是基于原生的。这导致我发现，我无法正常地将事件从 React 组件中阻止冒泡到 Swiper 的部分。 为了解决这个问题，很快，我从文档中查阅到，React 中的事件是由自己合成的“合成事件”，事件上的 e.nativeEvent 才是真正的原生事">
+<meta name="twitter:image" content="http://yoursite.com/images/react-event-registrationNameModules.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/06/21/react-event/">
+
+
+
+
+
+  <title>全是代码——React 事件机制 | 不会化妆的写手<br>不是好程序员</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?a17a483691d457feb9d048db3e29684c";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="default">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">不会化妆的写手<br>不是好程序员</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            About
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/06/21/react-event/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="泉先">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="不会化妆的写手<br>不是好程序员">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">全是代码——React 事件机制</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-06-21T20:27:04+08:00">
+                2019-06-21
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/框架-库-工具/" itemprop="url" rel="index">
+                    <span itemprop="name">框架/库/工具</span>
+                  </a>
+                </span>
+
+                
+                
+                  , 
+                
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/框架-库-工具/React-js/" itemprop="url" rel="index">
+                    <span itemprop="name">React.js</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>起因其实是我用了 React Swiper 库。该库虽然挂着 React 的名头，但其实完全是由 Swiper.js 包装而成的，因而内里的事件机制仍旧是基于<strong>原生</strong>的。这导致我发现，我无法正常地将事件从 React 组件中阻止冒泡到 Swiper 的部分。</p>
+<p>为了解决这个问题，很快，我从文档中查阅到，React 中的事件是由自己合成的“合成事件”，事件上的 <code>e.nativeEvent</code> 才是真正的原生事件。于是，我就尝试在事件处理函数中执行 <code>e.nativeEvent.stopPropagation()</code>，却仍旧无法阻止冒泡。</p>
+<p>要搞清楚出现这个问题的原因，就需要了解 React 的事件机制。</p>
+<p>React 的事件机制是基于事件委托的。所有 React 的事件监听实际都是被绑定在 document 上的。</p>
+<h2 id="例子"><a href="#例子" class="headerlink" title="例子"></a>例子</h2><p>本文其实就是对 React 事件机制部分的代码按照执行顺序解读。使用的例子代码如下：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// App.js</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> React <span class="keyword">from</span> <span class="string">'react'</span></span><br><span class="line"><span class="keyword">import</span> Child <span class="keyword">from</span> <span class="string">'./Child'</span></span><br><span class="line"><span class="keyword">import</span> <span class="string">'./App.css'</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">App</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">  clickHandler = <span class="function">(<span class="params">e</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'click callback'</span>, e)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  render() &#123;</span><br><span class="line">    <span class="keyword">return</span> (</span><br><span class="line">      <span class="comment">// 使用 &lt;article&gt; 是为了调试时更方便地一眼看出是什么标签</span></span><br><span class="line">      <span class="comment">// 其实该标签在语义化上不应被这样使用</span></span><br><span class="line">      &lt;article onClick=&#123;<span class="keyword">this</span>.clickHandler&#125;&gt;</span><br><span class="line">        &lt;Child /&gt;</span><br><span class="line">      &lt;<span class="regexp">/article&gt;</span></span><br><span class="line"><span class="regexp">    )</span></span><br><span class="line"><span class="regexp">  &#125;</span></span><br><span class="line"><span class="regexp">&#125;</span></span><br><span class="line"><span class="regexp"></span></span><br><span class="line"><span class="regexp">export default App</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Child.js</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> React <span class="keyword">from</span> <span class="string">'react'</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Child</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span> </span>&#123;</span><br><span class="line">  childClickHandler = <span class="function">(<span class="params">e</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'child click callback'</span>, e)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  render() &#123;</span><br><span class="line">    <span class="keyword">return</span> (</span><br><span class="line">      &lt;div</span><br><span class="line">        className=<span class="string">"box"</span></span><br><span class="line">        onClick=&#123;<span class="keyword">this</span>.childClickHandler&#125;</span><br><span class="line">      &gt;请点击&lt;<span class="regexp">/div&gt;</span></span><br><span class="line"><span class="regexp">    )</span></span><br><span class="line"><span class="regexp">  &#125;</span></span><br><span class="line"><span class="regexp">&#125;</span></span><br><span class="line"><span class="regexp"></span></span><br><span class="line"><span class="regexp">export default Child</span></span><br></pre></td></tr></table></figure>
+<a id="more"></a>
+<h2 id="事件处理函数的绑定"><a href="#事件处理函数的绑定" class="headerlink" title="事件处理函数的绑定"></a>事件处理函数的绑定</h2><h3 id="从-setInitialDOMProperties-开始"><a href="#从-setInitialDOMProperties-开始" class="headerlink" title="从 setInitialDOMProperties 开始"></a>从 <code>setInitialDOMProperties</code> 开始</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">setInitialDOMProperties</span>(<span class="params"></span></span></span><br><span class="line"><span class="function"><span class="params">  tag: string,</span></span></span><br><span class="line"><span class="function"><span class="params">  domElement: Element,</span></span></span><br><span class="line"><span class="function"><span class="params">  rootContainerElement: Element | Document,</span></span></span><br><span class="line"><span class="function"><span class="params">  nextProps: Object,</span></span></span><br><span class="line"><span class="function"><span class="params">  isCustomComponentTag: boolean,</span></span></span><br><span class="line"><span class="function"><span class="params"></span>): <span class="title">void</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 省略部分代码</span></span><br><span class="line">    <span class="keyword">if</span> (registrationNameModules.hasOwnProperty(propKey)) &#123;</span><br><span class="line">      <span class="keyword">if</span> (nextProp != <span class="literal">null</span>) &#123;</span><br><span class="line">        <span class="keyword">if</span> (__DEV__ &amp;&amp; <span class="keyword">typeof</span> nextProp !== <span class="string">'function'</span>) &#123;</span><br><span class="line">          warnForInvalidEventListener(propKey, nextProp);</span><br><span class="line">        &#125;</span><br><span class="line">        ensureListeningTo(rootContainerElement, propKey);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 省略部分代码</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>该方法处理实例的 props。<code>registrationNameModules</code> 的内容为：</p>
+<p><img src="/images/react-event-registrationNameModules.png" alt="registrationNameModules" title="registrationNameModules"></p>
+<p>可以看出，如果 <code>propKey</code> 为 <code>registrationNameModules</code> 中的 key，则该 <code>propKey</code> 为事件相关，进入到对事件的处理步骤中。</p>
+<p>就本文的例子而言，此时，我们的 <code>propKey</code> 应该为 <code>onClick</code>。</p>
+<h3 id="ensureListeningTo"><a href="#ensureListeningTo" class="headerlink" title="ensureListeningTo"></a><code>ensureListeningTo</code></h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">ensureListeningTo</span>(<span class="params">rootContainerElement, registrationName</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> isDocumentOrFragment =</span><br><span class="line">    rootContainerElement.nodeType === DOCUMENT_NODE ||</span><br><span class="line">    rootContainerElement.nodeType === DOCUMENT_FRAGMENT_NODE;</span><br><span class="line">  <span class="keyword">const</span> doc = isDocumentOrFragment</span><br><span class="line">    ? rootContainerElement</span><br><span class="line">    : rootContainerElement.ownerDocument;</span><br><span class="line">  listenTo(registrationName, doc);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>传入该方法的 <code>rootContainerElement</code> 即为 <code>#root</code>，即 React app 挂载的节点。<code>registrationName</code> 为 <code>onClick</code>。</p>
+<p>该方法首先判断 <code>rootContainerElement</code> 是否为 document 或 <a href="https://developer.mozilla.org/zh-CN/docs/Web/API/DocumentFragment" target="_blank" rel="noopener">documentFragmemt</a>，是则直接使用，不是则找到该节点对应的 document。</p>
+<p>接着，调用 <code>listenTo</code>，传入参数 <code>registrationName</code>（<code>onClick</code>），与 <code>doc</code>（document）。</p>
+<h3 id="listenTo"><a href="#listenTo" class="headerlink" title="listenTo"></a><code>listenTo</code></h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="function"><span class="keyword">function</span> <span class="title">listenTo</span>(<span class="params"></span></span></span><br><span class="line"><span class="function"><span class="params">  registrationName: string,</span></span></span><br><span class="line"><span class="function"><span class="params">  mountAt: Document | Element,</span></span></span><br><span class="line"><span class="function"><span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> isListening = getListeningForDocument(mountAt);</span><br><span class="line">  <span class="keyword">const</span> dependencies = registrationNameDependencies[registrationName];</span><br><span class="line"></span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; dependencies.length; i++) &#123;</span><br><span class="line">    <span class="keyword">const</span> dependency = dependencies[i];</span><br><span class="line">    <span class="keyword">if</span> (!(isListening.hasOwnProperty(dependency) &amp;&amp; isListening[dependency])) &#123;</span><br><span class="line">        <span class="comment">// 省略部分代码</span></span><br><span class="line">        <span class="keyword">default</span>:</span><br><span class="line">          <span class="comment">// By default, listen on the top level to all non-media events.</span></span><br><span class="line">          <span class="comment">// Media events don't bubble so adding the listener wouldn't do anything.</span></span><br><span class="line">          <span class="keyword">const</span> isMediaEvent = mediaEventTypes.indexOf(dependency) !== <span class="number">-1</span>;</span><br><span class="line">          <span class="keyword">if</span> (!isMediaEvent) &#123;</span><br><span class="line">            trapBubbledEvent(dependency, mountAt);</span><br><span class="line">          &#125;</span><br><span class="line">          <span class="keyword">break</span>;</span><br><span class="line">      &#125;</span><br><span class="line">      isListening[dependency] = <span class="literal">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>该方法用于指定相应事件的事件处理方法应在冒泡阶段还是捕获阶段触发。注意，此时的提到的“事件处理方法”是指绑定在 document 上用于分发事件的方法，而不是你在 React 组件中写的那个对应的事件处理方法。</p>
+<p><code>scroll</code>、<code>focus</code>、<code>blur</code>、<code>cancel</code>、<code>close</code> 事件在捕获阶段处理，也就是执行 <code>trapCapturedEvent</code> 方法。<code>invalid</code>、<code>submit</code>、<code>reset</code>以及媒体相关的事件不作处理。除此之外，其他所有时间都是在冒泡阶段处理的，也就是执行上文代码中的 <code>trapBubbledEvent</code> 方法。</p>
+<p>同时可以注意一下，此处使用了 <code>isListening</code> 来记录对应处理方法是否已经被绑定在了 document 上。因为 React 是将事件监听绑定在 document 上的，也就是事件委托模式，所以同样的一种事件只需要在 document 上绑定一次即可。</p>
+<h3 id="trapBubbledEvent"><a href="#trapBubbledEvent" class="headerlink" title="trapBubbledEvent"></a><code>trapBubbledEvent</code></h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="function"><span class="keyword">function</span> <span class="title">trapBubbledEvent</span>(<span class="params"></span></span></span><br><span class="line"><span class="function"><span class="params">  topLevelType: DOMTopLevelEventType,</span></span></span><br><span class="line"><span class="function"><span class="params">  element: Document | Element,</span></span></span><br><span class="line"><span class="function"><span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (!element) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">const</span> dispatch = isInteractiveTopLevelEventType(topLevelType)</span><br><span class="line">    ? dispatchInteractiveEvent</span><br><span class="line">    : dispatchEvent;</span><br><span class="line"></span><br><span class="line">  addEventBubbleListener(</span><br><span class="line">    element,</span><br><span class="line">    getRawEventName(topLevelType),</span><br><span class="line">    <span class="comment">// Check if interactive and wrap in interactiveUpdates</span></span><br><span class="line">    dispatch.bind(<span class="literal">null</span>, topLevelType),</span><br><span class="line">  );</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>trapBubbledEvent</code> 其实就是在 document 上绑定了一个于冒泡阶段触发的方法 <code>dispatch</code>。根据该事件是否是交互事件（即用户做交互的相关事件），<code>dispatch</code> 方法可能是 <code>dispatchInteractiveEvent</code> 或 <code>dispatchEvent</code>。<code>dispatchInteractiveEvent</code> 实际只是先行做了一些处理，比如事件的优先级等，最终还是会调用 <code>dispatchEvent</code> 方法。</p>
+<p>这样，将 <code>dispatchEvent</code> 方法绑定在了 document 上，并将 <code>topLevelType</code>，即字符串 <code>click</code> 作为参数传入方法，我们的事件绑定阶段就结束了。</p>
+<p>接下来，<strong>如果你点击了“请点击”字样</strong>，就会触发 document 上绑定的 <code>dispatchEvent</code> 方法。</p>
+<h2 id="事件处理函数的执行"><a href="#事件处理函数的执行" class="headerlink" title="事件处理函数的执行"></a>事件处理函数的执行</h2><h3 id="事件分发"><a href="#事件分发" class="headerlink" title="事件分发"></a>事件分发</h3><h4 id="dispatchEvent"><a href="#dispatchEvent" class="headerlink" title="dispatchEvent"></a><code>dispatchEvent</code></h4><p>点击“请点击”之后，立即触发 document 上绑定的 <code>dispatchEvent</code>。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="function"><span class="keyword">function</span> <span class="title">dispatchEvent</span>(<span class="params"></span></span></span><br><span class="line"><span class="function"><span class="params">  topLevelType: DOMTopLevelEventType, <span class="regexp">//</span> 对应浏览器事件名，本例中为 ‘click’</span></span></span><br><span class="line"><span class="function"><span class="params">  nativeEvent: AnyNativeEvent, <span class="regexp">//</span> 原生事件</span></span></span><br><span class="line"><span class="function"><span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (!_enabled) &#123;</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">const</span> nativeEventTarget = getEventTarget(nativeEvent); <span class="comment">// 取出 event.target</span></span><br><span class="line">  <span class="keyword">let</span> targetInst = getClosestInstanceFromNode(nativeEventTarget); <span class="comment">// 通过 event.target 取得对应的 fiberNode，这个关系是被提前储存起来的</span></span><br><span class="line">  <span class="keyword">if</span> (</span><br><span class="line">    targetInst !== <span class="literal">null</span> &amp;&amp;</span><br><span class="line">    <span class="keyword">typeof</span> targetInst.tag === <span class="string">'number'</span> &amp;&amp;</span><br><span class="line">    !isFiberMounted(targetInst)</span><br><span class="line">  ) &#123;</span><br><span class="line">    <span class="comment">// If we get an event (ex: img onload) before committing that</span></span><br><span class="line">    <span class="comment">// component's mount, ignore it for now (that is, treat it as if it was an</span></span><br><span class="line">    <span class="comment">// event on a non-React tree). We might also consider queueing events and</span></span><br><span class="line">    <span class="comment">// dispatching them after the mount.</span></span><br><span class="line">    targetInst = <span class="literal">null</span>;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">const</span> bookKeeping = getTopLevelCallbackBookKeeping(</span><br><span class="line">    topLevelType, <span class="comment">// 对应浏览器事件名，本例中为 ‘click’</span></span><br><span class="line">    nativeEvent, <span class="comment">// 浏览器原生事件</span></span><br><span class="line">    targetInst, <span class="comment">// 触发浏览器事件的 DOM 节点（event.target）对应的 fiberNode</span></span><br><span class="line">  );</span><br><span class="line"></span><br><span class="line">  <span class="keyword">try</span> &#123;</span><br><span class="line">    <span class="comment">// Event queue being processed in the same cycle allows</span></span><br><span class="line">    <span class="comment">// `preventDefault`.</span></span><br><span class="line">    batchedUpdates(handleTopLevel, bookKeeping);</span><br><span class="line">  &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">    releaseTopLevelCallbackBookKeeping(bookKeeping);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>传入的 <code>topLevelType</code> 即字符串 <code>click</code>，<code>nativeEvent</code> 是原生事件。</p>
+<p>通过 <code>getEventTarget</code> 从原生事件中取到触发事件的 DOM 节点（<code>nativeEvent.target</code>），然后通过 <code>getClosestInstanceFromNode</code> 取得该 DOM 节点对应的 fiberNode。DOM 节点对应的 fiberNode 是被提前记录在节点的属性中的。</p>
+<p>如果该 DOM 节点没有对应 fiberNode，或该 fiberNode 没有被安装在页面或文档片段中，则不做任何处理。判断 fiberNode 有没有被正确安装的方式是，不断寻找该 fiberNode 的 <code>return</code> 关系的 fiberNode，直到找到 <code>HostRoot</code>。如果找不到，则说明该 fiberNode 没有被正确安装。</p>
+<p>如果该 fiberNode 状态正常，则将 <code>topLevelType</code>（对应浏览器的事件名）、<code>nativeEvent</code>（浏览器原生事件）、<code>targetInst</code>（触发事件的 DOM 节点对应的 fiberNode）整合起来，作为一个 <code>bookKeeping</code>，并附上一个 <code>ancestors</code> 属性，该属性值为一个空数组。关于这个属性，我们下面细说。</p>
+<h4 id="batchedUpdates"><a href="#batchedUpdates" class="headerlink" title="batchedUpdates"></a><code>batchedUpdates</code></h4><p>整合好一个 <code>bookKeeping</code> 之后，我们将该 <code>bookKeeping</code> 与方法 <code>handleTopLevel</code> 一起传入方法 <code>batchedUpdates</code>，执行 <code>batchedUpdates</code>。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="function"><span class="keyword">function</span> <span class="title">batchedUpdates</span>(<span class="params">fn, bookkeeping</span>) </span>&#123;</span><br><span class="line">  <span class="comment">// 省略部分代码</span></span><br><span class="line">  <span class="keyword">return</span> _batchedUpdatesImpl(fn, bookkeeping);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// _batchedUpdatesImpl 实际是该方法</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">batchedUpdates</span>&lt;<span class="title">A</span>, <span class="title">R</span>&gt;(<span class="params">fn: (a: A</span>) =&gt; <span class="title">R</span>, <span class="title">a</span>: <span class="title">A</span>): <span class="title">R</span> </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> previousIsBatchingUpdates = isBatchingUpdates;</span><br><span class="line">  isBatchingUpdates = <span class="literal">true</span>;</span><br><span class="line">  <span class="keyword">try</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> fn(a);</span><br><span class="line">  &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">    isBatchingUpdates = previousIsBatchingUpdates;</span><br><span class="line">    <span class="keyword">if</span> (!isBatchingUpdates &amp;&amp; !isRendering) &#123;</span><br><span class="line">      performSyncWork();</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>可以看到，最终调用了 <code>fn</code>，<code>fn</code> 则为 <code>handleTopLevel</code>。</p>
+<h4 id="handleTopLevel"><a href="#handleTopLevel" class="headerlink" title="handleTopLevel"></a><code>handleTopLevel</code></h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">handleTopLevel</span>(<span class="params">bookKeeping</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">let</span> targetInst = bookKeeping.targetInst;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// Loop through the hierarchy, in case there's any nested components.</span></span><br><span class="line">  <span class="comment">// It's important that we build the array of ancestors before calling any</span></span><br><span class="line">  <span class="comment">// event handlers, because event handlers can modify the DOM, leading to</span></span><br><span class="line">  <span class="comment">// inconsistencies with ReactMount's node cache. See #1105.</span></span><br><span class="line">  <span class="keyword">let</span> ancestor = targetInst;</span><br><span class="line">  <span class="keyword">do</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (!ancestor) &#123;</span><br><span class="line">      bookKeeping.ancestors.push(ancestor);</span><br><span class="line">      <span class="keyword">break</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">const</span> root = findRootContainerNode(ancestor);</span><br><span class="line">    <span class="keyword">if</span> (!root) &#123;</span><br><span class="line">      <span class="keyword">break</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    bookKeeping.ancestors.push(ancestor);</span><br><span class="line">    ancestor = getClosestInstanceFromNode(root);</span><br><span class="line">  &#125; <span class="keyword">while</span> (ancestor);</span><br><span class="line"></span><br><span class="line">  <span class="comment">// bookKeeping.ancestors 列表中其实只有一个值，就是触发事件的 `e.target` 对应的 fiberNode</span></span><br><span class="line">  <span class="comment">// 详细解释见下文</span></span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; bookKeeping.ancestors.length; i++) &#123;</span><br><span class="line">    targetInst = bookKeeping.ancestors[i];</span><br><span class="line">    runExtractedEventsInBatch(</span><br><span class="line">      bookKeeping.topLevelType, <span class="comment">// 对应浏览器事件名，本例中为 ‘click’</span></span><br><span class="line">      targetInst, <span class="comment">// e.target，即触发事件的 DOM 元素对应的 fiberNode</span></span><br><span class="line">      bookKeeping.nativeEvent, <span class="comment">// 原生事件对象</span></span><br><span class="line">      getEventTarget(bookKeeping.nativeEvent), <span class="comment">// e.target，即触发事件的 DOM 元素</span></span><br><span class="line">    );</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>关于这个方法，我有一个奇妙的个人想法。</strong></p>
+<p>首先，看上半部分，也就是给 <code>ancestor</code> 填值的部分。你会发现，这部分代码首先会将触发事件的 DOM 元素对应的 fiberNode 本身放入 <code>ancestor</code> 列表中，然后取 <code>HostRoot</code>，也就是页面上的 <code>#root</code>，对 <code>#root</code> 执行 <code>getClosestInstanceFromNode</code>，而这个方法对 <code>#root</code> 执行必然会返回 <code>null</code>。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Given a DOM node, return the closest ReactDOMComponent or</span></span><br><span class="line"><span class="comment"> * ReactDOMTextComponent instance ancestor.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">export</span> <span class="function"><span class="keyword">function</span> <span class="title">getClosestInstanceFromNode</span>(<span class="params">node</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (node[internalInstanceKey]) &#123;</span><br><span class="line">    <span class="keyword">return</span> node[internalInstanceKey];</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 传入根节点，进入本段代码</span></span><br><span class="line">  <span class="keyword">while</span> (!node[internalInstanceKey]) &#123;</span><br><span class="line">    <span class="comment">// 因为已经是 HostRoot 节点，无论如何向上寻找，node[internalInstanceKey] 始终不会有值</span></span><br><span class="line">    <span class="comment">// 最终会返回 null</span></span><br><span class="line">    <span class="keyword">if</span> (node.parentNode) &#123;</span><br><span class="line">      node = node.parentNode;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      <span class="comment">// Top of the tree. This node must not be part of a React tree (or is</span></span><br><span class="line">      <span class="comment">// unmounted, potentially).</span></span><br><span class="line">      <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">let</span> inst = node[internalInstanceKey];</span><br><span class="line">  <span class="keyword">if</span> (inst.tag === HostComponent || inst.tag === HostText) &#123;</span><br><span class="line">    <span class="comment">// In Fiber, this will always be the deepest root.</span></span><br><span class="line">    <span class="keyword">return</span> inst;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这样，就会导致 <code>handleTopLevel</code> 方法中给 <code>ancestor</code> 列表里塞的值，永远都只有一个，就是触发事件元素对应的那个 fiberNode。对，就一个，就是这个。所以注释里写的什么“保存 DOM 结构”根本不对，你列表里就保存了这么一个 fiberNode，保存啥结构了你就保存……</p>
+<p>考虑到这段代码不同行提交记录的时间差距相当大，我估计这是一个没改干净的历史遗留问题。跑着正常，但意思看着是不对的。</p>
+<p>所以后面的循环也变得毫无意义，其实就是对触发事件的那一个 fiberNode 做的操作。做的操作是什么呢？也就是调用 <code>runExtractedEventsInBatch</code>。</p>
+<h4 id="runExtractedEventsInBatch"><a href="#runExtractedEventsInBatch" class="headerlink" title="runExtractedEventsInBatch"></a><code>runExtractedEventsInBatch</code></h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="function"><span class="keyword">function</span> <span class="title">runExtractedEventsInBatch</span>(<span class="params"></span></span></span><br><span class="line"><span class="function"><span class="params">  topLevelType: TopLevelType, <span class="regexp">//</span> 对应浏览器事件名，本例中为 ‘click’</span></span></span><br><span class="line"><span class="function"><span class="params">  targetInst: null | Fiber, <span class="regexp">//</span> e.target，即触发事件的 DOM 元素对应的 fiberNode</span></span></span><br><span class="line"><span class="function"><span class="params">  nativeEvent: AnyNativeEvent, <span class="regexp">//</span> 原生事件对象</span></span></span><br><span class="line"><span class="function"><span class="params">  nativeEventTarget: EventTarget, <span class="regexp">//</span> e.target，即触发事件的 DOM 元素</span></span></span><br><span class="line"><span class="function"><span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="comment">// 第一部分：提取事件部分，此时生成并提取合成事件</span></span><br><span class="line">  <span class="comment">// 开始执行</span></span><br><span class="line">  <span class="keyword">const</span> events = extractEvents(</span><br><span class="line">    topLevelType,</span><br><span class="line">    targetInst,</span><br><span class="line">    nativeEvent,</span><br><span class="line">    nativeEventTarget,</span><br><span class="line">  );</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 第二部分，执行事件监听方法</span></span><br><span class="line">  runEventsInBatch(events, <span class="literal">false</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这段代码分为两部分重要操作。第一部分是利用 <code>extractEvents</code> 方法生成并提取合成事件，需要传入事件名、触发事件 DOM 元素对应的 fiberNode，原生事件，以及触发事件的 DOM 元素。</p>
+<p>让我们先看看这个方法。</p>
+<h3 id="提取合成事件"><a href="#提取合成事件" class="headerlink" title="提取合成事件"></a>提取合成事件</h3><h4 id="获取当前类型事件应执行的-extractEvents（提取事件方法）"><a href="#获取当前类型事件应执行的-extractEvents（提取事件方法）" class="headerlink" title="获取当前类型事件应执行的 extractEvents（提取事件方法）"></a>获取当前类型事件应执行的 <code>extractEvents</code>（提取事件方法）</h4><h5 id="extractEvents"><a href="#extractEvents" class="headerlink" title="extractEvents"></a><code>extractEvents</code></h5><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">extractEvents</span>(<span class="params"></span></span></span><br><span class="line"><span class="function"><span class="params">  topLevelType: TopLevelType, <span class="regexp">//</span> 对应浏览器事件名，本例中为 ‘click’</span></span></span><br><span class="line"><span class="function"><span class="params">  targetInst: null | Fiber, <span class="regexp">//</span> e.target，即触发事件的 DOM 元素对应的 fiberNode</span></span></span><br><span class="line"><span class="function"><span class="params">  nativeEvent: AnyNativeEvent, <span class="regexp">//</span> 原生事件对象</span></span></span><br><span class="line"><span class="function"><span class="params">  nativeEventTarget: EventTarget, <span class="regexp">//</span> e.target，即触发事件的 DOM 元素</span></span></span><br><span class="line"><span class="function"><span class="params"></span>): <span class="title">Array</span>&lt;<span class="title">ReactSyntheticEvent</span>&gt; | <span class="title">ReactSyntheticEvent</span> | <span class="title">null</span> </span>&#123;</span><br><span class="line">  <span class="keyword">let</span> events = <span class="literal">null</span>;</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; plugins.length; i++) &#123;</span><br><span class="line">    <span class="comment">// Not every plugin in the ordering may be loaded at runtime.</span></span><br><span class="line">    <span class="comment">// plugins 即为可能的 plugin 列表，包含 extractEvents 等参数</span></span><br><span class="line">    <span class="keyword">const</span> possiblePlugin: PluginModule&lt;AnyNativeEvent&gt; = plugins[i];</span><br><span class="line">    <span class="keyword">if</span> (possiblePlugin) &#123;</span><br><span class="line">      <span class="keyword">const</span> extractedEvents = possiblePlugin.extractEvents(</span><br><span class="line">        topLevelType,</span><br><span class="line">        targetInst,</span><br><span class="line">        nativeEvent,</span><br><span class="line">        nativeEventTarget,</span><br><span class="line">      );</span><br><span class="line">      <span class="keyword">if</span> (extractedEvents) &#123;</span><br><span class="line">        events = accumulateInto(events, extractedEvents);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> events;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>plugins</code> 总共有五种，分别是 <code>SimpleEventPlugin</code> 、 <code>EnterLeaveEventPlugin</code> 、 <code>ChangeEventPlugin</code> 、 <code>SelectEventPlugin</code>、 <code>BeforeInputEventPlugin</code> 五种，判断事件属于哪一种 Plugin 是通过每种 Plugin 对应的 <code>extractEvents</code> 判断的。如果事件属于对应 Plugin，则该 Plugin 对应的 <code>extractEvents</code> 方法会生成并返回对应的合成事件，否则返回 <code>undefined</code>。</p>
+<p>以 click 事件为例，循环 Plugin 列表，首先执行 <code>SimpleEventPlugin</code> 对象上的 <code>extractEvents</code> 方法。</p>
+<h5 id="SimpleEventPlugin-extractEvents"><a href="#SimpleEventPlugin-extractEvents" class="headerlink" title="SimpleEventPlugin.extractEvents"></a><code>SimpleEventPlugin.extractEvents</code></h5><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> SimpleEventPlugin: PluginModule&lt;MouseEvent&gt; &amp; &#123;</span><br><span class="line">  isInteractiveTopLevelEventType: <span class="function">(<span class="params">topLevelType: TopLevelType</span>) =&gt;</span> boolean,</span><br><span class="line">&#125; = &#123;</span><br><span class="line">  <span class="comment">// 省略部分属性</span></span><br><span class="line">  extractEvents: <span class="function"><span class="keyword">function</span>(<span class="params"></span></span></span><br><span class="line"><span class="function"><span class="params">    topLevelType: TopLevelType,</span></span></span><br><span class="line"><span class="function"><span class="params">    targetInst: null | Fiber,</span></span></span><br><span class="line"><span class="function"><span class="params">    nativeEvent: MouseEvent,</span></span></span><br><span class="line"><span class="function"><span class="params">    nativeEventTarget: EventTarget,</span></span></span><br><span class="line"><span class="function"><span class="params">  </span>): <span class="title">null</span> | <span class="title">ReactSyntheticEvent</span> </span>&#123;</span><br><span class="line">    <span class="keyword">const</span> dispatchConfig = topLevelEventsToDispatchConfig[topLevelType];</span><br><span class="line">    <span class="comment">// 本例中，dispatchConfig 为 &#123;</span></span><br><span class="line">    <span class="comment">//   dependencies: ["click"]</span></span><br><span class="line">    <span class="comment">//   isInteractive: true,</span></span><br><span class="line">    <span class="comment">//   phasedRegistrationNames: &#123;</span></span><br><span class="line">    <span class="comment">//     bubbled: "onClick",</span></span><br><span class="line">    <span class="comment">//     captured: "onClickCapture",</span></span><br><span class="line">    <span class="comment">//   &#125;,</span></span><br><span class="line">    <span class="comment">// &#125;</span></span><br><span class="line">    <span class="keyword">if</span> (!dispatchConfig) &#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">let</span> EventConstructor;</span><br><span class="line">    <span class="keyword">switch</span> (topLevelType) &#123;</span><br><span class="line">      <span class="comment">// 省略部分代码</span></span><br><span class="line">      <span class="keyword">case</span> DOMTopLevelEventTypes.TOP_CLICK:</span><br><span class="line">        <span class="comment">// Firefox creates a click event on right mouse clicks. This removes the</span></span><br><span class="line">        <span class="comment">// unwanted click events.</span></span><br><span class="line">        <span class="keyword">if</span> (nativeEvent.button === <span class="number">2</span>) &#123;</span><br><span class="line">          <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// 省略部分代码</span></span><br><span class="line">        EventConstructor = SyntheticMouseEvent;</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">      <span class="comment">// 省略部分代码</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">const</span> event = EventConstructor.getPooled(</span><br><span class="line">      dispatchConfig,</span><br><span class="line">      targetInst,</span><br><span class="line">      nativeEvent,</span><br><span class="line">      nativeEventTarget,</span><br><span class="line">    );</span><br><span class="line">    accumulateTwoPhaseDispatches(event);</span><br><span class="line">    <span class="keyword">return</span> event;</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>可以看到，在事件为 click 的情况下，<code>EventConstructor</code> 被赋值为 <code>SyntheticMouseEvent</code>。赋值 <code>EventConstructor</code> 之后，调用 <code>EventConstructor.getPooled</code>。那么，首先应该来看看， <code>SyntheticMouseEvent</code> 是什么呢？</p>
+<h4 id="创建或从池中取出合成事件实例"><a href="#创建或从池中取出合成事件实例" class="headerlink" title="创建或从池中取出合成事件实例"></a>创建或从池中取出合成事件实例</h4><h5 id="SyntheticMouseEvent"><a href="#SyntheticMouseEvent" class="headerlink" title="SyntheticMouseEvent"></a><code>SyntheticMouseEvent</code></h5><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> SyntheticMouseEvent = SyntheticUIEvent.extend(&#123;</span><br><span class="line">  <span class="comment">// 属性若干</span></span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> SyntheticUIEvent = SyntheticEvent.extend(&#123;</span><br><span class="line">  <span class="comment">// 属性若干</span></span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>从字面可以看出，<code>SyntheticMouseEvent</code> 继承于 <code>SyntheticUIEvent</code>，<code>SyntheticUIEvent</code> 继承于 <code>SyntheticEvent</code>。那么，这个继承关系是如何实现的呢？</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">SyntheticEvent.extend = <span class="function"><span class="keyword">function</span>(<span class="params">Interface</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> Super = <span class="keyword">this</span>;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">const</span> E = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;&#125;;</span><br><span class="line">  E.prototype = Super.prototype;</span><br><span class="line">  <span class="keyword">const</span> prototype = <span class="keyword">new</span> E();</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">function</span> <span class="title">Class</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> Super.apply(<span class="keyword">this</span>, <span class="built_in">arguments</span>);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="built_in">Object</span>.assign(prototype, Class.prototype);</span><br><span class="line">  Class.prototype = prototype;</span><br><span class="line">  Class.prototype.constructor = Class;</span><br><span class="line"></span><br><span class="line">  Class.Interface = <span class="built_in">Object</span>.assign(&#123;&#125;, Super.Interface, Interface);</span><br><span class="line">  Class.extend = Super.extend;</span><br><span class="line">  addEventPoolingTo(Class);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> Class;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>从代码上看，继承方式正是最经典的寄生组合继承，详情可见<a href="https://wy1009.github.io/2017/04/16/JavaScript面向对象的程序设计-继承/" target="_blank" rel="noopener">《JavaScript面向对象的程序设计-继承》</a>。</p>
+<p>这样，我们就知道了，<code>SyntheticMouseEvent</code> 实际上是一个继承于 <code>SyntheticUIEvent</code> 与 <code>SyntheticEvent</code> 的构造函数。</p>
+<p>在通过条件判断，取得事件对应的构造函数之后，我们继续执行 <code>extractEvents</code> 接下来的代码，即 <code>EventConstructor.getPooled</code>。</p>
+<h5 id="EventConstructor-getPooled"><a href="#EventConstructor-getPooled" class="headerlink" title="EventConstructor.getPooled"></a><code>EventConstructor.getPooled</code></h5><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">getPooledEvent</span>(<span class="params">dispatchConfig, targetInst, nativeEvent, nativeInst</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> EventConstructor = <span class="keyword">this</span>;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 如果事件池中有事件，直接取出一个来使用</span></span><br><span class="line">  <span class="keyword">if</span> (EventConstructor.eventPool.length) &#123;</span><br><span class="line">    <span class="keyword">const</span> instance = EventConstructor.eventPool.pop();</span><br><span class="line">    EventConstructor.call(</span><br><span class="line">      instance,</span><br><span class="line">      dispatchConfig,</span><br><span class="line">      targetInst,</span><br><span class="line">      nativeEvent,</span><br><span class="line">      nativeInst,</span><br><span class="line">    );</span><br><span class="line">    <span class="keyword">return</span> instance;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 如果没有，则新建一个事件</span></span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">new</span> EventConstructor(</span><br><span class="line">    <span class="comment">// dispatchConfig 与 'click' 相关的一些配置。</span></span><br><span class="line">    <span class="comment">// dispatchConfig: &#123;</span></span><br><span class="line">    <span class="comment">//   dependencies: ['click'],</span></span><br><span class="line">    <span class="comment">//   isInteractive: true,</span></span><br><span class="line">    <span class="comment">//   phasedRegistrationNames: &#123;</span></span><br><span class="line">    <span class="comment">//     bubbled: 'onClick',</span></span><br><span class="line">    <span class="comment">//     captured: 'onClickCapture',</span></span><br><span class="line">    <span class="comment">//   &#125;,</span></span><br><span class="line">    <span class="comment">// &#125;</span></span><br><span class="line">    dispatchConfig,</span><br><span class="line">    targetInst,</span><br><span class="line">    nativeEvent,</span><br><span class="line">    nativeInst,</span><br><span class="line">  );</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>可以看到，React 的事件机制做了一个性能上的优化，即“事件池”。如果事件池中有事件，则直接取出使用。如果没有，则新建一个事件。剧透一下，这个新建的事件在使用完毕后，就会被扔进事件池。</p>
+<p>在本例中，此时，我们的事件池中还没有事件，因此执行 <code>new EventConstructor(arguments...)</code>。</p>
+<h5 id="SyntheticEvent"><a href="#SyntheticEvent" class="headerlink" title="SyntheticEvent"></a><code>SyntheticEvent</code></h5><p>执行 <code>new EventConstructor(arguments...)</code>，该 <code>EventConstructor</code> 继承于 <code>SyntheticEvent</code>，因而执行该方法。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">SyntheticEvent</span>(<span class="params"></span></span></span><br><span class="line"><span class="function"><span class="params">  dispatchConfig,</span></span></span><br><span class="line"><span class="function"><span class="params">  targetInst,</span></span></span><br><span class="line"><span class="function"><span class="params">  nativeEvent,</span></span></span><br><span class="line"><span class="function"><span class="params">  nativeEventTarget,</span></span></span><br><span class="line"><span class="function"><span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">this</span>.dispatchConfig = dispatchConfig;</span><br><span class="line">  <span class="keyword">this</span>._targetInst = targetInst;</span><br><span class="line">  <span class="keyword">this</span>.nativeEvent = nativeEvent;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">const</span> Interface = <span class="keyword">this</span>.constructor.Interface; <span class="comment">// 感觉该“接口”对象中包含的实际上是一个 React 事件所需要的全部属性</span></span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">const</span> propName <span class="keyword">in</span> Interface) &#123;</span><br><span class="line">    <span class="keyword">if</span> (!Interface.hasOwnProperty(propName)) &#123;</span><br><span class="line">      <span class="keyword">continue</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">const</span> normalize = Interface[propName];</span><br><span class="line">    <span class="keyword">if</span> (normalize) &#123;</span><br><span class="line">      <span class="comment">// 如果接口对象的对应属性不为空，则执行该属性，将其返回值赋给事件实例的对应属性</span></span><br><span class="line">      <span class="keyword">this</span>[propName] = normalize(nativeEvent);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      <span class="comment">// 如果接口对象的对应属性为空</span></span><br><span class="line">      <span class="keyword">if</span> (propName === <span class="string">'target'</span>) &#123;</span><br><span class="line">        <span class="comment">// 如果该属性为 target,则直接将我们原生事件的 event.target 赋值给该属性</span></span><br><span class="line">        <span class="comment">// 不写注释我也不知道为什么要单独把这个属性抽出来赋值呀……只能猜测是有可能变动了</span></span><br><span class="line">        <span class="keyword">this</span>.target = nativeEventTarget;</span><br><span class="line">      &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="comment">// 否则，直接将原生对象的对应属性赋值给该属性</span></span><br><span class="line">        <span class="keyword">this</span>[propName] = nativeEvent[propName];</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">const</span> defaultPrevented =</span><br><span class="line">    nativeEvent.defaultPrevented != <span class="literal">null</span></span><br><span class="line">      ? nativeEvent.defaultPrevented</span><br><span class="line">      : nativeEvent.returnValue === <span class="literal">false</span>;</span><br><span class="line">  <span class="keyword">if</span> (defaultPrevented) &#123;</span><br><span class="line">    <span class="keyword">this</span>.isDefaultPrevented = functionThatReturnsTrue;</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="keyword">this</span>.isDefaultPrevented = functionThatReturnsFalse;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">this</span>.isPropagationStopped = functionThatReturnsFalse;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">this</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>可以看到，这个方法基本就是将预设好的“接口对象”，即 <code>Interface</code> 对象，中的内容一一遍历，并将原生事件的对应属性/预设接口的执行结果赋值给 React 事件实例的过程。</p>
+<p>执行完这里，我们就执行完了 <code>new EventConstructor(argument...)</code>，也就是执行完了更上一层函数的 <code>EventConstructor.getPooled(arguments...)</code>，得到了一个 React 合成事件实例。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// extractEvents 方法的代码片段</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 已执行完</span></span><br><span class="line"><span class="keyword">const</span> event = EventConstructor.getPooled(</span><br><span class="line">  dispatchConfig,</span><br><span class="line">  targetInst,</span><br><span class="line">  nativeEvent,</span><br><span class="line">  nativeEventTarget,</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 下一步开始执行</span></span><br><span class="line">accumulateTwoPhaseDispatches(event);</span><br><span class="line"><span class="keyword">return</span> event;</span><br></pre></td></tr></table></figure>
+<p>下一步，我们应开始执行 <code>accumulateTwoPhaseDispatches(event)</code>，即在创建的合成事件上保存对应事件监听函数的过程。</p>
+<h4 id="在合成事件实例上保存事件监听方法"><a href="#在合成事件实例上保存事件监听方法" class="headerlink" title="在合成事件实例上保存事件监听方法"></a>在合成事件实例上保存事件监听方法</h4><h5 id="accumulateTwoPhaseDispatches"><a href="#accumulateTwoPhaseDispatches" class="headerlink" title="accumulateTwoPhaseDispatches"></a><code>accumulateTwoPhaseDispatches</code></h5><p>积累两个阶段的 dispatch。</p>
+<p><code>accumulateTwoPhaseDispatches(event)</code> -&gt; <code>forEachAccumulated(events, accumulateTwoPhaseDispatchesSingle)</code> （判断传入的 event 是否为数组，如果是，逐项执行 <code>accumulateTwoPhaseDispatchesSingle(event)</code> ，如果不是，则直接执行 <code>accumulateTwoPhaseDispatchesSingle(event)</code> ） -&gt; <code>accumulateTwoPhaseDispatchesSingle(event)</code> -&gt; <code>traverseTwoPhase(event._targetInst, accumulateDirectionalDispatches, event)</code> 。</p>
+<h5 id="traverseTwoPhase"><a href="#traverseTwoPhase" class="headerlink" title="traverseTwoPhase"></a><code>traverseTwoPhase</code></h5><p>遍历两个阶段。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Simulates the traversal of a two-phase, capture/bubble event dispatch.</span></span><br><span class="line"><span class="comment"> * @param inst 触发事件的 dom 元素对应的 fiberNode</span></span><br><span class="line"><span class="comment"> * @param fn accumulateDirectionalDispatches 方法</span></span><br><span class="line"><span class="comment"> * @param arg event，之前我们合成的 React 事件</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">export</span> <span class="function"><span class="keyword">function</span> <span class="title">traverseTwoPhase</span>(<span class="params">inst, fn, arg</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> path = [];</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 循环取触发事件的 dom 元素的 fiberNode 的父 fiberNode（仅包括 HostComponent 类型的节点）</span></span><br><span class="line">  <span class="comment">// 形成一条 fiberNode 链条。详见下面对 getParent 方法的描述。</span></span><br><span class="line">  <span class="comment">// 本例 path 最终为 [div, article]</span></span><br><span class="line">  <span class="keyword">while</span> (inst) &#123;</span><br><span class="line">    path.push(inst);</span><br><span class="line">    inst = getParent(inst);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">let</span> i;</span><br><span class="line">  <span class="keyword">for</span> (i = path.length; i-- &gt; <span class="number">0</span>; ) &#123;</span><br><span class="line">    fn(path[i], <span class="string">'captured'</span>, arg);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; path.length; i++) &#123;</span><br><span class="line">    fn(path[i], <span class="string">'bubbled'</span>, arg);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>getParent</code> 代码如下。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">getParent</span>(<span class="params">inst</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">do</span> &#123;</span><br><span class="line">    inst = inst.return; <span class="comment">// <span class="doctag">TODO:</span> If this is a HostRoot we might want to bail out.</span></span><br><span class="line">    <span class="comment">// That is depending on if we want nested subtrees (layers) to bubble</span></span><br><span class="line">    <span class="comment">// events to their parent. We could also go through parentNode on the</span></span><br><span class="line">    <span class="comment">// host node but that wouldn't work for React Native and doesn't let us</span></span><br><span class="line">    <span class="comment">// do the portal feature.</span></span><br><span class="line">  &#125; <span class="keyword">while</span> (inst &amp;&amp; inst.tag !== HostComponent);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (inst) &#123;</span><br><span class="line">    <span class="keyword">return</span> inst;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>return</code> 关系详见<a href="https://wy1009.github.io/2018/12/02/a-cartoon-intro-to-fiber/" target="_blank" rel="noopener">对 Fiber 的介绍</a>。可以看到，该方法会向上追溯最近的 HostComponent，即能够用于绑定事件的 fiberNode，不包括不能绑定事件的组件节点、文本节点等，然后返回。</p>
+<p>这样，在 <code>traverseTwoPhase</code> 方法中，我们就得到了一条用于传递事件的节点链条。</p>
+<p>接下来，我们按模拟捕获和冒泡的顺序，分别从根节点开始循环到触发事件的节点/从触发事件的节点循环到根节点，对每个节点执行 <code>accumulateDirectionalDispatches</code> 方法。</p>
+<h5 id="accumulateDirectionalDispatches"><a href="#accumulateDirectionalDispatches" class="headerlink" title="accumulateDirectionalDispatches"></a><code>accumulateDirectionalDispatches</code></h5><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Tags a `SyntheticEvent` with dispatched listeners. Creating this function</span></span><br><span class="line"><span class="comment"> * here, allows us to not have to bind or create functions for each event.</span></span><br><span class="line"><span class="comment"> * Mutating the event's members allows us to not have to create a wrapping</span></span><br><span class="line"><span class="comment"> * "dispatch" object that pairs the event with the listener.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">accumulateDirectionalDispatches</span>(<span class="params">inst, phase, event</span>) </span>&#123;</span><br><span class="line">  <span class="comment">// 通过上步循环到的 fiberNode、阶段（捕获 or 冒泡）以及 event（事件实例）</span></span><br><span class="line">  <span class="comment">// 得到节点上的事件监听函数</span></span><br><span class="line">  <span class="keyword">const</span> listener = listenerAtPhase(inst, event, phase);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (listener) &#123;</span><br><span class="line">    <span class="comment">// 如果有 event 对应的事件监听方法，则将该方法积累在 event._dispatchListeners 属性中</span></span><br><span class="line">    <span class="comment">// accumulateInfo 方法很简单，就是组合传入的值。</span></span><br><span class="line">    <span class="comment">// 这个方法相当于以数组的形式将所有的事件监听方法保存在 event 上</span></span><br><span class="line">    event._dispatchListeners = accumulateInto(</span><br><span class="line">      event._dispatchListeners,</span><br><span class="line">      listener,</span><br><span class="line">    );</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 同样，将所有绑定了事件监听方法的 fiberNode 以数组的形式保存在 event 上</span></span><br><span class="line">    <span class="comment">// 可以与事件监听方法一一对应</span></span><br><span class="line">    event._dispatchInstances = accumulateInto(event._dispatchInstances, inst);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这样，在循环执行了这个方法之后，就会按先捕获再冒泡的顺序，循环所有链条上的节点，将事件监听方法按顺序储存在事件实例上，并与绑定事件监听方法的节点一一对应。</p>
+<p><img src="/images/react-event-01.png" style="width: 300px;"></p>
+<p>到这里，前面的 <code>accumulateTwoPhaseDispatches</code> 也方法也完全执行完毕，返回了一个 <code>event</code>，即 React 的合成事件实例。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// extractEvents 方法的代码片段</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 已执行完</span></span><br><span class="line"><span class="keyword">const</span> event = EventConstructor.getPooled(</span><br><span class="line">  dispatchConfig,</span><br><span class="line">  targetInst,</span><br><span class="line">  nativeEvent,</span><br><span class="line">  nativeEventTarget,</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 已执行完</span></span><br><span class="line">accumulateTwoPhaseDispatches(event);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 返回合成事件实例</span></span><br><span class="line"><span class="keyword">return</span> event;</span><br></pre></td></tr></table></figure>
+<p>至此，<code>extractEvents</code> 方法全部执行完毕，接着执行下一步，<code>runEventsInBatch</code> 方法。即真正意义上调用事件监听方法。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="function"><span class="keyword">function</span> <span class="title">runExtractedEventsInBatch</span>(<span class="params"></span></span></span><br><span class="line"><span class="function"><span class="params">  topLevelType: TopLevelType, <span class="regexp">//</span> 对应浏览器事件名，本例中为 ‘click’</span></span></span><br><span class="line"><span class="function"><span class="params">  targetInst: null | Fiber, <span class="regexp">//</span> e.target，即触发事件的 DOM 元素对应的 fiberNode</span></span></span><br><span class="line"><span class="function"><span class="params">  nativeEvent: AnyNativeEvent, <span class="regexp">//</span> 原生事件对象</span></span></span><br><span class="line"><span class="function"><span class="params">  nativeEventTarget: EventTarget, <span class="regexp">//</span> e.target，即触发事件的 DOM 元素</span></span></span><br><span class="line"><span class="function"><span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="comment">// 第一部分：提取事件部分，此时生成并提取合成事件</span></span><br><span class="line">  <span class="comment">// 已经执行完毕</span></span><br><span class="line">  <span class="keyword">const</span> events = extractEvents(</span><br><span class="line">    topLevelType,</span><br><span class="line">    targetInst,</span><br><span class="line">    nativeEvent,</span><br><span class="line">    nativeEventTarget,</span><br><span class="line">  );</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 第二部分，执行事件监听方法</span></span><br><span class="line">  <span class="comment">// 开始执行</span></span><br><span class="line">  runEventsInBatch(events, <span class="literal">false</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="执行事件回调"><a href="#执行事件回调" class="headerlink" title="执行事件回调"></a>执行事件回调</h3><h4 id="runEventsInBatch"><a href="#runEventsInBatch" class="headerlink" title="runEventsInBatch"></a><code>runEventsInBatch</code></h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">runEventsInBatch</span>(<span class="params">events</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (events !== <span class="literal">null</span>) &#123;</span><br><span class="line">    eventQueue = accumulateInto(eventQueue, events);</span><br><span class="line">  &#125; <span class="comment">// Set `eventQueue` to null before processing it so that we can tell if more</span></span><br><span class="line">  <span class="comment">// events get enqueued while processing.</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">  <span class="keyword">var</span> processingEventQueue = eventQueue;</span><br><span class="line">  eventQueue = <span class="literal">null</span>;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (!processingEventQueue) &#123;</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  forEachAccumulated(processingEventQueue, executeDispatchesAndReleaseTopLevel);</span><br><span class="line">  !!eventQueue ? invariant(<span class="literal">false</span>, <span class="string">'processEventQueue(): Additional events were enqueued while processing an event queue. Support for this has not yet been implemented.'</span>) : <span class="keyword">void</span> <span class="number">0</span>; <span class="comment">// This would be a good time to rethrow if any of the event handlers threw.</span></span><br><span class="line"></span><br><span class="line">  rethrowCaughtError();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>可以看到，该方法其实是可以同时传入多个事件，形成一个事件队列的。然后对事件队列中的事件分别执行 <code>executeDispatchesAndReleaseTopLevel(event)</code> ，<code>executeDispatchesAndReleaseTopLevel(event)</code> 中只有一行代码，即执行 <code>executeDispatchesAndRelease(event)</code>。</p>
+<h5 id="executeDispatchesAndRelease"><a href="#executeDispatchesAndRelease" class="headerlink" title="executeDispatchesAndRelease"></a>executeDispatchesAndRelease</h5><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> executeDispatchesAndRelease = <span class="function"><span class="keyword">function</span> (<span class="params">event</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (event) &#123;</span><br><span class="line">    executeDispatchesInOrder(event);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (!event.isPersistent()) &#123;</span><br><span class="line">      event.constructor.release(event);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>调用 <code>executeDispatchesInOrder</code> 。在调用过后，如果事件没有被标记为持久化（<code>if (!event.isPersistent()) {}</code>），则释放事件。</p>
+<h5 id="executeDispatchesInOrder"><a href="#executeDispatchesInOrder" class="headerlink" title="executeDispatchesInOrder"></a>executeDispatchesInOrder</h5><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Standard/simple iteration through an event's collected dispatches.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">export</span> <span class="function"><span class="keyword">function</span> <span class="title">executeDispatchesInOrder</span>(<span class="params">event</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> dispatchListeners = event._dispatchListeners;</span><br><span class="line">  <span class="keyword">const</span> dispatchInstances = event._dispatchInstances;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (<span class="built_in">Array</span>.isArray(dispatchListeners)) &#123;</span><br><span class="line">    <span class="comment">// 如果该事件触发的事件监听方法不止一个，则依次执行</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; dispatchListeners.length; i++) &#123;</span><br><span class="line">      <span class="comment">// 如果事件被阻止传播，则不再继续执行其他事件监听方法</span></span><br><span class="line">      <span class="comment">// 注意，该属性虽然在中文语境中常被称为“阻止冒泡”，但其在冒泡阶段和捕获阶段均有效</span></span><br><span class="line">      <span class="comment">// 其实是“阻止传播”，而不是单单阻止冒泡</span></span><br><span class="line">      <span class="keyword">if</span> (event.isPropagationStopped()) &#123;</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="comment">// Listeners and Instances are two parallel arrays that are always in sync.</span></span><br><span class="line">      executeDispatch(</span><br><span class="line">        event,</span><br><span class="line">        dispatchListeners[i],</span><br><span class="line">        dispatchInstances[i],</span><br><span class="line">      );</span><br><span class="line">    &#125;</span><br><span class="line">  &#125; <span class="keyword">else</span> <span class="keyword">if</span> (dispatchListeners) &#123;</span><br><span class="line">    <span class="comment">// 否则执行一个事件监听方法即可</span></span><br><span class="line">    executeDispatch(event, dispatchListeners, dispatchInstances);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 执行完事件监听方法之后，清空事件记录的事件监听方法即相应绑定方法的 fiberNode</span></span><br><span class="line">  event._dispatchListeners = <span class="literal">null</span>;</span><br><span class="line">  event._dispatchInstances = <span class="literal">null</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h5 id="executeDispatch"><a href="#executeDispatch" class="headerlink" title="executeDispatch"></a>executeDispatch</h5><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Dispatch the event to the listener.</span></span><br><span class="line"><span class="comment"> * @param &#123;SyntheticEvent&#125; event SyntheticEvent to handle，当前的合成事件实例</span></span><br><span class="line"><span class="comment"> * @param &#123;function&#125; listener Application-level callback，事件监听方法</span></span><br><span class="line"><span class="comment"> * @param &#123;*&#125; inst Internal component instance，绑定事件监听方法的 fiberNode</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">executeDispatch</span>(<span class="params">event, listener, inst</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> type = event.type || <span class="string">'unknown-event'</span>; <span class="comment">// 设置事件名</span></span><br><span class="line">  event.currentTarget = getNodeFromInstance(inst); <span class="comment">// 设置 e.currentTarget</span></span><br><span class="line">  invokeGuardedCallbackAndCatchFirstError(type, listener, <span class="literal">undefined</span>, event);</span><br><span class="line">  event.currentTarget = <span class="literal">null</span>; <span class="comment">// 执行完事件监听方法之后，清空 e.currentTarget，便于下一个事件监听方法执行前更改 currentTarget</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>invokeGuardedCallbackAndCatchFirstError</code> 执行 <code>invokeGuardedCallback</code> 并 catch Error， <code>invokeGuardedCallback</code> 调用 <code>invokeGuardedCallbackImpl</code> 。</p>
+<h5 id="invokeGuardedCallback"><a href="#invokeGuardedCallback" class="headerlink" title="invokeGuardedCallback"></a>invokeGuardedCallback</h5><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> invokeGuardedCallbackImpl = <span class="function"><span class="keyword">function</span>&lt;<span class="title">A</span>, <span class="title">B</span>, <span class="title">C</span>, <span class="title">D</span>, <span class="title">E</span>, <span class="title">F</span>, <span class="title">Context</span>&gt;(<span class="params"></span></span></span><br><span class="line"><span class="function"><span class="params">  name: string | null,</span></span></span><br><span class="line"><span class="function"><span class="params">  func: (a: A, b: B, c: C, d: D, e: E, f: F</span>) =&gt; <span class="title">mixed</span>,</span></span><br><span class="line"><span class="function">  <span class="title">context</span>: <span class="title">Context</span>,</span></span><br><span class="line"><span class="function">  <span class="title">a</span>: <span class="title">A</span>,</span></span><br><span class="line"><span class="function">  <span class="title">b</span>: <span class="title">B</span>,</span></span><br><span class="line"><span class="function">  <span class="title">c</span>: <span class="title">C</span>,</span></span><br><span class="line"><span class="function">  <span class="title">d</span>: <span class="title">D</span>,</span></span><br><span class="line"><span class="function">  <span class="title">e</span>: <span class="title">E</span>,</span></span><br><span class="line"><span class="function">  <span class="title">f</span>: <span class="title">F</span>,</span></span><br><span class="line"><span class="function">) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> funcArgs = <span class="built_in">Array</span>.prototype.slice.call(<span class="built_in">arguments</span>, <span class="number">3</span>);</span><br><span class="line">  <span class="keyword">try</span> &#123;</span><br><span class="line">    <span class="comment">// 事件监听函数被执行</span></span><br><span class="line">    func.apply(context, funcArgs);</span><br><span class="line">  &#125; <span class="keyword">catch</span> (error) &#123;</span><br><span class="line">    <span class="keyword">this</span>.onError(error);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p><code>func</code> 即我们的 <code>listener</code>。可以看到，至此，事件监听函数终于被成功执行了。</p>
+<h3 id="将使用过的事件实例释放到资源池中"><a href="#将使用过的事件实例释放到资源池中" class="headerlink" title="将使用过的事件实例释放到资源池中"></a>将使用过的事件实例释放到资源池中</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> executeDispatchesAndRelease = <span class="function"><span class="keyword">function</span> (<span class="params">event</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (event) &#123;</span><br><span class="line">    <span class="comment">// 已执行完毕</span></span><br><span class="line">    executeDispatchesInOrder(event);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 如果事件不是“可持久化”的，则释放事件</span></span><br><span class="line">    <span class="keyword">if</span> (!event.isPersistent()) &#123;</span><br><span class="line">      event.constructor.release(event);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p><code>event.constructor.release</code>，即为 <code>releasePooledEvent</code> 方法。</p>
+<h4 id="releasePooledEvent"><a href="#releasePooledEvent" class="headerlink" title="releasePooledEvent"></a>releasePooledEvent</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">releasePooledEvent</span>(<span class="params">event</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> EventConstructor = <span class="keyword">this</span>;</span><br><span class="line">  invariant(</span><br><span class="line">    event <span class="keyword">instanceof</span> EventConstructor,</span><br><span class="line">    <span class="string">'Trying to release an event instance into a pool of a different type.'</span>,</span><br><span class="line">  );</span><br><span class="line">  event.destructor();</span><br><span class="line">  <span class="keyword">if</span> (EventConstructor.eventPool.length &lt; EVENT_POOL_SIZE) &#123;</span><br><span class="line">    EventConstructor.eventPool.push(event);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="event-distructor"><a href="#event-distructor" class="headerlink" title="event.distructor"></a>event.distructor</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">destructor: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">var</span> Interface = <span class="keyword">this</span>.constructor.Interface;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">var</span> propName <span class="keyword">in</span> Interface) &#123;</span><br><span class="line">    &#123;</span><br><span class="line">      <span class="built_in">Object</span>.defineProperty(<span class="keyword">this</span>, propName, getPooledWarningPropertyDefinition(propName, Interface[propName]));</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">this</span>.dispatchConfig = <span class="literal">null</span>;</span><br><span class="line">  <span class="keyword">this</span>._targetInst = <span class="literal">null</span>;</span><br><span class="line">  <span class="keyword">this</span>.nativeEvent = <span class="literal">null</span>;</span><br><span class="line">  <span class="keyword">this</span>.isDefaultPrevented = functionThatReturnsFalse;</span><br><span class="line">  <span class="keyword">this</span>.isPropagationStopped = functionThatReturnsFalse;</span><br><span class="line">  <span class="keyword">this</span>._dispatchListeners = <span class="literal">null</span>;</span><br><span class="line">  <span class="keyword">this</span>._dispatchInstances = <span class="literal">null</span>;</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="built_in">Object</span>.defineProperty(<span class="keyword">this</span>, <span class="string">'nativeEvent'</span>, getPooledWarningPropertyDefinition(<span class="string">'nativeEvent'</span>, <span class="literal">null</span>));</span><br><span class="line">    <span class="built_in">Object</span>.defineProperty(<span class="keyword">this</span>, <span class="string">'isDefaultPrevented'</span>, getPooledWarningPropertyDefinition(<span class="string">'isDefaultPrevented'</span>, functionThatReturnsFalse));</span><br><span class="line">    <span class="built_in">Object</span>.defineProperty(<span class="keyword">this</span>, <span class="string">'isPropagationStopped'</span>, getPooledWarningPropertyDefinition(<span class="string">'isPropagationStopped'</span>, functionThatReturnsFalse));</span><br><span class="line">    <span class="built_in">Object</span>.defineProperty(<span class="keyword">this</span>, <span class="string">'preventDefault'</span>, getPooledWarningPropertyDefinition(<span class="string">'preventDefault'</span>, <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;&#125;));</span><br><span class="line">    <span class="built_in">Object</span>.defineProperty(<span class="keyword">this</span>, <span class="string">'stopPropagation'</span>, getPooledWarningPropertyDefinition(<span class="string">'stopPropagation'</span>, <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;&#125;));</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在这个方法中，清空当前合成事件实例上的所有属性。然后回到上一步。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">releasePooledEvent</span>(<span class="params">event</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> EventConstructor = <span class="keyword">this</span>;</span><br><span class="line">  invariant(</span><br><span class="line">    event <span class="keyword">instanceof</span> EventConstructor,</span><br><span class="line">    <span class="string">'Trying to release an event instance into a pool of a different type.'</span>,</span><br><span class="line">  );</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 已执行完毕</span></span><br><span class="line">  event.destructor();</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 如果池中的事件小于一个预设值，则池子还没放满，将清空后的事件实例放入池中</span></span><br><span class="line">  <span class="keyword">if</span> (EventConstructor.eventPool.length &lt; EVENT_POOL_SIZE) &#123;</span><br><span class="line">    EventConstructor.eventPool.push(event);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>如果池子中的事件数量小于一个预设值，则池子还没放满，将清空后的事件放入池中。下次提取合成事件时，就可以直接从池中取，而不需要再次创建。</p>
+<h4 id="releaseTopLevelCallbackBookKeeping"><a href="#releaseTopLevelCallbackBookKeeping" class="headerlink" title="releaseTopLevelCallbackBookKeeping"></a>releaseTopLevelCallbackBookKeeping</h4><p>最终，我们连我们存下的 <code>bookKeeping</code> 也需要释放。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">releaseTopLevelCallbackBookKeeping</span>(<span class="params">instance</span>) </span>&#123;</span><br><span class="line">  instance.topLevelType = <span class="literal">null</span>;</span><br><span class="line">  instance.nativeEvent = <span class="literal">null</span>;</span><br><span class="line">  instance.targetInst = <span class="literal">null</span>;</span><br><span class="line">  instance.ancestors.length = <span class="number">0</span>;</span><br><span class="line">  <span class="keyword">if</span> (callbackBookkeepingPool.length &lt; CALLBACK_BOOKKEEPING_POOL_SIZE) &#123;</span><br><span class="line">    callbackBookkeepingPool.push(instance);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>操作同样，都是先清空实例，然后看池子中是否还有位置，如果有位置，则放入池中。</p>
+<p>至此，React 事件机制就已经介绍完成了。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><h3 id="在-document-上绑定事件处理函数"><a href="#在-document-上绑定事件处理函数" class="headerlink" title="在 document 上绑定事件处理函数"></a>在 document 上绑定事件处理函数</h3><p>如果 props 出现 <code>onClick</code> ，则在 document 上绑定针对 click 事件的处理方法，只绑定一次。其他事件同理。</p>
+<p>这样，原生事件冒泡（某些事件是捕获）到 document 时，则触发 React 绑定的处理方法。</p>
+<h3 id="执行-document-上的事件处理函数"><a href="#执行-document-上的事件处理函数" class="headerlink" title="执行 document 上的事件处理函数"></a>执行 document 上的事件处理函数</h3><p>触发事件，则触发了 document 上绑定的处理方法。</p>
+<p>该方法从原生事件中取得原生事件本身、触发事件的元素、触发事件的元素对应的 fiberNode、事件类型，然后分别进行两步重要操作：1. 提取（创建或从事件池中取出）合成事件；2. 执行用户绑定的事件处理函数。</p>
+<h4 id="提取事件"><a href="#提取事件" class="headerlink" title="提取事件"></a>提取事件</h4><p>根据事件类型不同，执行不同的提取事件方法。以常见的点击事件为例：</p>
+<ol>
+<li>先新建（或从事件池中取出）一个对象，然后将原生事件的必要属性按照 React 希望的形式赋值到该对象上；</li>
+<li>从触发事件的 fiberNode 开始一直向上遍历到 HostRoot（即 #root 对应的 fiberNode），取得所有可以绑定事件的 fiberNode（即 HostComponent 类型）形成一个链条。</li>
+<li>模拟捕获阶段和冒泡阶段，分别从 HostRoot 遍历到触发事件的 fiberNode，取出上面期望绑定在捕获阶段的事件处理函数（即 props onClickCapture），储存在合成事件上，然后模拟冒泡阶段，反着遍历，将绑定在冒泡阶段的事件处理函数（即 props onClick）记录在合成事件上，形成数组。其对应的 fiberNode 也同步记录在另一个数组中，与事件处理函数的数组一一对应。</li>
+</ol>
+<h4 id="执行事件处理函数（用户绑定的）"><a href="#执行事件处理函数（用户绑定的）" class="headerlink" title="执行事件处理函数（用户绑定的）"></a>执行事件处理函数（用户绑定的）</h4><p>遍历事件中储存的事件处理函数列表，循环依次执行。执行完整个列表后，清空该列表以及其对应的 fiberNode 列表、</p>
+<h4 id="将事件实例释放到池中"><a href="#将事件实例释放到池中" class="headerlink" title="将事件实例释放到池中"></a>将事件实例释放到池中</h4><ol>
+<li>初始化事件上的所有属性；</li>
+<li>如果事件池中的事件数目小于预设值，则将事件实例推入池中。</li>
+</ol>
+<h2 id="动图"><a href="#动图" class="headerlink" title="动图"></a>动图</h2><p>找到了一位作者为这个过程制作的<a href="https://www.lzane.com/animate/react-event-system/index.html" target="_blank" rel="noopener">React 事件机制动图</a>，应该能便于大家理解。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/React-js/" rel="tag"># React.js</a>
+          
+            <a href="/tags/JavaScript/" rel="tag"># JavaScript</a>
+          
+            <a href="/tags/源码/" rel="tag"># 源码</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/03/29/浏览器渲染详细过程/" rel="next" title="浏览器渲染的详细过程">
+                <i class="fa fa-chevron-left"></i> 浏览器渲染的详细过程
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/10/18/complex-sentence/" rel="prev" title="一个比较有趣的需求">
+                一个比较有趣的需求 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/images/avatar.jpeg" alt="泉先">
+          <p class="site-author-name" itemprop="name">泉先</p>
+           
+              <p class="site-description motion-element" itemprop="description">今天我有变得更厉害一点吗！>v<</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">51</span>
+                <span class="site-state-item-name">posts</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">14</span>
+                <span class="site-state-item-name">categories</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">23</span>
+                <span class="site-state-item-name">tags</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#例子"><span class="nav-number">1.</span> <span class="nav-text">例子</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#事件处理函数的绑定"><span class="nav-number">2.</span> <span class="nav-text">事件处理函数的绑定</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#从-setInitialDOMProperties-开始"><span class="nav-number">2.1.</span> <span class="nav-text">从 setInitialDOMProperties 开始</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ensureListeningTo"><span class="nav-number">2.2.</span> <span class="nav-text">ensureListeningTo</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#listenTo"><span class="nav-number">2.3.</span> <span class="nav-text">listenTo</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#trapBubbledEvent"><span class="nav-number">2.4.</span> <span class="nav-text">trapBubbledEvent</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#事件处理函数的执行"><span class="nav-number">3.</span> <span class="nav-text">事件处理函数的执行</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#事件分发"><span class="nav-number">3.1.</span> <span class="nav-text">事件分发</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#dispatchEvent"><span class="nav-number">3.1.1.</span> <span class="nav-text">dispatchEvent</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#batchedUpdates"><span class="nav-number">3.1.2.</span> <span class="nav-text">batchedUpdates</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#handleTopLevel"><span class="nav-number">3.1.3.</span> <span class="nav-text">handleTopLevel</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#runExtractedEventsInBatch"><span class="nav-number">3.1.4.</span> <span class="nav-text">runExtractedEventsInBatch</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#提取合成事件"><span class="nav-number">3.2.</span> <span class="nav-text">提取合成事件</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#获取当前类型事件应执行的-extractEvents（提取事件方法）"><span class="nav-number">3.2.1.</span> <span class="nav-text">获取当前类型事件应执行的 extractEvents（提取事件方法）</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#extractEvents"><span class="nav-number">3.2.1.1.</span> <span class="nav-text">extractEvents</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#SimpleEventPlugin-extractEvents"><span class="nav-number">3.2.1.2.</span> <span class="nav-text">SimpleEventPlugin.extractEvents</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#创建或从池中取出合成事件实例"><span class="nav-number">3.2.2.</span> <span class="nav-text">创建或从池中取出合成事件实例</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#SyntheticMouseEvent"><span class="nav-number">3.2.2.1.</span> <span class="nav-text">SyntheticMouseEvent</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#EventConstructor-getPooled"><span class="nav-number">3.2.2.2.</span> <span class="nav-text">EventConstructor.getPooled</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#SyntheticEvent"><span class="nav-number">3.2.2.3.</span> <span class="nav-text">SyntheticEvent</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#在合成事件实例上保存事件监听方法"><span class="nav-number">3.2.3.</span> <span class="nav-text">在合成事件实例上保存事件监听方法</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#accumulateTwoPhaseDispatches"><span class="nav-number">3.2.3.1.</span> <span class="nav-text">accumulateTwoPhaseDispatches</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#traverseTwoPhase"><span class="nav-number">3.2.3.2.</span> <span class="nav-text">traverseTwoPhase</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#accumulateDirectionalDispatches"><span class="nav-number">3.2.3.3.</span> <span class="nav-text">accumulateDirectionalDispatches</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#执行事件回调"><span class="nav-number">3.3.</span> <span class="nav-text">执行事件回调</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#runEventsInBatch"><span class="nav-number">3.3.1.</span> <span class="nav-text">runEventsInBatch</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#executeDispatchesAndRelease"><span class="nav-number">3.3.1.1.</span> <span class="nav-text">executeDispatchesAndRelease</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#executeDispatchesInOrder"><span class="nav-number">3.3.1.2.</span> <span class="nav-text">executeDispatchesInOrder</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#executeDispatch"><span class="nav-number">3.3.1.3.</span> <span class="nav-text">executeDispatch</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#invokeGuardedCallback"><span class="nav-number">3.3.1.4.</span> <span class="nav-text">invokeGuardedCallback</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#将使用过的事件实例释放到资源池中"><span class="nav-number">3.4.</span> <span class="nav-text">将使用过的事件实例释放到资源池中</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#releasePooledEvent"><span class="nav-number">3.4.1.</span> <span class="nav-text">releasePooledEvent</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#event-distructor"><span class="nav-number">3.4.2.</span> <span class="nav-text">event.distructor</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#releaseTopLevelCallbackBookKeeping"><span class="nav-number">3.4.3.</span> <span class="nav-text">releaseTopLevelCallbackBookKeeping</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">4.</span> <span class="nav-text">总结</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#在-document-上绑定事件处理函数"><span class="nav-number">4.1.</span> <span class="nav-text">在 document 上绑定事件处理函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#执行-document-上的事件处理函数"><span class="nav-number">4.2.</span> <span class="nav-text">执行 document 上的事件处理函数</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#提取事件"><span class="nav-number">4.2.1.</span> <span class="nav-text">提取事件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#执行事件处理函数（用户绑定的）"><span class="nav-number">4.2.2.</span> <span class="nav-text">执行事件处理函数（用户绑定的）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#将事件实例释放到池中"><span class="nav-number">4.2.3.</span> <span class="nav-text">将事件实例释放到池中</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#动图"><span class="nav-number">5.</span> <span class="nav-text">动图</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy;  2017 - 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">泉先</span>
+</div>
+
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="https://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Gemini
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.2"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

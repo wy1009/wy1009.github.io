@@ -1,0 +1,779 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="Babel,CRA,">
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.2">
+
+
+
+
+
+
+<meta name="description" content="CRA 项目如何兼容低版本浏览器对于兼容低版本浏览器的需求，CRA 官方文档写得很清楚。只要引入 react-app-polyfill 就可以解决绝大部分情况的问题。但实际使用时，我们发现，至少在今天（2022.7.12），对于超低版本浏览器（安卓 5.1.1，Chrome 42），react-app-polyfill 并没有提供对实例方法 arr.includes，以及浏览器 API URLSe">
+<meta name="keywords" content="Babel,CRA">
+<meta property="og:type" content="article">
+<meta property="og:title" content="2022 年，如何在 CRA 的项目中做浏览器兼容">
+<meta property="og:url" content="http://yoursite.com/2022/07/12/2022年如何在CRA项目配置Babel/index.html">
+<meta property="og:site_name" content="不会化妆的写手&lt;br&gt;不是好程序员">
+<meta property="og:description" content="CRA 项目如何兼容低版本浏览器对于兼容低版本浏览器的需求，CRA 官方文档写得很清楚。只要引入 react-app-polyfill 就可以解决绝大部分情况的问题。但实际使用时，我们发现，至少在今天（2022.7.12），对于超低版本浏览器（安卓 5.1.1，Chrome 42），react-app-polyfill 并没有提供对实例方法 arr.includes，以及浏览器 API URLSe">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2022-07-12T13:08:49.881Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="2022 年，如何在 CRA 的项目中做浏览器兼容">
+<meta name="twitter:description" content="CRA 项目如何兼容低版本浏览器对于兼容低版本浏览器的需求，CRA 官方文档写得很清楚。只要引入 react-app-polyfill 就可以解决绝大部分情况的问题。但实际使用时，我们发现，至少在今天（2022.7.12），对于超低版本浏览器（安卓 5.1.1，Chrome 42），react-app-polyfill 并没有提供对实例方法 arr.includes，以及浏览器 API URLSe">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2022/07/12/2022年如何在CRA项目配置Babel/">
+
+
+
+
+
+  <title>2022 年，如何在 CRA 的项目中做浏览器兼容 | 不会化妆的写手<br>不是好程序员</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?a17a483691d457feb9d048db3e29684c";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="default">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">不会化妆的写手<br>不是好程序员</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            About
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2022/07/12/2022年如何在CRA项目配置Babel/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="泉先">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="不会化妆的写手<br>不是好程序员">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">2022 年，如何在 CRA 的项目中做浏览器兼容</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2022-07-12T18:36:36+08:00">
+                2022-07-12
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/框架-库-工具/" itemprop="url" rel="index">
+                    <span itemprop="name">框架/库/工具</span>
+                  </a>
+                </span>
+
+                
+                
+                  , 
+                
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/框架-库-工具/Babel/" itemprop="url" rel="index">
+                    <span itemprop="name">Babel</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="CRA-项目如何兼容低版本浏览器"><a href="#CRA-项目如何兼容低版本浏览器" class="headerlink" title="CRA 项目如何兼容低版本浏览器"></a>CRA 项目如何兼容低版本浏览器</h1><p>对于兼容低版本浏览器的需求，<a href="https://create-react-app.dev/docs/supported-browsers-features" target="_blank" rel="noopener">CRA 官方文档</a>写得很清楚。只要引入 <code>react-app-polyfill</code> 就可以解决绝大部分情况的问题。<br>但实际使用时，我们发现，至少在今天（2022.7.12），对于超低版本浏览器（安卓 5.1.1，Chrome 42），<code>react-app-polyfill</code> 并没有提供对实例方法 <code>arr.includes</code>，以及浏览器 API <code>URLSearchParams</code> 的支持。因此，不得已自己使用 babel 作出支持。</p>
+<h1 id="CRA-项目引入-babel"><a href="#CRA-项目引入-babel" class="headerlink" title="CRA 项目引入 babel"></a>CRA 项目引入 babel</h1><p>原本的 <code>@babel/polyfill</code> 已经在 babel 7.4.0 版本中被弃用，如今完整的 polyfill 已经转移到了 <code>core-js</code> 中。实际上，直接 <code>import core-js</code> 就可以解决所有问题了。但意味着引入了所有的 polyfill，不管你想支持的浏览器版本，不管你实际使用了哪些方法。这势必会造成包的臃肿，因而需要对 babel 进行配置。<br>贴心的 babel 提供了两种按需加载方式，<code>@babel/preset-env</code> 的 <code>useBuiltIns</code> 可配置为 <code>entry</code> 或 <code>usage</code>。<br>如果配置为 <code>entry</code>，babel 则会通过对 browserlists 的配置，按需引入 <code>core-js</code> 的代码，如官方示例：</p>
+<p>你的代码：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> <span class="string">"core-js"</span>;</span><br></pre></td></tr></table></figure>
+<p>转换后：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> <span class="string">"core-js/modules/es.string.pad-start"</span>;</span><br><span class="line"><span class="keyword">import</span> <span class="string">"core-js/modules/es.string.pad-end"</span>;</span><br></pre></td></tr></table></figure>
+<p>而 <code>usage</code> 参数，则代表着更精确的按需加载。<strong>无需</strong>在文件开头 <code>import &#39;core-js&#39;</code>，babel 在处理你的代码的时候，会直接解析你的代码实际使用了哪些语法，然后有选择性地引入。</p>
+<p>该参数是在 babel 配置文件中配置的：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">"presets"</span>: [</span><br><span class="line">    [</span><br><span class="line">      <span class="string">"@babel/preset-env"</span>,</span><br><span class="line">      &#123;</span><br><span class="line">        <span class="attr">"useBuiltIns"</span>: <span class="string">"usage"</span>,</span><br><span class="line">        <span class="attr">"corejs"</span>: <span class="string">"3.23"</span> // usage 才需要该配置</span><br><span class="line">      &#125;</span><br><span class="line">    ]</span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>然而，现实是，我花了不少时间尝试，分别在 <code>package.json</code> 和 <code>babel.config.json</code> 中写了配置，似乎都并不生效。无论怎么改配置，打出来的 js 文件夹始终是 1.2M，并没有按需加载的效果。这让我感到很迷茫。</p>
+<p>于是查了下<a href="https://github.com/facebook/create-react-app/blob/3880ba6cfd98d9f2843217fd9061e385274b452f/packages/react-scripts/config/webpack.config.js#L411" target="_blank" rel="noopener">CRA 源码</a>，发现不仅是 webpack 配置，CRA 创建的项目默认连 babel 配置都不支持。那就只能用 <code>react-app-rewired</code> + <code>customize-cra</code> 来改了~看文档就会用，很方便很直观。</p>
+<p>值得一提的是，如果 <code>customize-cra</code> 没有提供对应的方法，可以用以下方法去补充：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> &#123;</span><br><span class="line">  override,</span><br><span class="line">  useBabelRc,</span><br><span class="line">  addWebpackPlugin,</span><br><span class="line">&#125; = <span class="built_in">require</span>(<span class="string">"customize-cra"</span>)</span><br><span class="line"><span class="keyword">const</span> BundleAnalyzerPlugin = <span class="built_in">require</span>(<span class="string">'webpack-bundle-analyzer'</span>).BundleAnalyzerPlugin</span><br><span class="line"></span><br><span class="line"><span class="comment">// 自定义方法</span></span><br><span class="line"><span class="keyword">const</span> setConcatenateModules = <span class="function"><span class="params">cm</span> =&gt;</span> (</span><br><span class="line">  config =&gt; &#123;</span><br><span class="line">    config.optimization.concatenateModules = cm</span><br><span class="line">    <span class="keyword">return</span> config</span><br><span class="line">  &#125;</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="built_in">module</span>.exports = override(</span><br><span class="line">  useBabelRc(),</span><br><span class="line">  setConcatenateModules(<span class="literal">false</span>),</span><br><span class="line">  addWebpackPlugin(<span class="keyword">new</span> BundleAnalyzerPlugin()),</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<p>即自己写一个方法来变更配置。</p>
+<p>至此，我终于成功配置了 babel。</p>
+<h1 id="成功配置-babel-后"><a href="#成功配置-babel-后" class="headerlink" title="成功配置 babel 后"></a>成功配置 babel 后</h1><p>在配置完 babel 后，打包推到测试服，5.1.1 的手机仍旧白屏。debug 发现，是 <code>URLSearchParams</code> 仍旧不支持。这个很好理解，<code>useBuildIns: usage</code> 是在我们使用某方法后才会将对应 polyfill 引入的，而 <code>URLSearchParams</code> 实际上是 <code>react-router-dom@6</code> 自行使用的。而在 CRA 项目的 webpack 配置中，<code>babel-loader</code> 只会处理 <code>src</code> 路径下的文件，当然不包括 <code>node_modules</code>。</p>
+<p>因此，在文件开头手动引入对应 polyfill <code>import &#39;core-js/web/url-search-params&#39;</code>。</p>
+<p>至此，项目的兼容性问题就完全解决了。</p>
+<h1 id="一个未解之谜"><a href="#一个未解之谜" class="headerlink" title="一个未解之谜"></a>一个未解之谜</h1><p>我的项目中有多个打包命令，用于区分是否生成 sourcemap，请求的接口是测试环境还是正式环境等。<br><code>yarn build:prod</code> 打包，请求的接口是正式环境，而 <code>yarn build</code> 请求的是测试环境。<br>此前，在 <code>yarn build:prod</code> 的情况下，配置已经没有什么问题了。但是改成 <code>yarn build</code> 打算提测后，控制台忽然就出现了 <code>Object.assign is not a function.</code> 的报错，且页面白屏。<br>考虑到两个环境的差异就只有请求接口的不同，我第一反应就是接口环境不同导致重定向的页面不同，造成访问的页面不同。所以正式环境没有触发 bug，测试环境触发了。<br>以这个思路查了半天，发现并不是这个问题。甚至发现客户端其实会拦截所有前端请求更改为正式环境（历史 Charles 抓包也显示确实从未请求过测试环境），所以两个包的运行情况应该是一模一样的才对。<br>虽然不知道两个运行情况相同的包为什么会有不同的表现，但我还是打算先猜测解决方案。首先从 browserlists 入手，利用<a href="https://liulanmi.com/labs/core.html" target="_blank" rel="noopener">这个地址</a>，我查到，我手头这个 5.1.1 的机器，webview 内核版本为 Chrome 42，而我的配置的浏览器支持似乎高于这个版本：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> @babel/preset-env debug 模式下的控制台输出</span><br><span class="line">Using targets:</span><br><span class="line">&#123;</span><br><span class="line">  "android": "4.4.3",</span><br><span class="line">  "chrome": "79",</span><br><span class="line">  "edge": "97",</span><br><span class="line">  "firefox": "96",</span><br><span class="line">  "ie": "11",</span><br><span class="line">  "ios": "12.2",</span><br><span class="line">  "opera": "82",</span><br><span class="line">  "safari": "13.1",</span><br><span class="line">  "samsung": "16"</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>虽然支持的安卓版本低于 5.1.1，但是 chrome 版本是高于 42 的。我怀疑是这个原因导致的，就在 browserlists 中加入了 <code>chrome 30</code>。</p>
+<p>然后问题就解决了。</p>
+<p>但这还是不能解释一个问题，就是为什么正式环境的包就没有同样的问题。因此，我将 <code>chrome 30</code> 的配置移除了，想再次观察情况。然后自此开始，<code>Object.assign</code> 这个 bug 就再也没有出现了。</p>
+<p>我怀疑是缓存的问题，删除了 <code>node_modules/.cache</code>，不复现。我干脆直接让其他同事拉代码部署了一下，同样不再复现。</p>
+<p>而因为发现 <code>debug</code> 的用处太晚，我甚至没有及时地监控到之前问题复现的时候，<code>object.assign</code> 的 polyfill 是否被正确引入了。这件事就暂时成为了未解之谜…………</p>
+<p>总之还是记录一下，debug 真的非常好用，不仅可以告诉你 target 的系统/浏览器内核版本，还会在 <code>usage</code> 的时候告诉你因什么文件而引入了什么 polyfill，非常非常好用了。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> @babel/preset-env debug 模式下的控制台输出</span><br><span class="line">[/Users/wangyi/Documents/edg/zhixue/src/bridge/index.ts]</span><br><span class="line">The corejs3 polyfill added the following polyfills:</span><br><span class="line">  es.regexp.exec &#123; "android":"4.4.3", "chrome":"79", "edge":"97", "firefox":"96", "ie":"11", "ios":"12.2", "opera":"82", "safari":"13.1", "samsung":"16" &#125;</span><br><span class="line">  es.regexp.test &#123; "android":"4.4.3", "chrome":"79", "edge":"97", "firefox":"96", "ie":"11", "ios":"12.2", "opera":"82", "safari":"13.1", "samsung":"16" &#125;</span><br><span class="line">  es.object.assign &#123; "android":"4.4.3", "chrome":"79", "edge":"97", "firefox":"96", "ie":"11", "ios":"12.2", "opera":"82", "safari":"13.1", "samsung":"16" &#125;</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Babel/" rel="tag"># Babel</a>
+          
+            <a href="/tags/CRA/" rel="tag"># CRA</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2022/03/08/Error: 你居然咸到文档都不看了！！！/" rel="next" title="Error: 你居然咸到文档都不看了！！！">
+                <i class="fa fa-chevron-left"></i> Error: 你居然咸到文档都不看了！！！
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/images/avatar.jpeg" alt="泉先">
+          <p class="site-author-name" itemprop="name">泉先</p>
+           
+              <p class="site-description motion-element" itemprop="description">今天我有变得更厉害一点吗！>v<</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">51</span>
+                <span class="site-state-item-name">posts</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">14</span>
+                <span class="site-state-item-name">categories</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">23</span>
+                <span class="site-state-item-name">tags</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#CRA-项目如何兼容低版本浏览器"><span class="nav-number">1.</span> <span class="nav-text">CRA 项目如何兼容低版本浏览器</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#CRA-项目引入-babel"><span class="nav-number">2.</span> <span class="nav-text">CRA 项目引入 babel</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#成功配置-babel-后"><span class="nav-number">3.</span> <span class="nav-text">成功配置 babel 后</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#一个未解之谜"><span class="nav-number">4.</span> <span class="nav-text">一个未解之谜</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy;  2017 - 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">泉先</span>
+</div>
+
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="https://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Gemini
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.2"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
