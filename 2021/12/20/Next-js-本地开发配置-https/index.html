@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="JavaScript,Next.js,HTTPS,">
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.2">
+
+
+
+
+
+
+<meta name="description" content="一搜其实不少博客在说，比如 Using HTTPS on Next.js local development server 这篇文章写的就是一个很常用的解法。为了防止链接失效，见到说下这篇文章的做法。先通过 mkcert 生成 https 证书，将生成的证书拷贝到项目中，然后自己写一个 server.js，引用该证书，且仅在本地开发时启动。 mkcert 使用方法见：mkcert 文档 重写 se">
+<meta name="keywords" content="JavaScript,Next.js,HTTPS">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Next.js 本地开发配置 https">
+<meta property="og:url" content="http://yoursite.com/2021/12/20/Next-js-本地开发配置-https/index.html">
+<meta property="og:site_name" content="不会化妆的写手&lt;br&gt;不是好程序员">
+<meta property="og:description" content="一搜其实不少博客在说，比如 Using HTTPS on Next.js local development server 这篇文章写的就是一个很常用的解法。为了防止链接失效，见到说下这篇文章的做法。先通过 mkcert 生成 https 证书，将生成的证书拷贝到项目中，然后自己写一个 server.js，引用该证书，且仅在本地开发时启动。 mkcert 使用方法见：mkcert 文档 重写 se">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2021-12-20T08:48:30.732Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Next.js 本地开发配置 https">
+<meta name="twitter:description" content="一搜其实不少博客在说，比如 Using HTTPS on Next.js local development server 这篇文章写的就是一个很常用的解法。为了防止链接失效，见到说下这篇文章的做法。先通过 mkcert 生成 https 证书，将生成的证书拷贝到项目中，然后自己写一个 server.js，引用该证书，且仅在本地开发时启动。 mkcert 使用方法见：mkcert 文档 重写 se">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2021/12/20/Next-js-本地开发配置-https/">
+
+
+
+
+
+  <title>Next.js 本地开发配置 https | 不会化妆的写手<br>不是好程序员</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?a17a483691d457feb9d048db3e29684c";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="default">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">不会化妆的写手<br>不是好程序员</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            About
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2021/12/20/Next-js-本地开发配置-https/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="泉先">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="不会化妆的写手<br>不是好程序员">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Next.js 本地开发配置 https</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-12-20T16:25:10+08:00">
+                2021-12-20
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/框架-库-工具/" itemprop="url" rel="index">
+                    <span itemprop="name">框架/库/工具</span>
+                  </a>
+                </span>
+
+                
+                
+                  , 
+                
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/框架-库-工具/Next-js/" itemprop="url" rel="index">
+                    <span itemprop="name">Next.js</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>一搜其实不少博客在说，比如 <a href="https://dev.to/nakib/using-https-on-next-js-local-development-server-bcd" target="_blank" rel="noopener">Using HTTPS on Next.js local development server</a> 这篇文章写的就是一个很常用的解法。<br>为了防止链接失效，见到说下这篇文章的做法。先通过 mkcert 生成 https 证书，将生成的证书拷贝到项目中，然后自己写一个 server.js，引用该证书，且仅在本地开发时启动。</p>
+<p>mkcert 使用方法见：<a href="https://github.com/FiloSottile/mkcert#mkcert" target="_blank" rel="noopener">mkcert 文档</a></p>
+<p>重写 server.js 见：<a href="https://www.nextjs.cn/docs/advanced-features/custom-server" target="_blank" rel="noopener">Next.js 自定义 Server</a></p>
+<a id="more"></a>
+<p>落实到代码：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// server.js</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> &#123; createServer &#125; = <span class="built_in">require</span>(<span class="string">'https'</span>)</span><br><span class="line"><span class="keyword">const</span> &#123; parse &#125; = <span class="built_in">require</span>(<span class="string">'url'</span>)</span><br><span class="line"><span class="keyword">const</span> next = <span class="built_in">require</span>(<span class="string">'next'</span>)</span><br><span class="line"><span class="keyword">const</span> fs = <span class="built_in">require</span>(<span class="string">'fs'</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> dev = process.env.NODE_ENV !== <span class="string">'production'</span></span><br><span class="line"><span class="keyword">const</span> app = next(&#123; dev &#125;)</span><br><span class="line"><span class="keyword">const</span> handle = app.getRequestHandler()</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> httpsOptions = &#123;</span><br><span class="line">  key: fs.readFileSync(<span class="string">'./https-cert/localhost-key.pem'</span>),</span><br><span class="line">  cert: fs.readFileSync(<span class="string">'./https-cert/localhost.pem'</span>),</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">app.prepare().then(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">  createServer(httpsOptions, (req, res) =&gt; &#123;</span><br><span class="line">    <span class="comment">// Be sure to pass `true` as the second argument to `url.parse`.</span></span><br><span class="line">    <span class="comment">// This tells it to parse the query portion of the URL.</span></span><br><span class="line">    <span class="keyword">const</span> parsedUrl = parse(req.url, <span class="literal">true</span>)</span><br><span class="line">    handle(req, res, parsedUrl)</span><br><span class="line">  &#125;).listen(<span class="number">3000</span>, (err) =&gt; &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(err, <span class="string">'err'</span>)</span><br><span class="line">    <span class="keyword">if</span> (err) <span class="keyword">throw</span> err</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'&gt; Ready on http://localhost:3000'</span>)</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<p>本质就是把官方例子的 createServer 从 http 改为 https，并配置了本地的 ssl 证书。</p>
+<p>但是过程中仍旧遇到了很多问题，很久才调通。</p>
+<h2 id="无法访问到启动的服务"><a href="#无法访问到启动的服务" class="headerlink" title="无法访问到启动的服务"></a>无法访问到启动的服务</h2><p>走的就是上面博客的写一个 server.js 的方式。访问 <a href="https://localhost:3000" target="_blank" rel="noopener">https://localhost:3000</a> ，Chrome 无法访问，显示 ERR_SSL_KEY_USAGE_INCOMPATIBLE。<br>于是下意识访问 <a href="http://localhost:3000" target="_blank" rel="noopener">http://localhost:3000</a> ，仍旧无法访问。这时候，我就认为是启动的服务有问题。<br>此时非常迷茫，没有看到任何报错，反复对比代码也没有问题。把启动的 createServer 改为从 http 包再访问就是正常的。所以怀疑是 https 包的问题。根据网上的回复不断尝试重装包、重新启动服务和更改服务端口号到 443，都没有效果。<br>此时看到一个 github issue，有人提示启动 https 服务需要访问 https 地址，提问者回复确实是没有访问 https，访问的是 http 地址，所以才导致无法访问到服务。<br>这时候，我才意识到，用 https 包启动的服务，使用 http 方法是无法访问到的。所以服务本身很可能是没有问题的，我只是被 http 无法访问给误导了。<br>这时候我意识到，我应该解决的是用 https 访问时看到的报错。</p>
+<h2 id="使用-https-访问服务报错"><a href="#使用-https-访问服务报错" class="headerlink" title="使用 https 访问服务报错"></a>使用 https 访问服务报错</h2><p>感觉是证书安装有问题，在钥匙串里查了半天，也 uninstall 然后重新 install 生成了新的证书。但是仍旧没有效果。</p>
+<p>最终在这个 <a href="https://github.com/FiloSottile/mkcert/issues/253" target="_blank" rel="noopener">issue</a> 中查到了原因。该 issue 中有一个回复：</p>
+<blockquote>
+<p>If you are seeing this error, it means you are trying to use the root CA directly. You are NOT supposed to use rootCA.pem directly. Instead, generate a certificate for localhost or example.com with mkcert localhost or mkcert example.com and use that.</p>
+</blockquote>
+<p>我确实直接使用了根证书。因为在按照官方文档使用 <code>mkcert example.com &quot;*.example.com&quot; example.test localhost 127.0.0.1 ::1</code> 命令时，实际上应该创建出新的证书。而不知为何我并没有成功创建。<br>所以，当我使用 <code>mkcert -CAROOT</code> 查看证书文件时，我的目录下就只有两个根证书，我就认为应该使用根证书。<br>上面的 issue 解决了我的问题。不能直接使用根证书，而应该根据不同的域名生成不同的证书，然后引入进去。</p>
+<p>Problem Solved.</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/JavaScript/" rel="tag"># JavaScript</a>
+          
+            <a href="/tags/Next-js/" rel="tag"># Next.js</a>
+          
+            <a href="/tags/HTTPS/" rel="tag"># HTTPS</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2021/12/07/Next-学习过程中想知道的问题/" rel="next" title="Next 学习过程中想知道的问题">
+                <i class="fa fa-chevron-left"></i> Next 学习过程中想知道的问题
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2021/12/24/TypeScript-想看的问题/" rel="prev" title="TypeScript 想看的问题">
+                TypeScript 想看的问题 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/images/avatar.jpeg" alt="泉先">
+          <p class="site-author-name" itemprop="name">泉先</p>
+           
+              <p class="site-description motion-element" itemprop="description">今天我有变得更厉害一点吗！>v<</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">51</span>
+                <span class="site-state-item-name">posts</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">14</span>
+                <span class="site-state-item-name">categories</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">23</span>
+                <span class="site-state-item-name">tags</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#无法访问到启动的服务"><span class="nav-number">1.</span> <span class="nav-text">无法访问到启动的服务</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用-https-访问服务报错"><span class="nav-number">2.</span> <span class="nav-text">使用 https 访问服务报错</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy;  2017 - 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">泉先</span>
+</div>
+
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="https://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Gemini
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.2"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

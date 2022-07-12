@@ -102,7 +102,7 @@
 <meta property="og:site_name" content="不会化妆的写手&lt;br&gt;不是好程序员">
 <meta property="og:description" content="盒模型在W3C和IE中的区别IE盒模型问题只会出现在IE5.5及更早的版本。 W3c盒模型，width = content-width。设定好width后，增加padding等都会增加整体盒子的宽度。 IE盒模型，width = content-width + padding + border。设定好width后，增加padding会减少content-width的宽度，整体盒子的宽度不变。 EM">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2020-06-30T14:04:59.929Z">
+<meta property="og:updated_time" content="2021-10-19T09:27:11.991Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="CSS零碎">
 <meta name="twitter:description" content="盒模型在W3C和IE中的区别IE盒模型问题只会出现在IE5.5及更早的版本。 W3c盒模型，width = content-width。设定好width后，增加padding等都会增加整体盒子的宽度。 IE盒模型，width = content-width + padding + border。设定好width后，增加padding会减少content-width的宽度，整体盒子的宽度不变。 EM">
@@ -400,6 +400,8 @@
 </ol>
 <h2 id="width-100"><a href="#width-100" class="headerlink" title="width: 100%"></a>width: 100%</h2><p>好奇怪，为什么我长期以来都有一个谬误，觉得 <code>width: 100%</code> 是相对于父元素宽度的，所以如果父元素有 padding，则内容 100% 会超出。<strong>这是错误的。</strong></p>
 <p>其实是相对于父元素 content 盒子的宽度，不包括 padding。所以 <code>width: 100%</code> 会刚好充满父元素，并不会超出。</p>
+<h2 id="CSS-的加载会阻塞吗？"><a href="#CSS-的加载会阻塞吗？" class="headerlink" title="CSS 的加载会阻塞吗？"></a>CSS 的加载会阻塞吗？</h2><p><a href="https://www.cnblogs.com/chenjg/p/7126822.html" target="_blank" rel="noopener">https://www.cnblogs.com/chenjg/p/7126822.html</a></p>
+<p>CSS 的加载不会阻塞 DOM 树的解析，但是会阻塞 DOM 树的渲染。<br>CSS 的加载会阻塞 JS 的执行。即遇到 script 标签且此时 CSS 正在加载，该 script 标签不会执行。在 JS 被阻塞执行的时候，后续 html 也不会解析。<br>JS 的执行也会阻塞后续 html 的解析。加载默认也会阻塞，但是加上 defer sync 则加载不会阻塞。等到执行时仍旧会阻塞。</p>
 
       
     </div>
@@ -517,7 +519,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">42</span>
+                <span class="site-state-item-count">51</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>
@@ -528,7 +530,7 @@
             
             <div class="site-state-item site-state-categories">
               <a href="/categories/index.html">
-                <span class="site-state-item-count">12</span>
+                <span class="site-state-item-count">14</span>
                 <span class="site-state-item-name">categories</span>
               </a>
             </div>
@@ -539,7 +541,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">18</span>
+                <span class="site-state-item-count">23</span>
                 <span class="site-state-item-name">tags</span>
               </a>
             </div>
@@ -574,7 +576,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#盒模型在W3C和IE中的区别"><span class="nav-number">1.</span> <span class="nav-text">盒模型在W3C和IE中的区别</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#EM"><span class="nav-number">2.</span> <span class="nav-text">EM</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#绝对定位，水平竖直居中，需要设定margin-auto的原因"><span class="nav-number">3.</span> <span class="nav-text">绝对定位，水平竖直居中，需要设定margin: auto的原因</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#clear-both之后"><span class="nav-number">4.</span> <span class="nav-text">clear:both之后</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#关于外边距合并"><span class="nav-number">5.</span> <span class="nav-text">关于外边距合并</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#width-100"><span class="nav-number">6.</span> <span class="nav-text">width: 100%</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#盒模型在W3C和IE中的区别"><span class="nav-number">1.</span> <span class="nav-text">盒模型在W3C和IE中的区别</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#EM"><span class="nav-number">2.</span> <span class="nav-text">EM</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#绝对定位，水平竖直居中，需要设定margin-auto的原因"><span class="nav-number">3.</span> <span class="nav-text">绝对定位，水平竖直居中，需要设定margin: auto的原因</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#clear-both之后"><span class="nav-number">4.</span> <span class="nav-text">clear:both之后</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#关于外边距合并"><span class="nav-number">5.</span> <span class="nav-text">关于外边距合并</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#width-100"><span class="nav-number">6.</span> <span class="nav-text">width: 100%</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CSS-的加载会阻塞吗？"><span class="nav-number">7.</span> <span class="nav-text">CSS 的加载会阻塞吗？</span></a></li></ol></div>
             
 
           </div>
@@ -597,7 +599,7 @@
         <div class="copyright">
   
   &copy;  2017 - 
-  <span itemprop="copyrightYear">2021</span>
+  <span itemprop="copyrightYear">2022</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

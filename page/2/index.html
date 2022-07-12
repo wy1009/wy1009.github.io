@@ -293,6 +293,1458 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/10/18/complex-sentence/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="泉先">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="不会化妆的写手<br>不是好程序员">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/10/18/complex-sentence/" itemprop="url">一个比较有趣的需求</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-10-18T18:09:58+08:00">
+                2019-10-18
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/框架-库-工具/" itemprop="url" rel="index">
+                    <span itemprop="name">框架/库/工具</span>
+                  </a>
+                </span>
+
+                
+                
+                  , 
+                
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/框架-库-工具/React-js/" itemprop="url" rel="index">
+                    <span itemprop="name">React.js</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>因为比较少见，是难得比较有趣的需求，记录一下。</p>
+<p>首先介绍一下需求。</p>
+<p><img src="/images/complex-01.jpeg" style="width: 300px;"><br><img src="/images/complex-03.png" style="width: 300px;"></p>
+<p>大概就是要实现如图效果，需求点拆分大概如下：</p>
+<ol>
+<li>给出一个句子，使用户可以在句子上划动，选中句子中的一部分。可以取消选中。</li>
+<li>将选中部分的位置（下称 index）提交给后端。不能单单提交选中的内容，因为同一句中可能会出现重复的单词。</li>
+<li>给出 index，可以将对应 index 转化为横线，划在句子上。句子中的下划线还可以再次叠加下划线，叠加的线条数目也是无上限的。</li>
+</ol>
+<p>第2、3条合并起来，其实就是 UI 视图到 index，与 index 到视图的相互转化。</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2019/10/18/complex-sentence/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/06/21/react-event/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="泉先">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="不会化妆的写手<br>不是好程序员">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/06/21/react-event/" itemprop="url">全是代码——React 事件机制</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-06-21T20:27:04+08:00">
+                2019-06-21
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/框架-库-工具/" itemprop="url" rel="index">
+                    <span itemprop="name">框架/库/工具</span>
+                  </a>
+                </span>
+
+                
+                
+                  , 
+                
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/框架-库-工具/React-js/" itemprop="url" rel="index">
+                    <span itemprop="name">React.js</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>起因其实是我用了 React Swiper 库。该库虽然挂着 React 的名头，但其实完全是由 Swiper.js 包装而成的，因而内里的事件机制仍旧是基于<strong>原生</strong>的。这导致我发现，我无法正常地将事件从 React 组件中阻止冒泡到 Swiper 的部分。</p>
+<p>为了解决这个问题，很快，我从文档中查阅到，React 中的事件是由自己合成的“合成事件”，事件上的 <code>e.nativeEvent</code> 才是真正的原生事件。于是，我就尝试在事件处理函数中执行 <code>e.nativeEvent.stopPropagation()</code>，却仍旧无法阻止冒泡。</p>
+<p>要搞清楚出现这个问题的原因，就需要了解 React 的事件机制。</p>
+<p>React 的事件机制是基于事件委托的。所有 React 的事件监听实际都是被绑定在 document 上的。</p>
+<h2 id="例子"><a href="#例子" class="headerlink" title="例子"></a>例子</h2><p>本文其实就是对 React 事件机制部分的代码按照执行顺序解读。使用的例子代码如下：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// App.js</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> React <span class="keyword">from</span> <span class="string">'react'</span></span><br><span class="line"><span class="keyword">import</span> Child <span class="keyword">from</span> <span class="string">'./Child'</span></span><br><span class="line"><span class="keyword">import</span> <span class="string">'./App.css'</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">App</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">  clickHandler = <span class="function">(<span class="params">e</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'click callback'</span>, e)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  render() &#123;</span><br><span class="line">    <span class="keyword">return</span> (</span><br><span class="line">      <span class="comment">// 使用 &lt;article&gt; 是为了调试时更方便地一眼看出是什么标签</span></span><br><span class="line">      <span class="comment">// 其实该标签在语义化上不应被这样使用</span></span><br><span class="line">      &lt;article onClick=&#123;<span class="keyword">this</span>.clickHandler&#125;&gt;</span><br><span class="line">        &lt;Child /&gt;</span><br><span class="line">      &lt;<span class="regexp">/article&gt;</span></span><br><span class="line"><span class="regexp">    )</span></span><br><span class="line"><span class="regexp">  &#125;</span></span><br><span class="line"><span class="regexp">&#125;</span></span><br><span class="line"><span class="regexp"></span></span><br><span class="line"><span class="regexp">export default App</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Child.js</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> React <span class="keyword">from</span> <span class="string">'react'</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Child</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span> </span>&#123;</span><br><span class="line">  childClickHandler = <span class="function">(<span class="params">e</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'child click callback'</span>, e)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  render() &#123;</span><br><span class="line">    <span class="keyword">return</span> (</span><br><span class="line">      &lt;div</span><br><span class="line">        className=<span class="string">"box"</span></span><br><span class="line">        onClick=&#123;<span class="keyword">this</span>.childClickHandler&#125;</span><br><span class="line">      &gt;请点击&lt;<span class="regexp">/div&gt;</span></span><br><span class="line"><span class="regexp">    )</span></span><br><span class="line"><span class="regexp">  &#125;</span></span><br><span class="line"><span class="regexp">&#125;</span></span><br><span class="line"><span class="regexp"></span></span><br><span class="line"><span class="regexp">export default Child</span></span><br></pre></td></tr></table></figure>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2019/06/21/react-event/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/03/29/浏览器渲染详细过程/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="泉先">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="不会化妆的写手<br>不是好程序员">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/03/29/浏览器渲染详细过程/" itemprop="url">浏览器渲染的详细过程</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-03-29T18:27:31+08:00">
+                2019-03-29
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/前端基础/" itemprop="url" rel="index">
+                    <span itemprop="name">前端基础</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p><strong>这是一篇转载文章。</strong></p>
+<p>原作者博客已失效，留了一篇在掘金。很担心掘金的也会消失掉，赶快敲一遍，侵删。</p>
+<p>主要还是我比较笨拙，看内容很好的文章还真是很喜欢一个字一个字敲一遍，基于理解稍微整理层级改变细节。感觉这个方式对我来说真的很利于领会和记忆，能够触及每一个细节。</p>
+<p>就是实在太费时间了……这篇文章长达七千多字，边理解边抄弄了有十个小时……</p>
+<p>另外，我真的非常喜欢这位作者。我和他很像，都是钻牛角尖的人，追求对细节的了解，认为流程中缺失了不确定的部分就不是真正理解。不同的是，这位是一名十分优秀的程序员，能够从规范级别的文档中找到自己需要的答案。而我往往周旋于良莠不齐的国内博客，看着大家东抄西抄的东西，不仅找不到答案，还频频被误导。</p>
+<p>所以说，第一个目标：学好英语。</p>
+<h2 id="页面渲染的时机"><a href="#页面渲染的时机" class="headerlink" title="页面渲染的时机"></a>页面渲染的时机</h2><h3 id="从-event-loop-开始"><a href="#从-event-loop-开始" class="headerlink" title="从 event loop 开始"></a>从 event loop 开始</h3><p>event loop 是整个渲染过程的关键，涉及浏览器进行渲染的时机。先看 <a href="https://html.spec.whatwg.org/multipage/webappapis.html#event-loop-processing-model" target="_blank" rel="noopener">HTML5 关于 event loop 的官方规范</a>：</p>
+<ul>
+<li>从第 1 到第 5 步，从多个 task 队列中选出一个 task 队列（浏览器为了区分不同 task 的优先级，所以时常有多个 task 队列），从这个 task 队列中取出最老的一个 task，执行它，然后将它从队列中移除；</li>
+<li>第 6 步，<a href="https://html.spec.whatwg.org/multipage/webappapis.html#perform-a-microtask-checkpoint" target="_blank" rel="noopener">执行一个 microtask 检查点（preform a microtask checkpoint）</a>。只要 microtask 队列不为空，这一步会一直从 microtask 队列中取出 microtask，然后执行。如果 microtask 执行过程中又增加了 microtask，仍然会执行新添加的 microtask。（链接第 7 步的“return to the microtask queue handling step”很关键。）</li>
+<li>第 7 步，更新渲染（update the rendering）<ul>
+<li>判断当前 document 是否需要渲染。因为只需要保持 60Hz 的刷新率即可，而每轮 event loop 都是非常快的，所以没必要每轮都进行渲染，而是差不多间隔 16ms 的时候渲染一次。同时，对于一些卡顿得已经不能保证 60Hz 的页面，若再在此时执行渲染会雪上加霜，所以浏览器可能会下调渲染频率为 30Hz。</li>
+<li><a href="https://drafts.csswg.org/cssom-view/#run-the-resize-steps" target="_blank" rel="noopener">run the resize steps</a><ul>
+<li>若浏览器 resize 过，那么这里会在 window 上触发“resize”事件</li>
+</ul>
+</li>
+<li><a href="https://drafts.csswg.org/cssom-view/#run-the-scroll-steps" target="_blank" rel="noopener">run the scroll steps</a><ul>
+<li>首先，每当我们在某个 target 上滚动时（target 可以是某个可滚动元素，也可以是 document），浏览器就会在 target 所属的 document 上的 <a href="https://drafts.csswg.org/cssom-view/#pending-scroll-event-targets" target="_blank" rel="noopener">pending scroll event targets</a> 列表里存放这个发生滚动的 target</li>
+<li>现在，run the scroll steps 这一步会从 pending scroll event targets 列表里取出 target，然后在 target 上触发事件</li>
+</ul>
+</li>
+<li>计算是否触发 media query</li>
+<li>执行 css animation，触发 animationstart 等 animation 相关事件</li>
+<li>run the fullscreen rendering steps：如果在之前的 task 或 microtask 中执行过 <code>requestFullscreen()</code> 等 full screen 相关 api，此时会执行全屏操作</li>
+<li>run the animation frame callbacks：执行 requestAnimationFrame 的回调</li>
+<li>执行 <a href="http://www.ruanyifeng.com/blog/2016/11/intersectionobserver_api.html?utm_source=tuicool&amp;utm_medium=referral" target="_blank" rel="noopener">IntersectionObserver</a> 的回调</li>
+<li>更新，渲染用户界面</li>
+</ul>
+</li>
+<li>继续返回第一步</li>
+</ul>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2019/03/29/浏览器渲染详细过程/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/03/25/工作记录零碎/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="泉先">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="不会化妆的写手<br>不是好程序员">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/03/25/工作记录零碎/" itemprop="url">工作记录零碎</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-03-25T20:48:34+08:00">
+                2019-03-25
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/前端基础/" itemprop="url" rel="index">
+                    <span itemprop="name">前端基础</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h2 id="Charles-mock-数据"><a href="#Charles-mock-数据" class="headerlink" title="Charles mock 数据"></a>Charles mock 数据</h2><p>Charles mock 数据，眼看着 Charles 抓到的包都是正常的，可是浏览器中间就是收不到响应。忽然回忆起，跨域实际上是浏览器本身做的一个限制，为用户的安全，及时收到数据也不返回。考虑到可能是跨域的问题，开了禁止跨域的浏览器，解决。</p>
+<h2 id="position-fixed-问题"><a href="#position-fixed-问题" class="headerlink" title="position: fixed 问题"></a>position: fixed 问题</h2><p><code>fixed</code> 的元素不一定相对视口定位。在祖先元素中出现某些特定属性时，会相对于该祖先元素定位。</p>
+<p>相关文章：<a href="https://github.com/chokcoco/iCSS/issues/24" target="_blank" rel="noopener">fixed 定位失效 | 不受控制的 position:fixed</a></p>
+<h2 id="写全局组件的方法"><a href="#写全局组件的方法" class="headerlink" title="写全局组件的方法"></a>写全局组件的方法</h2><p>如常见的 <code>Modal</code> 弹窗，之前一直都会在组件中设置一个 <code>modalShow</code> 的值，用来在组件内控制 <code>Modal</code> 组件的显示/隐藏。最近忽然意识到，其实可以更加方便。直接 <code>ReactDOM.render</code> <code>Modal</code> 组件，然后将其插入某节点即可。不需要依赖组件内部的某个值来显示隐藏。详见：<a href="https://github.com/wy1009/components/tree/master/ConfirmModal" target="_blank" rel="noopener">Modal 组件</a></p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2019/03/25/工作记录零碎/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/02/a-cartoon-intro-to-fiber/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="泉先">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="不会化妆的写手<br>不是好程序员">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/12/02/a-cartoon-intro-to-fiber/" itemprop="url">对 Fiber 的介绍</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-12-02T21:28:43+08:00">
+                2018-12-02
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/框架-库-工具/" itemprop="url" rel="index">
+                    <span itemprop="name">框架/库/工具</span>
+                  </a>
+                </span>
+
+                
+                
+                  , 
+                
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/框架-库-工具/React-js/" itemprop="url" rel="index">
+                    <span itemprop="name">React.js</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>可能大多数人都不知道 Fiber 是什么。如果你不知道，不必担心，因为我会从最基本的开始。解释它是什么，以及它是如何工作的。</p>
+<h2 id="Fiber-的作用"><a href="#Fiber-的作用" class="headerlink" title="Fiber 的作用"></a>Fiber 的作用</h2><p>这是一个 React app 的例子：</p>
+<p><img src="/images/fiber-react-app.gif" alt="React app 的例子" title="React app 的例子"></p>
+<p>左边是现在的 React 的效果，右边是使用了 Fiber 的 React 的效果。这是一个玩具性质的应用，它本身不是很有用处，但却可以很好地替代现实中的 app。我过会儿会解释原因。</p>
+<p>很明显，Fiber 为像上图这样的复杂 React 应用提升了用户感知的性能和响应。</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2018/12/02/a-cartoon-intro-to-fiber/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/11/13/你可能不需要Derived-State/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="泉先">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="不会化妆的写手<br>不是好程序员">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/11/13/你可能不需要Derived-State/" itemprop="url">你可能不需要 Derived State</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-11-13T20:37:09+08:00">
+                2018-11-13
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/框架-库-工具/" itemprop="url" rel="index">
+                    <span itemprop="name">框架/库/工具</span>
+                  </a>
+                </span>
+
+                
+                
+                  , 
+                
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/框架-库-工具/React-js/" itemprop="url" rel="index">
+                    <span itemprop="name">React.js</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>React 16.4 <a href="https://reactjs.org/blog/2018/05/23/react-v-16-4.html#bugfix-for-getderivedstatefromprops" target="_blank" rel="noopener">为 <code>getDerivedStateFromProps</code> 修复了一个 bug</a>，这个 bug 会导致一些在 React 组件中存在的 bug 不断重现。如果本次更新暴露了你的应用正在使用反模式（不推荐的做法）且在本次更新后可能出现问题，我们对此感到抱歉。在这篇博文中，我们会解释一些使用 derived state 时常见的反模式和我们更推荐的替代做法。</p>
+<p>在很长一段时间里，如果想在 props 改变时更新 state，且不造成多余的渲染，我们只能依靠生命周期 <code>componentWillReceiveProps</code>。在 16.3 版本，<a href="https://reactjs.org/blog/2018/03/29/react-v-16-3.html#component-lifecycle-changes" target="_blank" rel="noopener">我们介绍了一种可以替代 <code>componentWillReceiveProps</code> 的生命周期—— <code>getDerivedStateFromProps</code></a> ——来更安全地解决同样的问题。与此同时，我们发现大家在使用这两种生命周期时存在很多错误的观念，也发现了一些会造成微妙而令人困扰的 bug 的反模式。16.4 版本中对 <code>getDerivedStateFromProps</code> 的 bugfix 使 derived state 更加可预料，因而误用它所产生的结果也更加容易被注意到。</p>
+<blockquote>
+<p><strong> 注意 </strong><br>本文描述的所有反模式都同时适用于旧的 <code>componentWillReceiveProps</code> 和新的 <code>getDerivedStateFromProps</code>。</p>
+</blockquote>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2018/11/13/你可能不需要Derived-State/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/11/05/关于我的项目为什么使用又剥离了Redux/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="泉先">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="不会化妆的写手<br>不是好程序员">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/11/05/关于我的项目为什么使用又剥离了Redux/" itemprop="url">关于我的项目为什么使用又剥离了Redux</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-11-05T18:33:18+08:00">
+                2018-11-05
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/框架-库-工具/" itemprop="url" rel="index">
+                    <span itemprop="name">框架/库/工具</span>
+                  </a>
+                </span>
+
+                
+                
+                  , 
+                
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/框架-库-工具/React-js/" itemprop="url" rel="index">
+                    <span itemprop="name">React.js</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>关于我的项目这么简单我为什么又折腾了。</p>
+<p>关于我的需求为什么做不完我怎么在加班。</p>
+<h2 id="决定引入-Redux-的原因"><a href="#决定引入-Redux-的原因" class="headerlink" title="决定引入 Redux 的原因"></a>决定引入 Redux 的原因</h2><p>当初，决定将 Redux 引入项目的原因其实非常简单。项目的嵌套层级太深了。以评论列表的一个分支为例，嵌套层级为 CommentZone（用于引用评论列表组件，即下文的“环境”）&gt; CommentList（评论列表组件）&gt; Comment（单条评论组件）&gt; ReplyList（单条评论中的回复列表）&gt; Reply（单条回复）。在最末端的 Reply 组件中，我需要删除单条回复，而删除单条回复，实际上本质是操作最顶层的评论列表。这意味着，我用于删除评论列表的方法需要从顶层层层向下传递，传递四层。</p>
+<p>这让我义无反顾地选择了 Redux。</p>
+<p>然而，随着业务的不断更新，愚蠢而稚嫩的我开始意识到了自己的错误。那就是，一个打算要复用的东西，本身就是不应该和 Redux 有所牵连的。</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2018/11/05/关于我的项目为什么使用又剥离了Redux/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/10/16/immutability-in-react-and-redux/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="泉先">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="不会化妆的写手<br>不是好程序员">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/10/16/immutability-in-react-and-redux/" itemprop="url">React 和 Redux 中的不可变性：全面指引</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-10-16T16:41:29+08:00">
+                2018-10-16
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/框架-库-工具/" itemprop="url" rel="index">
+                    <span itemprop="name">框架/库/工具</span>
+                  </a>
+                </span>
+
+                
+                
+                  , 
+                
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/框架-库-工具/React-js/" itemprop="url" rel="index">
+                    <span itemprop="name">React.js</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>不可变性（immutability）可能是个令人困惑的话题，它总会在 React、Redux 和 JavaScript 中到处出现。</p>
+<p>你可能碰到过已经更改了 props，但 React 组件不重新渲染的 bug。有人说：“你应该做不可改变状态（immutable state）的更新。”可能你或者你的同事经常写改变状态（mutate state）的 Redux reducers，且你不得不不断纠正这些（reducers，或者你的同事😄）。</p>
+<p>纠正这个很棘手。它真的很微妙，特别是如果你不确定为什么要纠正。况且说真的，如果你不确定为什么这很重要，那就很难去在意它。</p>
+<p>这份导航会解释“不可变性”是什么，以及如果在你自己的应用中写不可变性的代码。</p>
+<h2 id="不可变性是什么"><a href="#不可变性是什么" class="headerlink" title="不可变性是什么"></a>不可变性是什么</h2><p>首先，“不可变”是“可变”的反义词——“可变”意味着可以变化，可能会出问题。</p>
+<p>所以某个东西是不可变的，就是说，这个东西不能够被改变。</p>
+<p>极端的讲，这意味着比起传统地直接改变值，你应该始终创建新的值去取代旧的值。JavaScript 没有这么极端，但是一些语言完全不允许“可变”（Elixir、Erlang、ML 等等）。</p>
+<p>尽管 JavaScript 不是纯粹的函数式语言，但它有时候可以假装是。在 JS 中，某些数组操作是不可变的（就是返回一个新数值，而不是修改原本的）。字符串操作总是不可变的（变化会创建一个新字符串）。并且，你也可以自己写不可变的函数。你只需要意识到一些规则。</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2018/10/16/immutability-in-react-and-redux/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/07/20/rem布局在webview中页面错乱/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="泉先">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="不会化妆的写手<br>不是好程序员">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/07/20/rem布局在webview中页面错乱/" itemprop="url">rem布局在webview中页面错乱</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-07-20T13:13:37+08:00">
+                2018-07-20
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/CSS/" itemprop="url" rel="index">
+                    <span itemprop="name">CSS</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>查到原因之后，感觉是一个很简单的事，解决方法也很方便很简单，本来没想写什么博客的。可是仔细看了看查到的两篇文章，一篇解决方法写得超级复杂，另一篇就特别……一言难尽。感觉我写这篇博客最主要的原因就是被第二篇文章的方法之差劲给震惊了……</p>
+<p>啊，写博客好麻烦好麻烦的……</p>
+<h2 id="现象及原因"><a href="#现象及原因" class="headerlink" title="现象及原因"></a>现象及原因</h2><p>在安卓webview中发现了利用rem布局的样式错乱的问题，以下是正常样式和错乱样式的对比：</p>
+<p><img src="/images/rem-android.png" alt="左为正常情况，右为错误情况" title="左为正常情况，右为错误情况"></p>
+<p>可以很容易发现，“错乱样式”实际上是rem的基准，即根结点字号，变大导致的。实际上，利用<code>Chrome://inspect</code>调试，也能够清楚地看到这一点，设置在根结点上的字号为<code>font-size: 48px</code>，而实际调用<code>getComputedStyle(document.documentElement).fontSize</code>的字号却是<code>55.1px</code>，这样，会产生样式的错乱就一点也不奇怪了。</p>
+<p>查询了一下，发现这个问题产生的原因实际上是因为用户设置了系统的字体，影响范围似乎只有安卓app内的webview，测试ios同样的操作并没有产生同样的问题。</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2018/07/20/rem布局在webview中页面错乱/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/03/28/babel-polyfill-babel-runtime/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -462,1472 +1914,11 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/03/08/Vue-js-keep-alive踩坑/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="泉先">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpeg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="不会化妆的写手<br>不是好程序员">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/03/08/Vue-js-keep-alive踩坑/" itemprop="url">Vue.js keep-alive踩坑</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-03-08T15:39:56+08:00">
-                2018-03-08
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/categories/框架-库-工具/" itemprop="url" rel="index">
-                    <span itemprop="name">框架/库/工具</span>
-                  </a>
-                </span>
-
-                
-                
-                  , 
-                
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/categories/框架-库-工具/Vue-js/" itemprop="url" rel="index">
-                    <span itemprop="name">Vue.js</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>发现面试好像会喜欢问“项目中遇到的难点”这样的问题。但说实话，难点这种东西，难了不会，会了不难，一旦解决了就觉得也还好，过段时间也就忘了，再过段时间，哪怕能想起来，也一定觉得不是什么值得说出来的问题。<br>总之，确实怎么回想也想不出什么难点，就只好从现在开始记录了。<br>就从keep-alive踩坑开始吧。<br>本文主要为了给个人记录一个过程，因此按照踩坑顺序记录，而不是一个知识体系。<br>btw过程中发现了好多博客的错误……</p>
-<p>首先，移动端，一个列表页，一个详情页。从列表页点入详情页，再从详情页回退到列表页，实际上列表页是完全不需要刷新的。在此需求上，能做到类似App那样“前进刷新，后退不刷新”的效果，当然是极好的。</p>
-<h2 id="判断前进还是后退"><a href="#判断前进还是后退" class="headerlink" title="判断前进还是后退"></a>判断前进还是后退</h2><p>单纯监听前进还是后退，很容易想到监听<code>popstate</code>事件。但是这个事件不管前进还是后退都能触发，且不能和Vue的生命周期结合起来，所以Pass。</p>
-<p>其他人的实现提供了两种方法，一种是<a href="https://segmentfault.com/a/1190000012083511" target="_blank" rel="noopener">另辟蹊径：vue单页面，多路由，前进刷新，后退不刷新</a>，严格监听是从哪一个路由跳到哪一个路由，从而监听是前进还是后退。这显然是很死板的，当然，如果需求简单，仅仅需要顾及几个页面，那反而很安全。另一种是<a href="https://juejin.im/post/5a69894a518825733b0f12f2" target="_blank" rel="noopener">vue实现前进刷新，后退不刷新</a>，使用路由的路径层级去判断是前进还是后退，也就是说，前进后退和路由层级严格挂钩，路由和前进后退的方向都变得不自由了。</p>
-<p>我开始想的是第三种方法，在路由信息对象上记录数字，用这个数字标识层级。但是很快意识到，这种方法也不直观，最直观的方法莫过于直接压一个栈。当要去的路由等于栈顶的路由的时候，就相当于是后退了。</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> routerStack = []</span><br><span class="line">router.beforeEach(<span class="function">(<span class="params">to, <span class="keyword">from</span>, next</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">if</span> (to.name === routerStack[routerStack.length - <span class="number">1</span>]) &#123;</span><br><span class="line">    <span class="comment">// 后退</span></span><br><span class="line">    routerStack.pop()</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="comment">// 前进</span></span><br><span class="line">    routerStack.push(to.name)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2018/03/08/Vue-js-keep-alive踩坑/#more" rel="contents">
-              Read more &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/03/02/JS获取各种常见位置距离/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="泉先">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpeg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="不会化妆的写手<br>不是好程序员">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/03/02/JS获取各种常见位置距离/" itemprop="url">JS获取各种常见位置距离</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-03-02T15:03:48+08:00">
-                2018-03-02
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/categories/JavaScript/" itemprop="url" rel="index">
-                    <span itemprop="name">JavaScript</span>
-                  </a>
-                </span>
-
-                
-                
-                  , 
-                
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/categories/JavaScript/基础/" itemprop="url" rel="index">
-                    <span itemprop="name">基础</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h2 id="client-offset-scroll系"><a href="#client-offset-scroll系" class="headerlink" title="client/offset/scroll系"></a>client/offset/scroll系</h2><h3 id="width-height"><a href="#width-height" class="headerlink" title="width/height"></a>width/height</h3><h4 id="element-clientWidth-Height"><a href="#element-clientWidth-Height" class="headerlink" title="element.clientWidth/Height"></a>element.clientWidth/Height</h4><p>按照以下判定规则：</p>
-<ol>
-<li>如果没有CSS布局盒子或者CSS布局盒子为inline，返回0；</li>
-<li>如果是根元素（html元素）或body元素，clientWidth/Height指的是视口的宽高（不含滚动条）</li>
-<li>否则，如上，是不包含border不包含滚动条的元素宽高。</li>
-</ol>
-<p>显然，其实就是致力于表示元素能够用于显示内容的那部分区域的宽高，所以才叫做clientWidth/Height吧。</p>
-<p><strong>用盒子模型表达，就是content-box去除滚动条占位。</strong></p>
-<p><img src="http://wx3.sinaimg.cn/large/7b1152ffly1foyj84wh62j20bf06vaa2.jpg" alt="clientWidth/Height"></p>
-<h4 id="element-offsetWidth-Height"><a href="#element-offsetWidth-Height" class="headerlink" title="element.offsetWidth/Height"></a>element.offsetWidth/Height</h4><p>与clientWidth/Height致力于表示元素能显示内容的区域的宽高不同，offsetWidth/Height致力于表示元素本身的宽高。</p>
-<p><strong>用盒子模型表达，即border-box的宽高。</strong></p>
-<p><img src="http://wx3.sinaimg.cn/mw690/7b1152ffly1foyj8a47qnj20bf06vdfu.jpg" alt="offsetWidth/Height"></p>
-<h4 id="element-scrollWidth-Height"><a href="#element-scrollWidth-Height" class="headerlink" title="element.scrollWidth/Height"></a>element.scrollWidth/Height</h4><p>表示元素内容的宽高，即包括了被卷去部分的宽高。</p>
-<p><strong>用盒子模型表达，就是……没有专门的框，就是显示在content-box中的内容的宽高（内容仅包含常规流中的元素），包括因设置overflow: auto/hidden藏起的部分</strong></p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2018/03/02/JS获取各种常见位置距离/#more" rel="contents">
-              Read more &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/02/05/关键渲染路径/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="泉先">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpeg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="不会化妆的写手<br>不是好程序员">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/02/05/关键渲染路径/" itemprop="url">关键渲染路径</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-02-05T14:40:48+08:00">
-                2018-02-05
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/categories/前端基础/" itemprop="url" rel="index">
-                    <span itemprop="name">前端基础</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h2 id="关键渲染路径"><a href="#关键渲染路径" class="headerlink" title="关键渲染路径"></a>关键渲染路径</h2><p>从收到HTML、CSS和JavaScript字节到对其进行必需的处理，从而将它们转变成渲染的像素。这一过程中有一些中间步骤，即关键渲染路径。</p>
-<ol>
-<li>处理HTML标记并构建DOM树；</li>
-<li>处理CSS标记并构建CSSOM树；</li>
-<li>将DOM与CSSOM合并成一个渲染树；</li>
-<li>根据渲染树来布局，以计算每个节点的几何信息；</li>
-<li>将各个节点绘制到屏幕上。</li>
-</ol>
-<h3 id="阻塞渲染的CSS"><a href="#阻塞渲染的CSS" class="headerlink" title="阻塞渲染的CSS"></a>阻塞渲染的CSS</h3><p>关键渲染路径要求我们同时具有DOM和CSSOM才能构建渲染树，因此HTML和CSS都是阻塞渲染的资源。<br>我们可以通过媒体类型和媒体查询将一些CSS资源标记为不阻塞渲染。<br>浏览器会下载所有的CSS资源，无论是否阻塞渲染，只是不阻塞渲染的资源优先级比较低。<br>阻塞渲染指的是浏览器是否要暂停网页的首次渲染，直至该资源准备就绪。</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2018/02/05/关键渲染路径/#more" rel="contents">
-              Read more &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/01/23/Underscore-js实现bind方法/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="泉先">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpeg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="不会化妆的写手<br>不是好程序员">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/01/23/Underscore-js实现bind方法/" itemprop="url">Underscore.js实现bind方法</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-01-23T21:02:28+08:00">
-                2018-01-23
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/categories/框架-库-工具/" itemprop="url" rel="index">
-                    <span itemprop="name">框架/库/工具</span>
-                  </a>
-                </span>
-
-                
-                
-                  , 
-                
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/categories/框架-库-工具/Underscore-js/" itemprop="url" rel="index">
-                    <span itemprop="name">Underscore.js</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h2 id="ES5中的bind"><a href="#ES5中的bind" class="headerlink" title="ES5中的bind"></a>ES5中的bind</h2><h3 id="描述"><a href="#描述" class="headerlink" title="描述"></a>描述</h3><p>bind()函数会创建一个新函数（称为绑定函数），新函数与被调用函数（绑定函数的目标函数）具有相同的函数体（。当新函数被调用时，this值绑定到bind()的第一个参数，该参数不能被重写。绑定函数被调用时，bind()也接受预设的参数提供给原函数。<br>一个绑定函数也能够使用new操作符创建对象，这种行为就像是把原函数当做构造器。提供的this值被忽略，同时调用时的参数被提供给模拟函数。</p>
-<h3 id="语法"><a href="#语法" class="headerlink" title="语法"></a>语法</h3><blockquote>
-<p>fun.bind(thisArg[, arg1, [, arg2, [, …]]])</p>
-<ul>
-<li>thisArg：当调用绑定函数时，该参数会作为目标函数运行时的this指向。当使用new操作符调用绑定函数时，该参数无效。</li>
-<li>arg1, arg2, …：当调用目标函数时，前置于提供给绑定函数的参数的参数</li>
-<li>返回值：返回由指定的this值和初始化参数改造的原函数拷贝</li>
-</ul>
-</blockquote>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2018/01/23/Underscore-js实现bind方法/#more" rel="contents">
-              Read more &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/01/18/替换元素和非替换元素/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="泉先">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpeg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="不会化妆的写手<br>不是好程序员">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/01/18/替换元素和非替换元素/" itemprop="url">替换元素和非替换元素</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-01-18T17:38:31+08:00">
-                2018-01-18
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/categories/CSS/" itemprop="url" rel="index">
-                    <span itemprop="name">CSS</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>印象很深，一年前觉得这么简单的概念不需要专门记，结果一年后就打脸了，又要重新翻找……好记性不如烂笔头。</p>
-<h2 id="替换元素（replaced-element）"><a href="#替换元素（replaced-element）" class="headerlink" title="替换元素（replaced element）"></a>替换元素（replaced element）</h2><p>替换元素是指内容不在CSS格式化模型范围的元素，比如图片、嵌入的文档或者应用程序。举例说，HTML IMG元素的内容常常被它的src属性指定的图片所替换。替换元素常常本身就有尺寸：一个本身的宽、一个本身的高和一个本身的比例。比如说，一个位图图片本身有绝对单位决定的宽和高（其比例显然也被确定）。另一方面，其他文档也有可能没有任何本身的尺寸（如果一个空白的HTML文档）。</p>
-<h2 id="计算width和margin"><a href="#计算width和margin" class="headerlink" title="计算width和margin"></a>计算width和margin</h2><p>计算值（computed value）：给CSS属性设置的值。比如，如果是width属性，其计算值可以是百分比或auto或绝对长度。<br>使用值（used value）：在布局时被使用的值，即最终实际看到的效果值。</p>
-<h3 id="行内非替换元素"><a href="#行内非替换元素" class="headerlink" title="行内非替换元素"></a>行内非替换元素</h3><ul>
-<li>margin-left或margin-right的计算值为auto，使用值为0。</li>
-<li>width属性不被接受。</li>
-</ul>
-<h3 id="行内替换元素"><a href="#行内替换元素" class="headerlink" title="行内替换元素"></a>行内替换元素</h3><ul>
-<li>margin-left或margin-right的计算值为auto，使用值为0。</li>
-<li>如果height和width的计算值都为auto，元素也有本身的宽度，那么这个本身的宽度就是width的使用值。例子：img、input。</li>
-<li>如果width的计算值为auto，元素也有本身的宽度，那么这个本身的宽度就是width的使用值。</li>
-<li>如果height和width的计算值都为auto，元素没有本身的宽度，但有本身的高度和比例；或者width的计算值为auto，height有其他的计算值，且元素有本身的比例，那么width的计算值为：高度的使用值（height的计算值或元素本身的高度） * 本身的比例。简单说，就是在此情况下，如果元素的高度（设置的或者本身的）和比例确定，则宽度根据此确定。</li>
-<li>除此之外，如果width的计算值为auto，那么width的使用值为300px。如果300px太宽了不能适应屏幕，UA应该使用2:1比例的最大矩形的宽度来适应屏幕。例子：iframe、canvas。</li>
-</ul>
-<p>其他类型的替换元素，其宽度的定义都参照行内替换元素的定义。</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2018/01/18/替换元素和非替换元素/#more" rel="contents">
-              Read more &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/01/09/Nuxt-js使用笔记/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="泉先">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpeg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="不会化妆的写手<br>不是好程序员">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/01/09/Nuxt-js使用笔记/" itemprop="url">Nuxt.js使用笔记</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-01-09T17:19:31+08:00">
-                2018-01-09
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/categories/框架-库-工具/" itemprop="url" rel="index">
-                    <span itemprop="name">框架/库/工具</span>
-                  </a>
-                </span>
-
-                
-                
-                  , 
-                
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/categories/框架-库-工具/Vue-js/" itemprop="url" rel="index">
-                    <span itemprop="name">Vue.js</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h2 id="Nuxt-js原理"><a href="#Nuxt-js原理" class="headerlink" title="Nuxt.js原理"></a>Nuxt.js原理</h2><p>一开始不知道这是怎么做到服务器端渲染的，后来写着写着就明白了。启动一个Server，执行前端代码。我司后端用的是nginx，配置是将请求直接转发到这个Server。<br>初次请求页面时，前端代码由Server端执行，生成一个内容完整而不是依赖js动态执行展示内容的HTML文件，再返回给Client端。<br>之后则正常走单页面应用的逻辑。</p>
-<h2 id="与浏览器执行代码的不同之处"><a href="#与浏览器执行代码的不同之处" class="headerlink" title="与浏览器执行代码的不同之处"></a>与浏览器执行代码的不同之处</h2><p>初次请求由Server端执行也带来了一些问题。在初次请求时，组件created之前的步骤全部由Server端执行，包括middleware、asyncData、beforeCreate。</p>
-<h3 id="cookie"><a href="#cookie" class="headerlink" title="cookie"></a>cookie</h3><p>因为是在Server端执行代码，本地将没有Client端有的cookie，因此：</p>
-<ul>
-<li>在发送ajax请求时，需要通过req.headers.cookie将cookie取出，然后设置axios，以此做到发送ajax时携带cookie。为axios设置的cookie不能为undefined，否则报错“”value” required in setHeader(“cookie”, value)”；</li>
-<li>在收到响应后，如果后台set cookie，在Server端也无法正常达到将cookie set到Client端上的效果，而需要利用res.setHeader(‘set-cookie’, ‘cookie=cookie’)，从Server端设置Client端的cookie。</li>
-</ul>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2018/01/09/Nuxt-js使用笔记/#more" rel="contents">
-              Read more &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/12/14/Underscore-js实现链式调用/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="泉先">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpeg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="不会化妆的写手<br>不是好程序员">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/12/14/Underscore-js实现链式调用/" itemprop="url">Underscore.js实现链式调用</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-12-14T20:11:13+08:00">
-                2017-12-14
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/categories/框架-库-工具/" itemprop="url" rel="index">
-                    <span itemprop="name">框架/库/工具</span>
-                  </a>
-                </span>
-
-                
-                
-                  , 
-                
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/categories/框架-库-工具/Underscore-js/" itemprop="url" rel="index">
-                    <span itemprop="name">Underscore.js</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h2 id="underscore基本结构"><a href="#underscore基本结构" class="headerlink" title="underscore基本结构"></a>underscore基本结构</h2><p>在全局变量上挂载一个对象“_”，将方法全部添加在这个对象上。</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> root = <span class="keyword">typeof</span> self == <span class="string">'object'</span> &amp;&amp; self.self === self &amp;&amp; self ||</span><br><span class="line">  <span class="keyword">typeof</span> global == <span class="string">'object'</span> &amp;&amp; global.global === global &amp;&amp; global ||</span><br><span class="line">  <span class="keyword">this</span> ||</span><br><span class="line">  &#123;&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> _ = &#123;&#125;</span><br><span class="line">root._ = _</span><br></pre></td></tr></table></figure>
-<h2 id="面向对象风格"><a href="#面向对象风格" class="headerlink" title="面向对象风格"></a>面向对象风格</h2><p>调用underscore方法的两种方式：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">_.each(obj, <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;&#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 面向对象风格</span></span><br><span class="line">_(obj).each(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;&#125;)</span><br></pre></td></tr></table></figure>
-<p>为实现面向对象风格，将<code>_</code>写为构造函数。</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2017/12/14/Underscore-js实现链式调用/#more" rel="contents">
-              Read more &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/11/23/对象类型判断/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="泉先">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpeg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="不会化妆的写手<br>不是好程序员">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/11/23/对象类型判断/" itemprop="url">对象类型判断</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-11-23T15:41:11+08:00">
-                2017-11-23
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/categories/JavaScript/" itemprop="url" rel="index">
-                    <span itemprop="name">JavaScript</span>
-                  </a>
-                </span>
-
-                
-                
-                  , 
-                
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/categories/JavaScript/基础/" itemprop="url" rel="index">
-                    <span itemprop="name">基础</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h2 id="类型判断的方法-Object-prototype-toString是最优解"><a href="#类型判断的方法-Object-prototype-toString是最优解" class="headerlink" title="类型判断的方法 - Object.prototype.toString是最优解"></a>类型判断的方法 - Object.prototype.toString是最优解</h2><h3 id="Array-isArray"><a href="#Array-isArray" class="headerlink" title="Array.isArray()"></a>Array.isArray()</h3><p>ES5，低版本浏览器不支持。只有Array有这个方法。</p>
-<h3 id="typeof"><a href="#typeof" class="headerlink" title="typeof"></a>typeof</h3><p>无法判断出array与null，两个返回结果都是object。</p>
-<h3 id="instanceof"><a href="#instanceof" class="headerlink" title="instanceof"></a>instanceof</h3><p>问题1：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> num = <span class="number">1</span></span><br><span class="line">num <span class="keyword">instanceof</span> <span class="built_in">Number</span> <span class="comment">// false</span></span><br><span class="line"><span class="keyword">var</span> num = <span class="keyword">new</span> <span class="built_in">Number</span>()</span><br><span class="line">num <span class="keyword">instanceof</span> <span class="built_in">Number</span> <span class="comment">// true</span></span><br></pre></td></tr></table></figure>
-<p>如果是直接创建的原始类型，不instanceof其构造函数。当然，array、object等引用类型不受影响。</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2017/11/23/对象类型判断/#more" rel="contents">
-              Read more &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/11/23/underscore-js源码笔记/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="泉先">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpeg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="不会化妆的写手<br>不是好程序员">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/11/23/underscore-js源码笔记/" itemprop="url">Underscore.js源码笔记</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-11-23T15:29:56+08:00">
-                2017-11-23
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/categories/框架-库-工具/" itemprop="url" rel="index">
-                    <span itemprop="name">框架/库/工具</span>
-                  </a>
-                </span>
-
-                
-                
-                  , 
-                
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/categories/框架-库-工具/Underscore-js/" itemprop="url" rel="index">
-                    <span itemprop="name">Underscore.js</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h2 id="用void-0代替undefined"><a href="#用void-0代替undefined" class="headerlink" title="用void 0代替undefined"></a>用void 0代替undefined</h2><h3 id="undefined可以被重写"><a href="#undefined可以被重写" class="headerlink" title="undefined可以被重写"></a>undefined可以被重写</h3><ol>
-<li>undefined并不是保留词（reserved word），只是全局对象的一个属性（<code>window.undefined === undefined</code>），因此在低版本的IE中可以被重写。</li>
-</ol>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> <span class="literal">undefined</span> = <span class="number">10</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="literal">undefined</span>) <span class="comment">// 10 -- IE8</span></span><br></pre></td></tr></table></figure>
-<ol>
-<li>undefined在ES5中已经是一个只读（read-only）属性了，不能被重写。但是在局部作用域中，还是可以被重写的。与浏览器版本无关。</li>
-</ol>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">var</span> <span class="literal">undefined</span> = <span class="number">10</span></span><br><span class="line">  <span class="built_in">console</span>.log(<span class="literal">undefined</span>) <span class="comment">// 10</span></span><br><span class="line">&#125;)()</span><br></pre></td></tr></table></figure>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">（<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="literal">undefined</span> = <span class="number">10</span></span><br><span class="line">  <span class="built_in">console</span>.log(<span class="literal">undefined</span>) <span class="comment">// undefined</span></span><br><span class="line">&#125;）()</span><br></pre></td></tr></table></figure>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2017/11/23/underscore-js源码笔记/#more" rel="contents">
-              Read more &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><a class="extend next" rel="next" href="/page/3/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" href="/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/6/">6</a><a class="extend next" rel="next" href="/page/3/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -1971,7 +1962,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">42</span>
+                <span class="site-state-item-count">51</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>
@@ -1982,7 +1973,7 @@
             
             <div class="site-state-item site-state-categories">
               <a href="/categories/index.html">
-                <span class="site-state-item-count">12</span>
+                <span class="site-state-item-count">14</span>
                 <span class="site-state-item-name">categories</span>
               </a>
             </div>
@@ -1993,7 +1984,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">18</span>
+                <span class="site-state-item-count">23</span>
                 <span class="site-state-item-name">tags</span>
               </a>
             </div>
@@ -2035,7 +2026,7 @@
         <div class="copyright">
   
   &copy;  2017 - 
-  <span itemprop="copyrightYear">2021</span>
+  <span itemprop="copyrightYear">2022</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

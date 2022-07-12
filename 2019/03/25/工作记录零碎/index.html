@@ -102,7 +102,7 @@
 <meta property="og:site_name" content="不会化妆的写手&lt;br&gt;不是好程序员">
 <meta property="og:description" content="Charles mock 数据Charles mock 数据，眼看着 Charles 抓到的包都是正常的，可是浏览器中间就是收不到响应。忽然回忆起，跨域实际上是浏览器本身做的一个限制，为用户的安全，及时收到数据也不返回。考虑到可能是跨域的问题，开了禁止跨域的浏览器，解决。 position: fixed 问题fixed 的元素不一定相对视口定位。在祖先元素中出现某些特定属性时，会相对于该祖先元素定">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2020-06-30T14:04:59.936Z">
+<meta property="og:updated_time" content="2022-04-25T04:17:16.116Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="工作记录零碎">
 <meta name="twitter:description" content="Charles mock 数据Charles mock 数据，眼看着 Charles 抓到的包都是正常的，可是浏览器中间就是收不到响应。忽然回忆起，跨域实际上是浏览器本身做的一个限制，为用户的安全，及时收到数据也不返回。考虑到可能是跨域的问题，开了禁止跨域的浏览器，解决。 position: fixed 问题fixed 的元素不一定相对视口定位。在祖先元素中出现某些特定属性时，会相对于该祖先元素定">
@@ -400,6 +400,8 @@
 <h2 id="fastclick-造成的坑"><a href="#fastclick-造成的坑" class="headerlink" title="fastclick 造成的坑"></a>fastclick 造成的坑</h2><ul>
 <li>ios 引入 fastclick 会导致 contenteditable 的元素无法正常聚焦。表现为非常不灵敏，需要长按才能聚焦。</li>
 </ul>
+<h2 id="React-Hooks-闭包问题"><a href="#React-Hooks-闭包问题" class="headerlink" title="React Hooks 闭包问题"></a>React Hooks 闭包问题</h2><p>setTimeout 之类的闭包问题可能就必须用 ref 一类的方式解决。但是事件监听方法不必要啊！<br>你下意识地将元素的 dom 实例取出，用原生事件绑定。这样回调方法永远是绑定时候创建的那一个，就触发了闭包问题。<br>实际上，应该直接在元素上面绑定事件监听方法。这样每次渲染，都创建了一个新的回调方法，这个方法所获取的值就一直都是最新的。<br>就不存在闭包问题了。</p>
+<h2 id="mobile-safari-点击事件失效"><a href="#mobile-safari-点击事件失效" class="headerlink" title="mobile safari 点击事件失效"></a>mobile safari 点击事件失效</h2><p>部分不可点击的元素，需要明确指定 cursor: pointer 才可以。</p>
 
       
     </div>
@@ -517,7 +519,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">42</span>
+                <span class="site-state-item-count">51</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>
@@ -528,7 +530,7 @@
             
             <div class="site-state-item site-state-categories">
               <a href="/categories/index.html">
-                <span class="site-state-item-count">12</span>
+                <span class="site-state-item-count">14</span>
                 <span class="site-state-item-name">categories</span>
               </a>
             </div>
@@ -539,7 +541,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">18</span>
+                <span class="site-state-item-count">23</span>
                 <span class="site-state-item-name">tags</span>
               </a>
             </div>
@@ -574,7 +576,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Charles-mock-数据"><span class="nav-number">1.</span> <span class="nav-text">Charles mock 数据</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#position-fixed-问题"><span class="nav-number">2.</span> <span class="nav-text">position: fixed 问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#写全局组件的方法"><span class="nav-number">3.</span> <span class="nav-text">写全局组件的方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Flex-做到子元素无条件等分空间"><span class="nav-number">4.</span> <span class="nav-text">Flex 做到子元素无条件等分空间</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#触底定位不准"><span class="nav-number">5.</span> <span class="nav-text">触底定位不准</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Number-parseInt"><span class="nav-number">6.</span> <span class="nav-text">Number.parseInt</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#webview-中刷新页面"><span class="nav-number">7.</span> <span class="nav-text">webview 中刷新页面</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#create-react-app-升级后问题"><span class="nav-number">8.</span> <span class="nav-text">create-react-app 升级后问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#fastclick-造成的坑"><span class="nav-number">9.</span> <span class="nav-text">fastclick 造成的坑</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Charles-mock-数据"><span class="nav-number">1.</span> <span class="nav-text">Charles mock 数据</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#position-fixed-问题"><span class="nav-number">2.</span> <span class="nav-text">position: fixed 问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#写全局组件的方法"><span class="nav-number">3.</span> <span class="nav-text">写全局组件的方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Flex-做到子元素无条件等分空间"><span class="nav-number">4.</span> <span class="nav-text">Flex 做到子元素无条件等分空间</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#触底定位不准"><span class="nav-number">5.</span> <span class="nav-text">触底定位不准</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Number-parseInt"><span class="nav-number">6.</span> <span class="nav-text">Number.parseInt</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#webview-中刷新页面"><span class="nav-number">7.</span> <span class="nav-text">webview 中刷新页面</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#create-react-app-升级后问题"><span class="nav-number">8.</span> <span class="nav-text">create-react-app 升级后问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#fastclick-造成的坑"><span class="nav-number">9.</span> <span class="nav-text">fastclick 造成的坑</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#React-Hooks-闭包问题"><span class="nav-number">10.</span> <span class="nav-text">React Hooks 闭包问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#mobile-safari-点击事件失效"><span class="nav-number">11.</span> <span class="nav-text">mobile safari 点击事件失效</span></a></li></ol></div>
             
 
           </div>
@@ -597,7 +599,7 @@
         <div class="copyright">
   
   &copy;  2017 - 
-  <span itemprop="copyrightYear">2021</span>
+  <span itemprop="copyrightYear">2022</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>
